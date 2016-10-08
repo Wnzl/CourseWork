@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GitTest.Properties
+namespace CourseProject.Properties
 {
 
 

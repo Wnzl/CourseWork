@@ -7,8 +7,8 @@
     <ProjectGuid>{C1E5FFB9-34C5-4416-822C-3CAB93986CA9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GitTest</RootNamespace>
-    <AssemblyName>GitTest</AssemblyName>
+    <RootNamespace>CourseProject</RootNamespace>
+    <AssemblyName>CourseProject</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

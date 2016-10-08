@@ -1,4 +1,4 @@
-﻿namespace GitTest
+﻿namespace CourseProject
 {
     partial class Form1
     {

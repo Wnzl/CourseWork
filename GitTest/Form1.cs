@@ -24,7 +24,10 @@ namespace GitTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            Convert.ToDouble(textBox1.Text);
+            out1.Text = (Convert.ToDouble(textBox1.Text) + Convert.ToDouble(textBox2.Text)).ToString();
+            /*textBox2.Text
+            out1.Text= */
         }
 
         private void label3_Click(object sender, EventArgs e)

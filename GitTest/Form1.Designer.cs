@@ -34,6 +34,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.out1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -88,11 +89,20 @@
             this.label3.Text = "+";
             this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
+            // out1
+            // 
+            this.out1.AutoSize = true;
+            this.out1.Location = new System.Drawing.Point(211, 179);
+            this.out1.Name = "out1";
+            this.out1.Size = new System.Drawing.Size(0, 13);
+            this.out1.TabIndex = 6;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(477, 304);
+            this.Controls.Add(this.out1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -115,6 +125,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label out1;
     }
 }
 

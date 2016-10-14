@@ -29,7 +29,7 @@ namespace CourseProject
 
             int[] fs = { 1, 4 }; //коэффициенты базиса
             double[] C = new double[] { -2, 2, 9, 1 }; //коэффициенты целевой функции
-            SimplexMethod.buildTable(A,C, fs);
+            SimplexMethod.solve(A,C, fs);
         }
             
 

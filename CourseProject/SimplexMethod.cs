@@ -13,7 +13,7 @@ namespace CourseProject {
     class SimplexMethod {
 
         public static void buildTable(double[,] A, double[] C, int[] fs) {
-            double[,] X = newTableCoeffsCount(A, fs);
+            double[,] X = basicPlanFormation(A, fs);
             double[] delta = deltaCount(C, X, fs);
             int situation = situationCheck(delta);
             int k = 0; //Направляющий столбец
@@ -30,9 +30,18 @@ namespace CourseProject {
                     k = findDirectiveColumn(delta);
                     r = findDirectiveRow(k, X, fs);
                     fs[Array.IndexOf(fs, r)] = k;   //Делаем замену вектора условий с индексом r на вектор с индексом k 
-                    //тут должны делаться всякие штуки которые я еще не дописал
+                    double[,] Xnew = new double[X.GetLength(0), X.GetLength(1)];
+                    Xnew = newBasicPlanFormation(X, C, fs, k, r);
                     break;
             }
+        }
+
+        private static double[,] newBasicPlanFormation(double[,] X, double[] C, int[] fs, int k, int r) {
+            int row = X.GetLength(0);
+            int col = X.GetLength(1);
+            double[,] Xnew = new double[row,col];
+
+            return Xnew;
         }
 
         /// <summary>
@@ -90,6 +99,7 @@ namespace CourseProject {
             if(negativeCount == 0) {
                 situation = 1;
             }else {
+                //тут еще омегу нужно сделать
                 if(negativeCount == length) {
                     situation = 2;
                 }else {
@@ -132,7 +142,7 @@ namespace CourseProject {
         /// <param name="A">Вектор ограничений</param>
         /// <param name="fs">Коэффициенты начального базиса</param>
         /// <returns>Новые коэффициенты симплекс таблицы</returns>
-        private static double[,] newTableCoeffsCount(double[,] A, int[] fs) {
+        private static double[,] basicPlanFormation(double[,] A, int[] fs) {
             int x = fs.GetLength(0);
             int y = A.GetLength(1);
             double[,] fsMatrix = new double[x, x]; //Создаем матрицу начального базиса по коэффициентам

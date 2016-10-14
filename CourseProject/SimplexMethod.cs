@@ -4,30 +4,147 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-/// <summary>
-/// Метод последовательного улучшения плана (1 алгоритм)
-/// </summary>
+
 namespace CourseProject {
+
+    /// <summary>
+    /// Метод последовательного улучшения плана (1 алгоритм)
+    /// </summary>
     class SimplexMethod {
 
-     /*   public void buildTable(double[,] A, double[] C, double[,] fs) {
+        public static void buildTable(double[,] A, double[] C, int[] fs) {
             double[,] X = newTableCoeffsCount(A, fs);
+            double[] delta = deltaCount(C, X, fs);
+            int situation = situationCheck(delta);
+            int k = 0; //Направляющий столбец
+            int r = 0; //Направляющая строка
+            switch (situation) {
+                case 1:
+                    Console.WriteLine("Решение найдено");
+                    // тут нужно вывести результаты
+                    break;
+                case 2:
+                    Console.WriteLine("Задача не имеет решения");
+                    break;
+                case 3:
+                    k = findDirectiveColumn(delta);
+                    r = findDirectiveRow(k, X, fs);
+                    fs[Array.IndexOf(fs, r)] = k;   //Делаем замену вектора условий с индексом r на вектор с индексом k 
+                    //тут должны делаться всякие штуки которые я еще не дописал
+                    break;
+            }
         }
-    */
 
+        /// <summary>
+        /// Метод нахождения направляющей строки
+        /// </summary>
+        /// <param name="k">Направляющий столбец</param>
+        /// <param name="X">Опорный план задачи</param>
+        /// <param name="fs">Коэффициенты начального базиса</param>
+        /// <returns>Направляющая строка</returns>
+        private static int findDirectiveRow(int k, double[,] X, int[] fs) {
+            int r = fs[0]; //Направляющая строка
+            int length = X.GetLength(0);
+            double[] teta = new double[length];
+            teta[0] = X[0, 0] / X[0, k];
+            for (int i = 1; i < length; i++) {
+                teta[i] = (X[i,0]/X[i,k]);
+                if (teta[i] < teta[i-1]) {
+                    r = fs[i];
+                }
+            }
+            return r;
+        }
+
+        /// <summary>
+        /// Метод нахождения направляющего столбца
+        /// </summary>
+        /// <param name="delta">Вектор дельта</param>
+        /// <returns>Направляющий столбец</returns>
+        private static int findDirectiveColumn(double[] delta) {
+            int k = 0; //Направляющий столбец
+            int length = delta.GetLength(0);
+            double min = delta[0];
+            for(int i = 1; i < length; i++) {
+                if (min > delta[i]) {
+                    min = delta[i];
+                    k = i;
+                }
+            }
+            return k;
+        }
+        
+        /// <summary>
+        /// Метод определения ситуации
+        /// </summary>
+        /// <param name="delta">Вектор дельта</param>
+        /// <returns>Номер ситуации</returns>
+        private static int situationCheck(double[] delta) {
+            int situation = 0;
+            int length = delta.GetLength(0);
+            int negativeCount = 0;
+            for(int i = 0; i < length; i++) {
+                if (delta[i] < 0)
+                    negativeCount++;
+            }
+            if(negativeCount == 0) {
+                situation = 1;
+            }else {
+                if(negativeCount == length) {
+                    situation = 2;
+                }else {
+                    situation = 3;
+                }
+            }
+            return situation;
+        }
+    
+        /// <summary>
+        /// Метод нахождения коэффициентов дельта
+        /// </summary>
+        /// <param name="C">Вектор целевой функции</param>
+        /// <param name="X">Опорный план задачи</param>
+        /// <param name="fs">Коэффициенты начального базиса</param>
+        /// <returns>Вектор дельта</returns>
+        private static double[] deltaCount(double[] C, double[,] X, int[] fs) {
+            int coefCount = X.GetLength(1);
+            int leng = fs.GetLength(0);
+            double[] Cs = new double[leng]; //Коэффициенты целевой функции начального базиса
+            for(int i = 0; i < leng; i++) {
+                Cs[i] = C[fs[i] - 1];
+            }
+            double[] delta = new double[coefCount];
+            double[] z = new double[coefCount];
+            for(int i = 0; i < coefCount; i++) {
+                for (int j = 0; j < leng; j++)
+                    z[i] += Cs[j] * X[j,i];
+            }
+            delta[0] = z[0];
+            for (int i = 1; i < coefCount; i++)
+                delta[i] = z[i] - C[i-1];
+                       
+            return delta;
+        }
 
         /// <summary>
         /// Метод нахождения коэффициентов симплекс таблицы
         /// </summary>
         /// <param name="A">Вектор ограничений</param>
-        /// <param name="fs">Начальный базис</param>
+        /// <param name="fs">Коэффициенты начального базиса</param>
         /// <returns>Новые коэффициенты симплекс таблицы</returns>
-        public static double[,] newTableCoeffsCount(double[,] A, double[,] fs) {
+        private static double[,] newTableCoeffsCount(double[,] A, int[] fs) {
             int x = fs.GetLength(0);
             int y = A.GetLength(1);
+            double[,] fsMatrix = new double[x, x]; //Создаем матрицу начального базиса по коэффициентам
+            int counter = 0;
+            foreach(int row in fs) {
+                for (int i = 0; i < x; i++)
+                    fsMatrix[i, counter] = A[i, row];
+                counter++;
+            }
             double[,] X = new double[x, y];
-                double[,] Afs = new double[fs.GetLength(0), fs.GetLength(1)];
-                Afs = inverseMatrix(fs);
+                double[,] Afs = new double[x, x];
+                Afs = inverseMatrix(fsMatrix);
                 for (int i = 0; i < x; i++) {
                     for (int j = 0; j < y; j++) {
                         for (int z = 0; z < x; z++)

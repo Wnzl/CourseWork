@@ -23,21 +23,13 @@ namespace CourseProject
         }
 
         private void button1_Click(object sender, EventArgs e) {
+            //тут для примера вводим всякие значения
                     double[,] A = new double[,] { {15, 3, 6, 9, 3},
-                                                  {5,-3,2,3,2 } };
-                                                    
-            double[,] fs = new double[,] { { 3, 3 },
-                                            { -3,2} };
-            double[,] X = SimplexMethod.newTableCoeffsCount(A,fs);
+                                                  {5,-3,2,3,2 } }; //матрица ограничений
 
-            int x = X.GetLength(0);
-            int y = X.GetLength(1);
-            for (int i = 0; i < x; i++) {
-                out1.Text += ("\n\n");
-                for (int j = 0; j < y; j++) {
-                    out1.Text += X[i, j] + "   ";
-                }
-            }
+            int[] fs = { 1, 4 }; //коэффициенты базиса
+            double[] C = new double[] { -2, 2, 9, 1 }; //коэффициенты целевой функции
+            SimplexMethod.buildTable(A,C, fs);
         }
             
 

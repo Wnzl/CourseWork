@@ -43,10 +43,10 @@ namespace CourseProject
                 }
             }
             //коэффициенты целевой функции с учетом добавленных переменных
-            double[] C = new double[AFirst.GetLength(0) + AFirst.GetLength(1)];
-            for (int i = 0; i < AFirst.GetLength(0) + AFirst.GetLength(1); i++)
+            double[] C = new double[AFirst.GetLength(0) + AFirst.GetLength(1) - 1];
+            for (int i = 0; i < AFirst.GetLength(0) + AFirst.GetLength(1)-1; i++)
             {
-                if (i < AFirst.GetLength(1)) C[i] = CFirst[i];
+                if (i < AFirst.GetLength(1)-1) C[i] = CFirst[i];
                 else C[i] = 0;     
             }
             int[] fs = new int [AFirst.GetLength(0)]; //коэффициенты базиса

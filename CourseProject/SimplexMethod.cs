@@ -15,13 +15,11 @@ namespace CourseProject {
         public static void solve(double[,] AFirst, double[] CFirst) {
             
             //матрица ограничений с учётом добавленных переменных
-            double[,] A = new double[AFirst.GetLength(0), AFirst.GetLength(0) + AFirst.GetLength(1)];
+            double[,] A = modifyA(AFirst);
             //коэффициенты целевой функции с учетом добавленных переменных
-            double[] C = new double[AFirst.GetLength(0) + AFirst.GetLength(1) - 1];
-            A=modifyA(AFirst);
-            C = modifyC(CFirst, AFirst);
-            int[] fs = new int[A.GetLength(0)]; //коэффициенты базиса
-            fs = referenceBasis(A);
+            double[] C = modifyC(CFirst, AFirst);
+            //коэффициенты базиса
+            int[] fs = referenceBasis(AFirst);
             double[,] X = basicPlanFormation(A, fs);
             buildTable(X, C, fs);
         }
@@ -357,19 +355,21 @@ namespace CourseProject {
         /// <returns>Матрица А</returns>
         private static double[,] modifyA(double[,] AFirst)
         {
-            double[,] A = new double[AFirst.GetLength(0), AFirst.GetLength(0) + AFirst.GetLength(1)];
+            int m = AFirst.GetLength(0);
+            int n = AFirst.GetLength(1);
+            double[,] A = new double[m, m + n];
             //добавление элементов в матрицу А
-            for (int i = 0; i < AFirst.GetLength(0); i++)
+            for (int i = 0; i < m; i++)
             {
-                for (int j = 0; j < AFirst.GetLength(0) + AFirst.GetLength(1); j++)
+                for (int j = 0; j < m + n; j++)
                 {
                     //если переменная не новая, т.е. уже была в АFirst
-                    if (j < AFirst.GetLength(1)) A[i, j] = AFirst[i, j]; //переписываем
+                    if (j < n) A[i, j] = AFirst[i, j]; //переписываем
                     //если переменная новая
                     else
                     {
                         //единицы должны быть по диагонали
-                        if (j == i + A.GetLength(1) - 2) A[i, j] = 1;//диагональный элемент - 1
+                        if (j == i + n) A[i, j] = 1;//диагональный элемент - 1
                         else A[i, j] = 0;// пишем 0
                     }
                 }
@@ -384,12 +384,14 @@ namespace CourseProject {
         /// <returns>вектор С</returns>
         private static double[] modifyC(double[] CFirst, double[,]AFirst)
         {
-            double[] C = new double[AFirst.GetLength(0) + AFirst.GetLength(1) - 1];
+            int m = AFirst.GetLength(0);
+            int n = AFirst.GetLength(1);
+            double[] C = new double[m + n - 1];
             //добавление элементов в вектор С
-            for (int i = 0; i < AFirst.GetLength(0) + AFirst.GetLength(1) - 1; i++)
+            for (int i = 0; i < m + n - 1; i++)
             {
                 //если переменная не новая, т.е. уже была в СFirst
-                if (i < AFirst.GetLength(1) - 1) C[i] = CFirst[i];//переписываем
+                if (i < n - 1) C[i] = CFirst[i];//переписываем
                 else C[i] = 0;  //иначе коэффициент при переменной, которой по условию не было
                                 //в целевой функции, будет = 0
             }
@@ -400,13 +402,15 @@ namespace CourseProject {
         /// </summary>
         /// <param name="А">Матрица А с учетом дополнительных переменных</param>
         /// <returns>Базис fs</returns>
-        private static int[] referenceBasis(double[,] A)
+        private static int[] referenceBasis(double[,] AFirst)
         {
-            int[] fs = new int[A.GetLength(0)]; //коэффициенты базиса
+            int m = AFirst.GetLength(0);
+            int n = AFirst.GetLength(1);
+            int[] fs = new int[m]; //коэффициенты базиса
             //записываем базис с учетом новых переменных
-            for (int i = 0; i < A.GetLength(0); i++)
+            for (int i = 0; i < m; i++)
             {
-                fs[i] = A.GetLength(0) + i + 1;
+                fs[i] = n + i;
             }
             return fs;
         }

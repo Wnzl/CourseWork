@@ -12,7 +12,16 @@ namespace CourseProject {
     /// </summary>
     class SimplexMethod {
 
-        public static void solve(double[,] A, double[] C, int[] fs) {
+        public static void solve(double[,] AFirst, double[] CFirst) {
+            
+            //матрица ограничений с учётом добавленных переменных
+            double[,] A = new double[AFirst.GetLength(0), AFirst.GetLength(0) + AFirst.GetLength(1)];
+            //коэффициенты целевой функции с учетом добавленных переменных
+            double[] C = new double[AFirst.GetLength(0) + AFirst.GetLength(1) - 1];
+            A=modifyA(AFirst);
+            C = modifyC(CFirst, AFirst);
+            int[] fs = new int[A.GetLength(0)]; //коэффициенты базиса
+            fs = referenceBasis(A);
             double[,] X = basicPlanFormation(A, fs);
             buildTable(X, C, fs);
         }
@@ -342,15 +351,13 @@ namespace CourseProject {
             return C;
         }
         /// <summary>
-        /// Метод изменения матрицы А и вектора С с учетом дополнительных переменных
+        /// Метод изменения матрицы А с учетом дополнительных переменных
         /// </summary>
         /// <param name="AFirst">Исходная матрица АFirst</param>
-        /// <param name="А">Матрица А с учетом дополнительных переменных</param>
-        /// <param name="СFirst">Исходный вектор СFirst</param>
-        /// <param name="С">Вектор С с учетом дополнительных переменных</param>
-        /// <returns>Матрица А, вектор С</returns>
-        public static void modifyAC(double [,]AFirst, double [,]A, double []CFirst, double []C)
+        /// <returns>Матрица А</returns>
+        private static double[,] modifyA(double[,] AFirst)
         {
+            double[,] A = new double[AFirst.GetLength(0), AFirst.GetLength(0) + AFirst.GetLength(1)];
             //добавление элементов в матрицу А
             for (int i = 0; i < AFirst.GetLength(0); i++)
             {
@@ -367,6 +374,17 @@ namespace CourseProject {
                     }
                 }
             }
+            return A;
+        }
+        /// <summary>
+        /// Метод изменения вектора С с учетом дополнительных переменных
+        /// </summary>
+        /// <param name="AFirst">Исходная матрица АFirst</param>
+        /// <param name="СFirst">Исходный вектор СFirst</param>
+        /// <returns>вектор С</returns>
+        private static double[] modifyC(double[] CFirst, double[,]AFirst)
+        {
+            double[] C = new double[AFirst.GetLength(0) + AFirst.GetLength(1) - 1];
             //добавление элементов в вектор С
             for (int i = 0; i < AFirst.GetLength(0) + AFirst.GetLength(1) - 1; i++)
             {
@@ -375,14 +393,14 @@ namespace CourseProject {
                 else C[i] = 0;  //иначе коэффициент при переменной, которой по условию не было
                                 //в целевой функции, будет = 0
             }
-
+            return C;
         }
         /// <summary>
         /// Метод изменения матрицы А и вектора С с учетом дополнительных переменных
         /// </summary>
         /// <param name="А">Матрица А с учетом дополнительных переменных</param>
         /// <returns>Базис fs</returns>
-        public static int[] referenceBasis(double[,] A)
+        private static int[] referenceBasis(double[,] A)
         {
             int[] fs = new int[A.GetLength(0)]; //коэффициенты базиса
             //записываем базис с учетом новых переменных

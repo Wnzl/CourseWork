@@ -27,14 +27,7 @@ namespace CourseProject
             double[,] AFirst = new double[,] { {15, 3, 6, 9, 3},
                                                   {5,-3,2,3,2 } }; //матрица ограничений из формы ввода
             double[] CFirst = new double[] { -2, 2, 9, 1 }; //коэффициенты целевой функции из формы ввода
-            //матрица ограничений с учётом добавленных переменных
-            double[,] A = new double[AFirst.GetLength(0), AFirst.GetLength(0) + AFirst.GetLength(1)];
-            //коэффициенты целевой функции с учетом добавленных переменных
-            double[] C = new double[AFirst.GetLength(0) + AFirst.GetLength(1) - 1];
-            SimplexMethod.modifyAC(AFirst,A,CFirst,C);
-            int[] fs = new int [A.GetLength(0)]; //коэффициенты базиса
-            fs = SimplexMethod.referenceBasis(A);
-            SimplexMethod.solve(A, C, fs);
+            SimplexMethod.solve(AFirst, CFirst);
         }
             
 

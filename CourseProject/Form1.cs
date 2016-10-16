@@ -27,34 +27,13 @@ namespace CourseProject
             double[,] AFirst = new double[,] { {15, 3, 6, 9, 3},
                                                   {5,-3,2,3,2 } }; //матрица ограничений из формы ввода
             double[] CFirst = new double[] { -2, 2, 9, 1 }; //коэффициенты целевой функции из формы ввода
-            //нужно в одельный метод закинуть, пока для пробы
             //матрица ограничений с учётом добавленных переменных
             double[,] A = new double[AFirst.GetLength(0), AFirst.GetLength(0) + AFirst.GetLength(1)];
-            for (int i=0; i < AFirst.GetLength(0); i++)
-            {
-                for (int j = 0; j < AFirst.GetLength(0) + AFirst.GetLength(1); j++)
-                {
-                    if (j < AFirst.GetLength(1)) A[i, j] = AFirst[i, j];
-                    else
-                    {
-                        if (j == i) A[i, j] = 1;
-                        else A[i, j] = 0;
-                    }
-                }
-            }
             //коэффициенты целевой функции с учетом добавленных переменных
             double[] C = new double[AFirst.GetLength(0) + AFirst.GetLength(1) - 1];
-            for (int i = 0; i < AFirst.GetLength(0) + AFirst.GetLength(1)-1; i++)
-            {
-                if (i < AFirst.GetLength(1)-1) C[i] = CFirst[i];
-                else C[i] = 0;     
-            }
-            int[] fs = new int [AFirst.GetLength(0)]; //коэффициенты базиса
-            for (int i = 0; i < AFirst.GetLength(0); i++)
-            {
-                fs[i] = AFirst.GetLength(0) + i + 1;
-            }
-           
+            SimplexMethod.modifyAC(AFirst,A,CFirst,C);
+            int[] fs = new int [A.GetLength(0)]; //коэффициенты базиса
+            fs = SimplexMethod.referenceBasis(A);
             SimplexMethod.solve(A, C, fs);
         }
             

@@ -341,5 +341,56 @@ namespace CourseProject {
             }
             return C;
         }
+        /// <summary>
+        /// Метод изменения матрицы А и вектора С с учетом дополнительных переменных
+        /// </summary>
+        /// <param name="AFirst">Исходная матрица АFirst</param>
+        /// <param name="А">Матрица А с учетом дополнительных переменных</param>
+        /// <param name="СFirst">Исходный вектор СFirst</param>
+        /// <param name="С">Вектор С с учетом дополнительных переменных</param>
+        /// <returns>Матрица А, вектор С</returns>
+        public static void modifyAC(double [,]AFirst, double [,]A, double []CFirst, double []C)
+        {
+            //добавление элементов в матрицу А
+            for (int i = 0; i < AFirst.GetLength(0); i++)
+            {
+                for (int j = 0; j < AFirst.GetLength(0) + AFirst.GetLength(1); j++)
+                {
+                    //если переменная не новая, т.е. уже была в АFirst
+                    if (j < AFirst.GetLength(1)) A[i, j] = AFirst[i, j]; //переписываем
+                    //если переменная новая
+                    else
+                    {
+                        //единицы должны быть по диагонали
+                        if (j == i + A.GetLength(1) - 2) A[i, j] = 1;//диагональный элемент - 1
+                        else A[i, j] = 0;// пишем 0
+                    }
+                }
+            }
+            //добавление элементов в вектор С
+            for (int i = 0; i < AFirst.GetLength(0) + AFirst.GetLength(1) - 1; i++)
+            {
+                //если переменная не новая, т.е. уже была в СFirst
+                if (i < AFirst.GetLength(1) - 1) C[i] = CFirst[i];//переписываем
+                else C[i] = 0;  //иначе коэффициент при переменной, которой по условию не было
+                                //в целевой функции, будет = 0
+            }
+
+        }
+        /// <summary>
+        /// Метод изменения матрицы А и вектора С с учетом дополнительных переменных
+        /// </summary>
+        /// <param name="А">Матрица А с учетом дополнительных переменных</param>
+        /// <returns>Базис fs</returns>
+        public static int[] referenceBasis(double[,] A)
+        {
+            int[] fs = new int[A.GetLength(0)]; //коэффициенты базиса
+            //записываем базис с учетом новых переменных
+            for (int i = 0; i < A.GetLength(0); i++)
+            {
+                fs[i] = A.GetLength(0) + i + 1;
+            }
+            return fs;
+        }
     }
 }

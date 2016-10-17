@@ -24,9 +24,15 @@ namespace CourseProject
 
         private void button1_Click(object sender, EventArgs e) {
             //тут для примера вводим всякие значения
-            double[,] AFirst = new double[,] { {15, 3, 6, 9, 3},
-                                                  {5,-3,2,3,2 } }; //матрица ограничений из формы ввода
-            double[] CFirst = new double[] { -2, 2, 9, 1 }; //коэффициенты целевой функции из формы ввода
+            /*   double[,] AFirst = new double[,] { {15, 3, 6, 9, 3},
+                                                     {5,-3,2,3,2 } }; //матрица ограничений из формы ввода
+               double[] CFirst = new double[] { -2, 2, 9, 1 }; //коэффициенты целевой функции из формы ввода
+            */
+            double[,] AFirst = new double[,] { {6, 1, -2, 2, 0, 0},
+                                                  {24, 1, 2, 1, 1, 0},
+                                                  {30, 2, 1, -4, 0, 1} }; //матрица ограничений из формы ввода
+            double[] CFirst = new double[] { 9, 5, 4, 3, 2}; //коэффициенты целевой функции из формы ввода
+            
             SimplexMethod.solve(AFirst, CFirst);
         }
             

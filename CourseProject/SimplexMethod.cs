@@ -37,7 +37,7 @@ namespace CourseProject {
             double[] delta = deltaCount(C, X, fs);
             int k = 0; //Направляющий столбец
             int r = 0; //Направляющая строка
-            int situation = situationCheck(delta);
+            int situation = situationCheck(delta, X);
             switch (situation) {
                 case 1:
                     //Безобразный вывод в консоль исключительно для теста как выполняется эта вся кухня
@@ -49,7 +49,6 @@ namespace CourseProject {
                     for (int i = 0; i < fs.GetLength(0); i++)
                         Console.Write("A" + fs[i] + " ");
                     Console.Write("}");
-                    //тут нужно еще вывод вектора значений переменных вывести, но мне уже влом
                   /*int l = C.GetLength(0);
                     double[] result = new double[l];
                     for(int i = 0; i < l; i++) {
@@ -62,16 +61,17 @@ namespace CourseProject {
                     break;
                 case 3:
                     k = findDirectiveColumn(delta);
-                    //Доделал до этого момента
                     r = findDirectiveRow(k, X, fs);
                     fs[Array.IndexOf(fs, r)] = k;   //Делаем замену вектора условий с индексом r на вектор с индексом k 
                     double[,] Xnew = new double[X.GetLength(0), X.GetLength(1)];
+                    Console.WriteLine("Method");
                     Xnew = newBasicPlanFormation(X, C, fs, k, r);
-                     if (calculationsCheckIsOk(Xnew,C,fs)) {
+                     optimalityCheck(Xnew, C, fs);
+/*                     if (calculationsCheckIsOk(Xnew,C,fs)) {
                         optimalityCheck(Xnew, C, fs);
-                    } else {
+                    }else {
                           Console.WriteLine("Чет пошло не так");
-                      }
+                      } */
                     break;
             }
         }
@@ -108,7 +108,6 @@ namespace CourseProject {
                 return false;
         } 
 
-        //Не работает т.к. неправильно сделан выбор i != r, надо допилить
         /// <summary>
         /// Метод формирования нового опорного плана
         /// </summary>
@@ -120,19 +119,25 @@ namespace CourseProject {
         /// <returns>Новый опорный план</returns>
         private static double[,] newBasicPlanFormation(double[,] X, double[] C, int[] fs, int k, int r) {
             int row = X.GetLength(0);
-            int col = X.GetLength(1);
-            double[,] Xnew = new double[row,col];
+            int col = X.GetLength(1) - 1;
+            Console.WriteLine("check");
+            double[,] Xnew = new double[row,col + 1];
+            int rIndexRow = 0;
+            for(int i = 0; i < row; i++) {
+                if (X[i, 0] == r)
+                    rIndexRow = i; //Находим какая строка имеет индекс r
+            }
             for(int i = 0; i < row; i++) {
                for(int j = 0; j < col; j++) {
-                    if (i != r - 1) {
-                        //Ошибка из-за того, что в массиве нумерация идёт 0, 1, 2..., а в матрице это может
-                        //быть что-то вроде 3,4,6 или 1, 2, 4 и всякое такое
-                        Xnew[i, j] = Math.Round(X[i, j] - ((X[r - 1, j] * X[i, k]) / X[r - 1, k]),14);
-                    }else {
-                        Xnew[i, j] = Math.Round(X[r-1, j] / X[r-1, k],14);
-                    }
+                    if (X[i,0] != r ) //Является ли текущая строка ведущей строкой (r)
+                        Xnew[i, j + 1] = Math.Round(X[i, j + 1] - ((X[rIndexRow, j + 1] * 
+                            X[i, k + 1]) / X[rIndexRow, k + 1]),14);
+                    else 
+                        Xnew[i, j + 1] = Math.Round(X[rIndexRow, j + 1] / X[rIndexRow, k + 1], 14);
                 }
             }
+            for (int i = 0; i < row; i++)
+                Xnew[i, 0] = fs[i];
             return Xnew;
         }
 
@@ -147,9 +152,12 @@ namespace CourseProject {
             int r = fs[0]; //Направляющая строка
             int length = X.GetLength(0);
             double[] teta = new double[length];
-            teta[0] = X[0, 0] / X[0, k];
+            teta[0] = X[0, 1] / X[0, k + 1];
             for (int i = 1; i < length; i++) {
-                teta[i] = (X[i,0]/X[i,k]);
+                if (X[i, k + 1] > 0)
+                    teta[i] = (X[i, 1] / X[i, k + 1]);
+                else
+                    teta[i] = 99999999999999; //Неадекватно большое значение, которое показывает, что элемент не рассматривается
                 if (teta[i] < teta[i-1]) {
                     r = fs[i];
                 }
@@ -180,22 +188,21 @@ namespace CourseProject {
         /// </summary>
         /// <param name="delta">Вектор дельта</param>
         /// <returns>Номер ситуации</returns>
-        private static int situationCheck(double[] delta) {
-            int situation = 0;
+        private static int situationCheck(double[] delta, double[,] X) {
             int length = delta.GetLength(0);
-            int negativeCount = 0;
-            for(int i = 0; i < length; i++) {
-                if (delta[i] < 0)
-                    negativeCount++;
-            }
-            if(negativeCount == 0) {
-                situation = 1;
-            }else {
-                //тут еще омегу нужно сделать
-                if(negativeCount == length) {
-                    situation = 2;
-                }else {
+            int height = X.GetLength(0);
+            int situation = 1;
+            for (int j = 1; j < length; j++) {
+                if (delta[j] < 0) {
+                    int omega = 0;
                     situation = 3;
+                    for (int i = 0; i < height; i++) {
+                        if (X[i, j] >= 0) omega++;
+                    }
+                    if (omega == 0) {
+                        situation = 2;
+                        break;
+                    }
                 }
             }
             return situation;

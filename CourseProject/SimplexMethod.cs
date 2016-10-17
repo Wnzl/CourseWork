@@ -14,17 +14,26 @@ namespace CourseProject {
 
         public static void solve(double[,] AFirst, double[] CFirst) {
             
-            //матрица ограничений с учётом добавленных переменных
+            //матрица ограничений с учётом добавленных переменных 
             double[,] A = modifyA(AFirst);
             //коэффициенты целевой функции с учетом добавленных переменных
             double[] C = modifyC(CFirst, AFirst);
             //коэффициенты базиса
             int[] fs = referenceBasis(AFirst);
-            double[,] X = basicPlanFormation(A, fs);
-            buildTable(X, C, fs);
+            int rows = A.GetLength(0); //Получаем количество строк матрицы ограничений
+            for (int i = 0; i < rows; i++)
+                A[i, 0] = fs[i];  //Записываем в каждый 0-ой элемент строки индекс А
+            optimalityCheck(A, C, fs);
         }
 
-        private static void buildTable(double[,] X, double[] C, int[] fs) {
+        /// <summary>
+        /// Метод проверки текущего базиса на оптимальность, выполняется до тех пор пока не 
+        /// будет найдено решение либо не будет определено, что задача не имеет решения
+        /// </summary>
+        /// <param name="X">Матрица ограничений, где [i,0] это индекс А, а [i,1] значение вектора b</param>
+        /// <param name="C">Вектор коэффициентов целевой функции</param>
+        /// <param name="fs">Коэффициенты начального базиса</param>
+        private static void optimalityCheck(double[,] X, double[] C, int[] fs) {
             double[] delta = deltaCount(C, X, fs);
             int k = 0; //Направляющий столбец
             int r = 0; //Направляющая строка
@@ -53,14 +62,13 @@ namespace CourseProject {
                     break;
                 case 3:
                     k = findDirectiveColumn(delta);
-                    // Не работает, нужно допилить
-                    //   r = findDirectiveRow(k, X, fs);
-                    r = 1;
+                    //Доделал до этого момента
+                    r = findDirectiveRow(k, X, fs);
                     fs[Array.IndexOf(fs, r)] = k;   //Делаем замену вектора условий с индексом r на вектор с индексом k 
                     double[,] Xnew = new double[X.GetLength(0), X.GetLength(1)];
                     Xnew = newBasicPlanFormation(X, C, fs, k, r);
                      if (calculationsCheckIsOk(Xnew,C,fs)) {
-                        buildTable(Xnew, C, fs);
+                        optimalityCheck(Xnew, C, fs);
                     } else {
                           Console.WriteLine("Чет пошло не так");
                       }
@@ -201,7 +209,7 @@ namespace CourseProject {
         /// <param name="fs">Коэффициенты начального базиса</param>
         /// <returns>Вектор дельта</returns>
         private static double[] deltaCount(double[] C, double[,] X, int[] fs) {
-            int coefCount = X.GetLength(1);
+            int coefCount = X.GetLength(1) - 1; //Потому что [i,0] это не коэффициент, а индекс А
             int leng = fs.GetLength(0);
             double[] Cs = new double[leng]; //Коэффициенты целевой функции начального базиса
             for(int i = 0; i < leng; i++) {
@@ -211,7 +219,7 @@ namespace CourseProject {
             double[] z = new double[coefCount];
             for(int i = 0; i < coefCount; i++) {
                 for (int j = 0; j < leng; j++)
-                    z[i] += Cs[j] * X[j,i];
+                    z[i] += Cs[j] * X[j,i + 1];
             }
             delta[0] = z[0];
             for (int i = 1; i < coefCount; i++)
@@ -220,6 +228,78 @@ namespace CourseProject {
             return delta;
         }
 
+        /// <summary>
+        /// Метод изменения матрицы А с учетом дополнительных переменных
+        /// </summary>
+        /// <param name="AFirst">Исходная матрица АFirst</param>
+        /// <returns>Матрица А</returns>
+        private static double[,] modifyA(double[,] AFirst)
+        {
+            int m = AFirst.GetLength(0);
+            int n = AFirst.GetLength(1);
+            double[,] A = new double[m, m + n + 1]; // Каждый 0-ой элемент строки это индекс А, каждый 1-ый это значение вектора b
+            //добавление элементов в матрицу А
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < m + n; j++)
+                {
+                    //если переменная не новая, т.е. уже была в АFirst
+                    if (j < n) A[i, j + 1] = AFirst[i,j]; //переписываем
+                    //если переменная новая
+                    else
+                    {
+                        //единицы должны быть по диагонали
+                        if (j == i + n) A[i, j + 1] = 1;//диагональный элемент - 1
+                        else A[i, j + 1] = 0;// пишем 0
+                    }
+                }
+            }
+            return A;
+        }
+
+        /// <summary>
+        /// Метод изменения вектора С с учетом дополнительных переменных
+        /// </summary>
+        /// <param name="AFirst">Исходная матрица АFirst</param>
+        /// <param name="СFirst">Исходный вектор СFirst</param>
+        /// <returns>вектор С</returns>
+        private static double[] modifyC(double[] CFirst, double[,]AFirst)
+        {
+            int m = AFirst.GetLength(0);
+            int n = AFirst.GetLength(1);
+            double[] C = new double[m + n - 1];
+            //добавление элементов в вектор С
+            for (int i = 0; i < m + n - 1; i++)
+            {
+                //если переменная не новая, т.е. уже была в СFirst
+                if (i < n - 1) C[i] = CFirst[i];//переписываем
+                else C[i] = 0;  //иначе коэффициент при переменной, которой по условию не было
+                                //в целевой функции, будет = 0
+            }
+            return C;
+        }
+
+        /// <summary>
+        /// Метод изменения матрицы А и вектора С с учетом дополнительных переменных
+        /// </summary>
+        /// <param name="А">Матрица А с учетом дополнительных переменных</param>
+        /// <returns>Базис fs</returns>
+        private static int[] referenceBasis(double[,] AFirst)
+        {
+            int m = AFirst.GetLength(0);
+            int n = AFirst.GetLength(1);
+            int[] fs = new int[m]; //коэффициенты базиса
+            //записываем базис с учетом новых переменных
+            for (int i = 0; i < m; i++)
+            {
+                fs[i] = n + i;
+            }
+            return fs;
+        }
+
+        /* Методы связанные с обработкой начальной матрицы, из-за того, 
+         * что у нас метод нахождения начального базиса это все не требует они теряют актуальность, но на всякий случай оставлю.
+         * 
         /// <summary>
         /// Метод нахождения коэффициентов симплекс таблицы
         /// </summary>
@@ -285,7 +365,7 @@ namespace CourseProject {
             } else {
                 for (int i = 0; i < x; i++) {
                     for (int j = 0; j < y; j++) {
-                        cofactor[i, j] = Math.Pow((-1), (j + 2 + i)) * matrix[(x-1)-i, (y-1)-j];
+                        cofactor[i, j] = Math.Pow((-1), (j + 2 + i)) * matrix[(x - 1) - i, (y - 1) - j];
                     }
                 }
             }
@@ -307,7 +387,7 @@ namespace CourseProject {
             inversed = transposition(matrix);
             for (int i = 0; i < x; i++) {
                 for (int j = 0; j < y; j++)
-                    inversed[i, j] *= 1/determ;
+                    inversed[i, j] *= 1 / determ;
             }
             return inversed;
         }
@@ -348,71 +428,6 @@ namespace CourseProject {
             }
             return C;
         }
-        /// <summary>
-        /// Метод изменения матрицы А с учетом дополнительных переменных
-        /// </summary>
-        /// <param name="AFirst">Исходная матрица АFirst</param>
-        /// <returns>Матрица А</returns>
-        private static double[,] modifyA(double[,] AFirst)
-        {
-            int m = AFirst.GetLength(0);
-            int n = AFirst.GetLength(1);
-            double[,] A = new double[m, m + n];
-            //добавление элементов в матрицу А
-            for (int i = 0; i < m; i++)
-            {
-                for (int j = 0; j < m + n; j++)
-                {
-                    //если переменная не новая, т.е. уже была в АFirst
-                    if (j < n) A[i, j] = AFirst[i, j]; //переписываем
-                    //если переменная новая
-                    else
-                    {
-                        //единицы должны быть по диагонали
-                        if (j == i + n) A[i, j] = 1;//диагональный элемент - 1
-                        else A[i, j] = 0;// пишем 0
-                    }
-                }
-            }
-            return A;
-        }
-        /// <summary>
-        /// Метод изменения вектора С с учетом дополнительных переменных
-        /// </summary>
-        /// <param name="AFirst">Исходная матрица АFirst</param>
-        /// <param name="СFirst">Исходный вектор СFirst</param>
-        /// <returns>вектор С</returns>
-        private static double[] modifyC(double[] CFirst, double[,]AFirst)
-        {
-            int m = AFirst.GetLength(0);
-            int n = AFirst.GetLength(1);
-            double[] C = new double[m + n - 1];
-            //добавление элементов в вектор С
-            for (int i = 0; i < m + n - 1; i++)
-            {
-                //если переменная не новая, т.е. уже была в СFirst
-                if (i < n - 1) C[i] = CFirst[i];//переписываем
-                else C[i] = 0;  //иначе коэффициент при переменной, которой по условию не было
-                                //в целевой функции, будет = 0
-            }
-            return C;
-        }
-        /// <summary>
-        /// Метод изменения матрицы А и вектора С с учетом дополнительных переменных
-        /// </summary>
-        /// <param name="А">Матрица А с учетом дополнительных переменных</param>
-        /// <returns>Базис fs</returns>
-        private static int[] referenceBasis(double[,] AFirst)
-        {
-            int m = AFirst.GetLength(0);
-            int n = AFirst.GetLength(1);
-            int[] fs = new int[m]; //коэффициенты базиса
-            //записываем базис с учетом новых переменных
-            for (int i = 0; i < m; i++)
-            {
-                fs[i] = n + i;
-            }
-            return fs;
-        }
+        */
     }
 }

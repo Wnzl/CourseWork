@@ -11,7 +11,11 @@ namespace CourseProject {
     /// Метод последовательного улучшения плана (1 алгоритм)
     /// </summary>
     class SimplexMethod {
-
+        /// <summary>
+        /// Метод нахождения оптимального плана методом последовательного улучшения плана (1 алгоритм)
+        /// </summary>
+        /// <param name="AFirst">Матрица ограничений</param>
+        /// <param name="CFirst">Вектор коэффициентов целевой функции</param>
         public static void solve(double[,] AFirst, double[] CFirst) {
             
             //матрица ограничений с учётом добавленных переменных 
@@ -44,34 +48,45 @@ namespace CourseProject {
                     Console.WriteLine("Решение найдено");
                     int row = X.GetLength(0);
                     int col = X.GetLength(1);
+                    double[] xResult = new double[col - 1];
+                    for(int i = 0; i < col - 1; i++) {
+                        for (int j = 0; j < row; j++) {
+                            if (i + 1 == X[j, 0]) {
+                                xResult[i] = X[j, 1];
+                                break;
+                            } else
+                                xResult[i] = 0;
+                        }
+                    }
                     Console.WriteLine("L = {0}", delta[0]);
                     Console.Write("\nFs = {");
                     for (int i = 0; i < fs.GetLength(0); i++)
                         Console.Write("A" + fs[i] + " ");
                     Console.Write("}");
-                  /*int l = C.GetLength(0);
-                    double[] result = new double[l];
-                    for(int i = 0; i < l; i++) {
-                        if(i == )
-                        result[i] 
-                    }*/
-                        break;
+                    Console.WriteLine("X = (");
+                    foreach (double x in xResult)
+                        Console.Write(x + ", ");
+                    Console.WriteLine(")");
+                    return;
                 case 2:
                     Console.WriteLine("Задача не имеет решения");
                     break;
                 case 3:
                     k = findDirectiveColumn(delta);
                     r = findDirectiveRow(k, X, fs);
+                    int row2 = X.GetLength(0);
+                    int col2 = X.GetLength(1);
                     fs[Array.IndexOf(fs, r)] = k;   //Делаем замену вектора условий с индексом r на вектор с индексом k 
-                    double[,] Xnew = new double[X.GetLength(0), X.GetLength(1)];
-                    Console.WriteLine("Method");
-                    Xnew = newBasicPlanFormation(X, C, fs, k, r);
-                     optimalityCheck(Xnew, C, fs);
-/*                     if (calculationsCheckIsOk(Xnew,C,fs)) {
-                        optimalityCheck(Xnew, C, fs);
-                    }else {
+                    double[,] Xnew = new double[row2, col2];
+                    Xnew = newPlanFormation(X, C, fs, k, r);
+                    optimalityCheck(Xnew, C, fs);
+                    /*if (calculationsCheckIsOk(Xnew,C,fs)) {
+                          optimalityCheck(Xnew, C, fs);
+                      break;
+                       }else {
                           Console.WriteLine("Чет пошло не так");
-                      } */
+                      return;
+                       } */
                     break;
             }
         }
@@ -86,17 +101,16 @@ namespace CourseProject {
         /// <returns>Возвращает true, если погрешность допустима</returns>
         private static Boolean calculationsCheckIsOk(double[,] X, double[] C, int[] fs) {
             int row = X.GetLength(0);
-            int col = X.GetLength(1);
+            int col = X.GetLength(1) - 1;
             double[] delta = deltaCount(C, X, fs);
             double[] checkDelta = new double[col]; //Дельта расчитываемая для сравнения и проверки погрешностей
-            checkDelta[0] = C[fs[0] - 1] * X[0, 0] + C[fs[1] - 1] * X[1, 0];
             for (int i = 1; i < col; i++) {
                 for (int j = 0; j < row; j++) {
                     checkDelta[i] += C[fs[j] - 1] * X[j, i];
                 }
                 checkDelta[i] -= C[i - 1]; 
             }
-            double epsilon = 0.0000001;
+            double epsilon = 0.000001;
             int checkedValues = 0;
             for (int i = 0; i < col; i++) {
                 if(Math.Abs(checkDelta[i]-delta[i]) <= epsilon)
@@ -117,27 +131,29 @@ namespace CourseProject {
         /// <param name="k">Направляющий столбец</param>
         /// <param name="r">Направляющая строка</param>
         /// <returns>Новый опорный план</returns>
-        private static double[,] newBasicPlanFormation(double[,] X, double[] C, int[] fs, int k, int r) {
+        private static double[,] newPlanFormation(double[,] X, double[] C, int[] fs, int k, int r) {
             int row = X.GetLength(0);
             int col = X.GetLength(1) - 1;
-            Console.WriteLine("check");
             double[,] Xnew = new double[row,col + 1];
-            int rIndexRow = 0;
+            int rIndexRow = -1;
             for(int i = 0; i < row; i++) {
-                if (X[i, 0] == r)
+                if (X[i, 0] == r) {
                     rIndexRow = i; //Находим какая строка имеет индекс r
+                    break;
+                }
             }
             for(int i = 0; i < row; i++) {
                for(int j = 0; j < col; j++) {
-                    if (X[i,0] != r ) //Является ли текущая строка ведущей строкой (r)
-                        Xnew[i, j + 1] = Math.Round(X[i, j + 1] - ((X[rIndexRow, j + 1] * 
-                            X[i, k + 1]) / X[rIndexRow, k + 1]),14);
-                    else 
-                        Xnew[i, j + 1] = Math.Round(X[rIndexRow, j + 1] / X[rIndexRow, k + 1], 14);
+                    if (X[i, 0] != r) { //Является ли текущая строка ведущей строкой (r)
+                        Xnew[i, j + 1] = Math.Round((X[i, j + 1] - ((X[rIndexRow, j + 1] * X[i, k + 1]) / X[rIndexRow, k + 1])), 14);
+                    } else {
+                        Xnew[i, j + 1] = Math.Round((X[rIndexRow, j + 1] / X[rIndexRow, k + 1]), 14);
+                    }
                 }
             }
             for (int i = 0; i < row; i++)
                 Xnew[i, 0] = fs[i];
+
             return Xnew;
         }
 
@@ -152,16 +168,14 @@ namespace CourseProject {
             int r = fs[0]; //Направляющая строка
             int length = X.GetLength(0);
             double[] teta = new double[length];
-            teta[0] = X[0, 1] / X[0, k + 1];
-            for (int i = 1; i < length; i++) {
+            for (int i = 0; i < length; i++) {
                 if (X[i, k + 1] > 0)
                     teta[i] = (X[i, 1] / X[i, k + 1]);
                 else
                     teta[i] = 99999999999999; //Неадекватно большое значение, которое показывает, что элемент не рассматривается
-                if (teta[i] < teta[i-1]) {
-                    r = fs[i];
-                }
             }
+            int minVal = Array.IndexOf(teta, teta.Min());
+            r = fs[minVal];
             return r;
         }
 
@@ -193,7 +207,7 @@ namespace CourseProject {
             int height = X.GetLength(0);
             int situation = 1;
             for (int j = 1; j < length; j++) {
-                if (delta[j] < 0) {
+                if (delta[j-1] < 0) {
                     int omega = 0;
                     situation = 3;
                     for (int i = 0; i < height; i++) {
@@ -230,8 +244,7 @@ namespace CourseProject {
             }
             delta[0] = z[0];
             for (int i = 1; i < coefCount; i++)
-                delta[i] = z[i] - C[i-1];
-                       
+                delta[i] = Math.Round(z[i] - C[i-1], 6); //округляем до 6 знаков после запятой
             return delta;
         }
 

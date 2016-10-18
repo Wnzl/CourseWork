@@ -38,7 +38,9 @@ namespace CourseProject
                  };
                  double[] CFirst = new double[] { 315, 489, 663, 837, 1011, 1185, 1359, 1533, 1707, 1881, 2055, 2229, 2403}; 
              
-            SimplexMethod.solve(AFirst, CFirst);
+            SimplexTable[] results = SimplexMethod.solve(AFirst, CFirst);
+            foreach (SimplexTable table in results) //Вывод значений целевой функции из каждой итерации
+                Console.WriteLine(table.L);
         }
             
 

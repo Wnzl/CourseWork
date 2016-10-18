@@ -16,7 +16,7 @@ namespace CourseProject {
         /// </summary>
         /// <param name="AFirst">Матрица ограничений</param>
         /// <param name="CFirst">Вектор коэффициентов целевой функции</param>
-        public static void solve(double[,] AFirst, double[] CFirst) {
+        public static SimplexTable[] solve(double[,] AFirst, double[] CFirst) {
             
             //матрица ограничений с учётом добавленных переменных 
             double[,] A = modifyA(AFirst);
@@ -24,10 +24,12 @@ namespace CourseProject {
             double[] C = modifyC(CFirst, AFirst);
             //коэффициенты базиса
             int[] fs = referenceBasis(AFirst);
-            int rows = A.GetLength(0); //Получаем количество строк матрицы ограничений
+            int rows = A.GetLength(0);                               //Получаем количество строк матрицы ограничений
             for (int i = 0; i < rows; i++)
-                A[i, 0] = fs[i];  //Записываем в каждый 0-ой элемент строки индекс А
-            optimalityCheck(A, C, fs);
+                A[i, 0] = fs[i];                                     //Записываем в каждый 0-ой элемент строки индекс А
+            SimplexTable[] resultMassive = new SimplexTable[0];      //Создаем массив симплекс таблиц
+            resultMassive = optimalityCheck(A, C, fs, resultMassive);//Определяем массив симплекс таблиц для всех итераций
+            return resultMassive;
         }
 
         /// <summary>
@@ -37,61 +39,45 @@ namespace CourseProject {
         /// <param name="X">Матрица ограничений, где [i,0] это индекс А, а [i,1] значение вектора b</param>
         /// <param name="C">Вектор коэффициентов целевой функции</param>
         /// <param name="fs">Коэффициенты начального базиса</param>
-        private static void optimalityCheck(double[,] X, double[] C, int[] fs) {
+        private static SimplexTable[] optimalityCheck(double[,] X, double[] C, int[] fs, SimplexTable[] oldMassive) {
+            SimplexTable[] resultMassive = new SimplexTable[oldMassive.GetLength(0) + 1]; //Создаем новую симпл таблицу для новой итерации
+            Array.Copy(oldMassive, resultMassive, oldMassive.GetLength(0));
+            int lastTable = resultMassive.GetLength(0) - 1;                               //Выбираем индекс последней таблицы
+            resultMassive[lastTable] = new SimplexTable();
             double[] delta = deltaCount(C, X, fs);
             int k = 0; //Направляющий столбец
             int r = 0; //Направляющая строка
             int situation = situationCheck(delta, X);
+            //Записываем значения текущей симплекс таблицы
+            resultMassive[lastTable].delta = delta;
+            resultMassive[lastTable].L = delta[0];
+            resultMassive[lastTable].C = C;
+            resultMassive[lastTable].X = X;
+            resultMassive[lastTable].fs = fs;
+            resultMassive[lastTable].delta = delta;
+            resultMassive[lastTable].situation = situation;
             switch (situation) {
                 case 1:
-                    //Безобразный вывод в консоль исключительно для теста как выполняется эта вся кухня
                     Console.WriteLine("Решение найдено");
-                    int row = X.GetLength(0);
-                    int col = X.GetLength(1);
-                    double[] xResult = new double[col - 1];
-                    for(int i = 0; i < col - 1; i++) {
-                        for (int j = 0; j < row; j++) {
-                            if (i + 1 == X[j, 0]) {
-                                xResult[i] = X[j, 1];
-                                break;
-                            } else
-                                xResult[i] = 0;
-                        }
-                    }
-                    Console.WriteLine("L = {0}", delta[0]);
-                    Console.Write("\nFs = {");
-                    for (int i = 0; i < fs.GetLength(0); i++)
-                        Console.Write("A" + fs[i] + " ");
-                    Console.Write("}");
-                    Console.WriteLine("X = (");
-                    foreach (double x in xResult)
-                        Console.Write(x + ", ");
-                    Console.WriteLine(")");
-                    return;
+                    return resultMassive;
                 case 2:
                     Console.WriteLine("Задача не имеет решения");
-                    break;
+                    return resultMassive;
                 case 3:
                     k = findDirectiveColumn(delta);
                     r = findDirectiveRow(k, X, fs);
-                    int row2 = X.GetLength(0);
-                    int col2 = X.GetLength(1);
-                    fs[Array.IndexOf(fs, r)] = k;   //Делаем замену вектора условий с индексом r на вектор с индексом k 
-                    double[,] Xnew = new double[row2, col2];
-                    Xnew = newPlanFormation(X, C, fs, k, r);
-                    optimalityCheck(Xnew, C, fs);
-                    /*if (calculationsCheckIsOk(Xnew,C,fs)) {
-                          optimalityCheck(Xnew, C, fs);
-                      break;
-                       }else {
-                          Console.WriteLine("Чет пошло не так");
-                      return;
-                       } */
-                    break;
+                    //Записываем значения текущей симплекс таблицы
+                    resultMassive[lastTable].k = k;
+                    resultMassive[lastTable].r = r;
+                    resultMassive[lastTable].teta = tetaCount(k, X, fs);
+                    fs[Array.IndexOf(fs, r)] = k;                       //Делаем замену вектора условий с индексом r на вектор с индексом k 
+                    double[,] Xnew = new double[X.GetLength(0), X.GetLength(1)]; 
+                    Xnew = newPlanFormation(X, C, fs, k, r);            //Расчитываем новый опорный план для следующей итерации
+                    return optimalityCheck(Xnew, C, fs, resultMassive); //Делаем новую итерацию до тех пор пока не будет найден результат
             }
+            return resultMassive;
         }
 
-        //Не понимаю смысла этой  проверки, думаю удалить этот метод
         /// <summary>
         /// Метод проверки погрешностей вычисления
         /// </summary>
@@ -167,6 +153,21 @@ namespace CourseProject {
         private static int findDirectiveRow(int k, double[,] X, int[] fs) {
             int r = fs[0]; //Направляющая строка
             int length = X.GetLength(0);
+            double[] teta = tetaCount(k, X, fs);
+            int minVal = Array.IndexOf(teta, teta.Min());
+            r = fs[minVal];
+            return r;
+        }
+
+        /// <summary>
+        /// Метод расчета тета
+        /// </summary>
+        /// <param name="k">Направляющий столбец</param>
+        /// <param name="X">Опорный план</param>
+        /// <param name="fs">Коэффициенты базиса</param>
+        /// <returns>Тета</returns>
+        private static double[] tetaCount(int k, double[,] X, int[] fs) {
+            int length = X.GetLength(0);
             double[] teta = new double[length];
             for (int i = 0; i < length; i++) {
                 if (X[i, k + 1] > 0)
@@ -174,9 +175,7 @@ namespace CourseProject {
                 else
                     teta[i] = 99999999999999; //Неадекватно большое значение, которое показывает, что элемент не рассматривается
             }
-            int minVal = Array.IndexOf(teta, teta.Min());
-            r = fs[minVal];
-            return r;
+            return teta;
         }
 
         /// <summary>
@@ -227,7 +226,7 @@ namespace CourseProject {
         /// </summary>
         /// <param name="C">Вектор целевой функции</param>
         /// <param name="X">Опорный план задачи</param>
-        /// <param name="fs">Коэффициенты начального базиса</param>
+        /// <param name="fs">Коэффициенты базиса</param>
         /// <returns>Вектор дельта</returns>
         private static double[] deltaCount(double[] C, double[,] X, int[] fs) {
             int coefCount = X.GetLength(1) - 1; //Потому что [i,0] это не коэффициент, а индекс А

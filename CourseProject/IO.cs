@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace CourseProject
 {
@@ -189,6 +190,66 @@ namespace CourseProject
                 }
             answer += "}\r\nL = " + simplexTable.L.ToString() + "\r\n";
             return answer;
+        }
+
+        public static void drowSolve(SimplexTable table, int action)
+        {
+            switch (action)
+            {
+                case 0:
+                    {
+                        using (StreamWriter sw = new StreamWriter("out.html", false, System.Text.Encoding.Default)) //false вказує, що файл буде перезаписано. Далі використовувати true!
+                        {
+                            sw.WriteLine("<!DOCTYPE html>\r\n<html lang='uk'>\r\n<head>\r\n<meta charset='UTF-8'>\r\n<title>Detail solve</title>\r\n</head>\r\n<body>");
+                        }
+                        break;
+                    }
+                case 1:
+                    {
+                        string solveString = "";
+                        //Вивід початку таблиці
+                        solveString = "<table border = '1'><tr><td></td><td></td><td></td><td>C</td>";
+                        //Цикл значень С
+                        foreach (int i in table.C)
+                        {
+                            solveString += "<td>" + i + "</td>";
+                        }
+                        solveString += "<td></td></tr>";
+                        //Ще заголовки, 2-й ряд
+                        solveString += "<tr><td>N</td><td>Cs</td><td>Fs</td>";
+                        //Виводимо індекси А в заголовку
+                        for (int i = 0; i < table.X.GetLength(1) - 1; i++)
+                        {
+                            solveString += "<td>A" + i + "</td>";
+                        }
+                        solveString += "<td>Θ</td></tr>";
+
+                        for (int index = 0; index < table.X.GetLength(0); index++)
+                        {
+                            //Виводимо номер, Cs, Fs
+                            solveString += "<tr><td>"+(index+1)+"</td><td>"+table.Cs[index]+ "</td><td>"+table.fs[index]+"</td>";
+                            //Цикл для значень Х
+                            for(int i = 0; i < table.X.GetLength(1) - 1; i++)
+                                solveString += "<td>" + Math.Round(table.X[index, i], 3) + "</td>";
+                            solveString += "</tr>";
+                        }
+
+                        using (StreamWriter sw = new StreamWriter("out.html", true, System.Text.Encoding.Default)) //false вказує, що файл буде перезаписано. Далі використовувати true!
+                        {
+                            sw.WriteLine(solveString);
+                        }
+                        break;
+                    }
+                case 2:
+                    {
+                        using (StreamWriter sw = new StreamWriter("out.html", true, System.Text.Encoding.Default))
+                        {
+                            sw.WriteLine("</body>\r\n</html>");
+                        }
+                        break;
+                    }
+            }
+
         }
     }
 }

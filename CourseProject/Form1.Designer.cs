@@ -53,7 +53,7 @@
             this.insertValues.TabIndex = 0;
             this.insertValues.Text = "Заповнити матрицю";
             this.insertValues.UseVisualStyleBackColor = true;
-            this.insertValues.Click += new System.EventHandler(this.button1_Click);
+            this.insertValues.Click += new System.EventHandler(this.insertValues_Click);
             // 
             // out1
             // 
@@ -126,6 +126,7 @@
             this.Solve.TabIndex = 13;
             this.Solve.Text = "Розв\'язати";
             this.Solve.UseVisualStyleBackColor = true;
+            this.Solve.Click += new System.EventHandler(this.Solve_Click);
             // 
             // menuStrip1
             // 

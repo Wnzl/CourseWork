@@ -116,23 +116,36 @@ namespace CourseProject
         /// <summary>
         /// Отримання матриці обмежень (масив)
         /// </summary>
-        public static double[,] getLimitationMatrix(object sender, EventArgs e, DataGridView dataGridView1)
+        public static double[,] getLimitationMatrix(object sender, EventArgs e, DataGridView dataGridView)
         {
-            int colsNum = Convert.ToInt16(dataGridView1.ColumnCount);
-            int rowOfFunction = Convert.ToInt16(dataGridView1.RowCount);
-            int colsOfFunction = colsNum - 1;
-            double[,] limitationMatrix = new double[rowOfFunction, colsOfFunction];
-            int bIndex = rowOfFunction - 1;
-            for (int i = 0; i < rowOfFunction; i++)
-                limitationMatrix[i, 0] = Convert.ToDouble(dataGridView1.Rows[i].Cells[bIndex].Value);
+            int colsNum = Convert.ToInt16(dataGridView.ColumnCount);
+            int rowsNum = Convert.ToInt16(dataGridView.RowCount);
+            int colsOfMassive = colsNum - 1;
+            double[,] limitationMatrix = new double[rowsNum, colsOfMassive];
+            //Індекс b = кількість колонок - 1
+            int bIndex = colsNum - 1;
 
-            int jj; //для виводу значень A в масив береться індекс на 1 більше, перший займає b
-            for (int i = 0; i < rowOfFunction; i++)
-                for (int j = 0; j < colsOfFunction; j++)
+            //забираємо значення b
+            for (int rowIndex = 0; rowIndex < rowsNum; rowIndex++)
+                limitationMatrix[rowIndex, 0] = Convert.ToDouble(dataGridView.Rows[rowIndex].Cells[bIndex].Value);
+            MessageBox.Show("0: " +limitationMatrix.GetLength(0)+ " 1: " + limitationMatrix.GetLength(1));
+            //забираємо значення A
+            //colMassive для виводу значень A в масив береться індекс на 1 більше, перший займає b
+            //colsOfFunction - 2, адже беремо лише значення А
+            for (int rowIndex = 0; rowIndex < rowsNum; rowIndex++) 
+                for (int colGridIndex = 0, colIndexMassive = 1; colGridIndex < colsNum - 2; colGridIndex++, colIndexMassive++)
                 {
-                    jj = j + 1;
-                    limitationMatrix[i, jj] = Convert.ToDouble(dataGridView1.Rows[i].Cells[bIndex].Value);
+                    limitationMatrix[rowIndex, colIndexMassive] = Convert.ToDouble(dataGridView.Rows[rowIndex].Cells[colGridIndex].Value);
                 }
+
+            /*string a = ""; //це було для перевірки масиву
+            for (int row = 0; row < limitationMatrix.GetLength(0); row++)
+            {
+                for (int col = 0; col < limitationMatrix.GetLength(1); col++)
+                    a += limitationMatrix[row, col].ToString() + " ";
+                a += "\n";
+            }
+            MessageBox.Show(a);*/
             return limitationMatrix;
         }
 

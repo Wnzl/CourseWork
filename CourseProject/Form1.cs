@@ -22,7 +22,7 @@ namespace CourseProject
 
         }
 
-        private void button1_Click(object sender, EventArgs e) {
+        private void insertValues_Click(object sender, EventArgs e) {
                  double[,] AFirst = new double[,] { {1300, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                                                     {9100, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13},
                                                     {12400, 11, 5, 9, 21, 1, 19, 1, 31, 1, 0, 0, 0, 29},
@@ -59,11 +59,15 @@ namespace CourseProject
                     //Задаємо A
                     dataGridView2.Rows[i].Cells[j].Value = AFirst[i, matrJ].ToString();
             }
+        }
 
-            SimplexTable[] results = SimplexMethod.solve(AFirst, CFirst);
-           /* foreach (SimplexTable table in results) //Вывод значений целевой функции из каждой итерации
-                Console.WriteLine(table.L);*/
-            AnswerBox.Text = results[results.Length-1].L.ToString();
+        /// <summary>
+        /// Знаходження розв'зяку
+        /// </summary>
+        private void Solve_Click(object sender, EventArgs e)
+        {
+            SimplexTable[] results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e));
+            AnswerBox.Text = results[results.Length - 1].L.ToString();
         }
 
         /// <summary>
@@ -99,7 +103,7 @@ namespace CourseProject
         /// </summary>
         private double[,] getLimitationMatrix(object sender, EventArgs e)
         {
-            return IO.getLimitationMatrix(sender, e, dataGridView1);
+            return IO.getLimitationMatrix(sender, e, dataGridView2);
         }
 
         /// <summary>

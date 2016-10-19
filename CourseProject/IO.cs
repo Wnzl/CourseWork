@@ -38,7 +38,7 @@ namespace CourseProject
                 { Name = colName, HeaderText = colName, Width = 50 });
             }
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
-            { HeaderText = "→", Width = 50 });
+            { HeaderText = "→", Width = 34 });
             DataGridViewComboBoxColumn comboboxColumnMaxMin = new DataGridViewComboBoxColumn();
             comboboxColumnMaxMin.Items.AddRange("max", "min");
             comboboxColumnMaxMin.HeaderText = "MaxMin";
@@ -70,7 +70,7 @@ namespace CourseProject
             dataGridView1.RowCount = 1;
             dataGridView2.RowCount = rowsNum;
         }
-
+        
         /// <summary>
         /// Задання знаків у матриці обмежень
         /// </summary>
@@ -128,7 +128,7 @@ namespace CourseProject
             //забираємо значення b
             for (int rowIndex = 0; rowIndex < rowsNum; rowIndex++)
                 limitationMatrix[rowIndex, 0] = Convert.ToDouble(dataGridView.Rows[rowIndex].Cells[bIndex].Value);
-            MessageBox.Show("0: " +limitationMatrix.GetLength(0)+ " 1: " + limitationMatrix.GetLength(1));
+
             //забираємо значення A
             //colMassive для виводу значень A в масив береться індекс на 1 більше, перший займає b
             //colsOfFunction - 2, адже беремо лише значення А
@@ -143,7 +143,7 @@ namespace CourseProject
             {
                 for (int col = 0; col < limitationMatrix.GetLength(1); col++)
                     a += limitationMatrix[row, col].ToString() + " ";
-                a += "\n";
+                a += "\r\n";
             }
             MessageBox.Show(a);*/
             return limitationMatrix;
@@ -159,6 +159,36 @@ namespace CourseProject
                 return true;
             else
                 return false;
+        }
+        /// <summary>
+        /// Виведення результату в рядок
+        /// </summary>
+        public static string writeSolve(SimplexTable simplexTable)
+        {
+            int xCount = simplexTable.X.GetLength(1) - 2;
+            int simplexTableLength = simplexTable.X.GetLength(0);
+            string answer = "";
+            for(int index = 1; index <= xCount; index++)
+            {
+                for (int i = 0; i < simplexTableLength; i++)
+                {
+                    if (simplexTable.X[i, 0] == index)
+                    {
+                        answer += "x" + index + " = " + simplexTable.X[i, 1] + "\r\n";
+                        break;
+                    }
+                    else if (i == simplexTableLength - 1)
+                        answer += "x" + index + " = " + 0 + "\r\n";
+                }
+            }
+            answer += "\r\nFs = { ";
+
+            foreach (int Fs in simplexTable.fs)
+                {
+                    answer += "A" + Fs.ToString() + " ";
+                }
+            answer += "}\r\nL = " + simplexTable.L.ToString() + "\r\n";
+            return answer;
         }
     }
 }

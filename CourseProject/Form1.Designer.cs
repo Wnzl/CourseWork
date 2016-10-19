@@ -47,9 +47,9 @@
             // 
             // insertValues
             // 
-            this.insertValues.Location = new System.Drawing.Point(841, 94);
+            this.insertValues.Location = new System.Drawing.Point(836, 94);
             this.insertValues.Name = "insertValues";
-            this.insertValues.Size = new System.Drawing.Size(176, 23);
+            this.insertValues.Size = new System.Drawing.Size(181, 23);
             this.insertValues.TabIndex = 0;
             this.insertValues.Text = "Заповнити матрицю";
             this.insertValues.UseVisualStyleBackColor = true;
@@ -110,9 +110,9 @@
             // 
             // buildMatrix
             // 
-            this.buildMatrix.Location = new System.Drawing.Point(841, 53);
+            this.buildMatrix.Location = new System.Drawing.Point(836, 53);
             this.buildMatrix.Name = "buildMatrix";
-            this.buildMatrix.Size = new System.Drawing.Size(176, 23);
+            this.buildMatrix.Size = new System.Drawing.Size(181, 23);
             this.buildMatrix.TabIndex = 12;
             this.buildMatrix.Text = "Будувати матрицю";
             this.buildMatrix.UseVisualStyleBackColor = true;
@@ -120,9 +120,9 @@
             // 
             // Solve
             // 
-            this.Solve.Location = new System.Drawing.Point(841, 123);
+            this.Solve.Location = new System.Drawing.Point(836, 123);
             this.Solve.Name = "Solve";
-            this.Solve.Size = new System.Drawing.Size(176, 23);
+            this.Solve.Size = new System.Drawing.Size(181, 23);
             this.Solve.TabIndex = 13;
             this.Solve.Text = "Розв\'язати";
             this.Solve.UseVisualStyleBackColor = true;
@@ -147,10 +147,14 @@
             // 
             // AnswerBox
             // 
-            this.AnswerBox.Location = new System.Drawing.Point(841, 152);
+            this.AnswerBox.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.AnswerBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.AnswerBox.Location = new System.Drawing.Point(836, 152);
             this.AnswerBox.Multiline = true;
             this.AnswerBox.Name = "AnswerBox";
-            this.AnswerBox.Size = new System.Drawing.Size(176, 135);
+            this.AnswerBox.ReadOnly = true;
+            this.AnswerBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.AnswerBox.Size = new System.Drawing.Size(181, 367);
             this.AnswerBox.TabIndex = 15;
             // 
             // Form1

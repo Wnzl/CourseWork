@@ -66,8 +66,13 @@ namespace CourseProject
         /// </summary>
         private void Solve_Click(object sender, EventArgs e)
         {
+            try
+            {
             SimplexTable[] results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e));
-            AnswerBox.Text = results[results.Length - 1].L.ToString();
+            int last = results.Length - 1;
+            AnswerBox.Text = IO.writeSolve(results[last]);
+            }
+            catch (Exception ex) { MessageBox.Show("Виникла помилка при розв'язанні задачі\r\n\r\nДеталі:\r\n" + ex, "Помилка"); }
         }
 
         /// <summary>
@@ -76,9 +81,15 @@ namespace CourseProject
         private void buildMatrix_Click(object sender, EventArgs e)
         {
             //Кількість колонок і рядків
-            int colsNum = Convert.ToInt16(numCols.Text);
-            int rowsNum = Convert.ToInt16(numRows.Text);
-            IO.buildMatrix(sender, e, dataGridView1, dataGridView2, colsNum, rowsNum);
+            try
+            {
+                int colsNum = Convert.ToInt16(numCols.Text);
+                int rowsNum = Convert.ToInt16(numRows.Text);
+                if (colsNum < 2 || rowsNum < 2)
+                    throw new System.ArgumentException("Недійсні значення");
+                IO.buildMatrix(sender, e, dataGridView1, dataGridView2, colsNum, rowsNum);
+            }
+            catch (Exception ex) { MessageBox.Show("Не вдалося побудувати матрицю, перевірте значення\r\n\r\nДеталі:\r\n" + ex, "Помилка"); }
         }
 
         /// <summary>

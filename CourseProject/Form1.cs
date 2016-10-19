@@ -36,11 +36,34 @@ namespace CourseProject
                                                     {12408, 7, 0, 0, 5, 1, 9, 11, 1, 19, 21, 29, 0, 31},
                                                     {12410, 11, 0, 0, 0, 9, 1, 19, 1, 21, 1, 29, 31, 10},
                  };
-                 double[] CFirst = new double[] { 315, 489, 663, 837, 1011, 1185, 1359, 1533, 1707, 1881, 2055, 2229, 2403}; 
-             
+                 double[] CFirst = new double[] { 315, 489, 663, 837, 1011, 1185, 1359, 1533, 1707, 1881, 2055, 2229, 2403};
+
+            //-----Заповнення таблиці даними з масиву-----
+            //Отримання розмірності
+            int nCols = CFirst.GetLength(0);
+            int nRows = AFirst.GetLength(0);
+            //Будуємо таблиці
+            IO.buildMatrix(sender, e, dataGridView1, dataGridView2, nCols, nRows);
+            //Заповнюємо цільову функцію
+            for (int i = 0; i < nCols; i++)
+                dataGridView1.Rows[0].Cells[i].Value = CFirst[i].ToString();
+
+            //Заповнюємо матрицю обмежень
+            //collsAdded враховує додані колонки зі знаком і b, потрібна для знахоження індексу елементів b в таблиці
+            int collsAdded = dataGridView2.ColumnCount;
+            for (int i = 0; i < nRows; i++)
+            {
+                //Задаємо b
+                dataGridView2.Rows[i].Cells[collsAdded - 1].Value = AFirst[i, 0].ToString();
+                for (int j = 0, matrJ = 1; j < nCols; j++, matrJ++)
+                    //Задаємо A
+                    dataGridView2.Rows[i].Cells[j].Value = AFirst[i, matrJ].ToString();
+            }
+
             SimplexTable[] results = SimplexMethod.solve(AFirst, CFirst);
-            foreach (SimplexTable table in results) //Вывод значений целевой функции из каждой итерации
-                Console.WriteLine(table.L);
+           /* foreach (SimplexTable table in results) //Вывод значений целевой функции из каждой итерации
+                Console.WriteLine(table.L);*/
+            AnswerBox.Text = results[results.Length-1].L.ToString();
         }
 
         /// <summary>
@@ -48,7 +71,10 @@ namespace CourseProject
         /// </summary>
         private void buildMatrix_Click(object sender, EventArgs e)
         {
-            IO.buildMatrix(sender, e, dataGridView1, dataGridView2, numCols, numRows);
+            //Кількість колонок і рядків
+            int colsNum = Convert.ToInt16(numCols.Text);
+            int rowsNum = Convert.ToInt16(numRows.Text);
+            IO.buildMatrix(sender, e, dataGridView1, dataGridView2, colsNum, rowsNum);
         }
 
         /// <summary>
@@ -60,18 +86,35 @@ namespace CourseProject
             IO.sameSign_Check(sender, e, dataGridView2, sameSign);
         }
 
-        private void getTargetFunction(object sender, EventArgs e)
+        /// <summary>
+        /// Отримання вектора цільової функції (масив)
+        /// </summary>
+        private double[] getTargetFunction(object sender, EventArgs e)
         {
-            IO.getTargetFunction(sender, e, numCols, dataGridView1);
-        }
-        private void getLimitationMatrix(object sender, EventArgs e)
-        {
-            IO.getLimitationMatrix(sender, e, numCols, numRows, dataGridView1);
+            return IO.getTargetFunction(sender, e, dataGridView1);
         }
 
-        private void tryBTN_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Отримання матриці обмежень (масив)
+        /// </summary>
+        private double[,] getLimitationMatrix(object sender, EventArgs e)
         {
-            MessageBox.Show(IO.getMaxMin(sender, e, dataGridView1).ToString());
+            return IO.getLimitationMatrix(sender, e, dataGridView1);
+        }
+
+        /// <summary>
+        /// Отримання значення куди прямує функція MIN/MAX
+        /// </summary>
+        private bool getMaxMin(object sender, EventArgs e)
+        {
+            return IO.getMaxMin(sender, e, dataGridView1);
+        }
+        
+
+        //Елемент меню. Кнопка Вийти
+        private void exit_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

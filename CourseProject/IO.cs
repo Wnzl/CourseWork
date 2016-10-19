@@ -23,16 +23,12 @@ namespace CourseProject
         /// <summary>
         /// Розмітка таблиць для введення даних
         /// </summary>
-        public static void buildMatrix(object sender, EventArgs e, DataGridView dataGridView1, DataGridView dataGridView2, TextBox numCols, TextBox numRows)
+        public static void buildMatrix(object sender, EventArgs e, DataGridView dataGridView1, DataGridView dataGridView2, int colsNum, int rowsNum)
         {
             //Очистимо Grid
             clearGrid(sender, e, dataGridView1);
             clearGrid(sender, e, dataGridView2);
-
-            //Кількість колонок і рядків
-            int colsNum = Convert.ToInt16(numCols.Text);
-            int rowsNum = Convert.ToInt16(numRows.Text);
-
+            
             //Створимо таблицю для введення вектора цільової функції
             for (int i = 0; i < colsNum; i++)
             {
@@ -107,9 +103,9 @@ namespace CourseProject
         /// <summary>
         /// Отримання вектора цільової функції (масив)
         /// </summary>
-        public static double[] getTargetFunction(object sender, EventArgs e, TextBox numCols, DataGridView dataGridView1)
+        public static double[] getTargetFunction(object sender, EventArgs e, DataGridView dataGridView1)
         {
-            int colsNum = Convert.ToInt16(numCols.Text);
+            int colsNum = dataGridView1.ColumnCount;
             int colsOfFunction = colsNum - 2;
             double[] targetFunction = new double[colsOfFunction];
             for (int i = 0; i < colsOfFunction; i++)
@@ -120,10 +116,10 @@ namespace CourseProject
         /// <summary>
         /// Отримання матриці обмежень (масив)
         /// </summary>
-        public static double[,] getLimitationMatrix(object sender, EventArgs e, TextBox numCols, TextBox numRows, DataGridView dataGridView1)
+        public static double[,] getLimitationMatrix(object sender, EventArgs e, DataGridView dataGridView1)
         {
-            int colsNum = Convert.ToInt16(numCols.Text);
-            int rowOfFunction = Convert.ToInt16(numRows.Text);
+            int colsNum = Convert.ToInt16(dataGridView1.ColumnCount);
+            int rowOfFunction = Convert.ToInt16(dataGridView1.RowCount);
             int colsOfFunction = colsNum - 1;
             double[,] limitationMatrix = new double[rowOfFunction, colsOfFunction];
             int bIndex = rowOfFunction - 1;

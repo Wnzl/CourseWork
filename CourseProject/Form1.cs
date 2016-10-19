@@ -29,11 +29,36 @@ namespace CourseProject
             double[] CFirst = new double[] { -2, 2, 9, 1 }; //коэффициенты целевой функции из формы ввода
             SimplexMethod.solve(AFirst, CFirst);
         }
-            
 
-        private void label3_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Розмітка таблиць для введення даних після натискання кнопки
+        /// </summary>
+        private void buildMatrix_Click(object sender, EventArgs e)
         {
+            IO.buildMatrix(sender, e, dataGridView1, dataGridView2, numCols, numRows);
+        }
 
+        /// <summary>
+        /// Зміна поведінки знаків після зміни значення прапорця sameSign 
+        /// (sameSign - В матриці обмежень однакові знаки нерівностей?)
+        /// </summary>
+        private void sameSign_Click(object sender, EventArgs e)
+        {
+            IO.sameSign_Check(sender, e, dataGridView2, sameSign);
+        }
+
+        private void getTargetFunction(object sender, EventArgs e)
+        {
+            IO.getTargetFunction(sender, e, numCols, dataGridView1);
+        }
+        private void getLimitationMatrix(object sender, EventArgs e)
+        {
+            IO.getLimitationMatrix(sender, e, numCols, numRows, dataGridView1);
+        }
+
+        private void tryBTN_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(IO.getMaxMin(sender, e, dataGridView1).ToString());
         }
     }
 }

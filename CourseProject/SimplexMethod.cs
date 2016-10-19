@@ -11,64 +11,73 @@ namespace CourseProject {
     /// Метод последовательного улучшения плана (1 алгоритм)
     /// </summary>
     class SimplexMethod {
-
-        public static void solve(double[,] AFirst, double[] CFirst) {
+        /// <summary>
+        /// Метод нахождения оптимального плана методом последовательного улучшения плана (1 алгоритм)
+        /// </summary>
+        /// <param name="AFirst">Матрица ограничений</param>
+        /// <param name="CFirst">Вектор коэффициентов целевой функции</param>
+        public static SimplexTable[] solve(double[,] AFirst, double[] CFirst) {
             
-            //матрица ограничений с учётом добавленных переменных
+            //матрица ограничений с учётом добавленных переменных 
             double[,] A = modifyA(AFirst);
             //коэффициенты целевой функции с учетом добавленных переменных
             double[] C = modifyC(CFirst, AFirst);
             //коэффициенты базиса
             int[] fs = referenceBasis(AFirst);
-            double[,] X = basicPlanFormation(A, fs);
-            buildTable(X, C, fs);
+            int rows = A.GetLength(0);                               //Получаем количество строк матрицы ограничений
+            for (int i = 0; i < rows; i++)
+                A[i, 0] = fs[i];                                     //Записываем в каждый 0-ой элемент строки индекс А
+            SimplexTable[] resultMassive = new SimplexTable[0];      //Создаем массив симплекс таблиц
+            resultMassive = optimalityCheck(A, C, fs, resultMassive);//Определяем массив симплекс таблиц для всех итераций
+            return resultMassive;
         }
 
-        private static void buildTable(double[,] X, double[] C, int[] fs) {
+        /// <summary>
+        /// Метод проверки текущего базиса на оптимальность, выполняется до тех пор пока не 
+        /// будет найдено решение либо не будет определено, что задача не имеет решения
+        /// </summary>
+        /// <param name="X">Матрица ограничений, где [i,0] это индекс А, а [i,1] значение вектора b</param>
+        /// <param name="C">Вектор коэффициентов целевой функции</param>
+        /// <param name="fs">Коэффициенты начального базиса</param>
+        private static SimplexTable[] optimalityCheck(double[,] X, double[] C, int[] fs, SimplexTable[] oldMassive) {
+            SimplexTable[] resultMassive = new SimplexTable[oldMassive.GetLength(0) + 1]; //Создаем новую симпл таблицу для новой итерации
+            Array.Copy(oldMassive, resultMassive, oldMassive.GetLength(0));
+            int lastTable = resultMassive.GetLength(0) - 1;                               //Выбираем индекс последней таблицы
+            resultMassive[lastTable] = new SimplexTable();
             double[] delta = deltaCount(C, X, fs);
             int k = 0; //Направляющий столбец
             int r = 0; //Направляющая строка
-            int situation = situationCheck(delta);
+            int situation = situationCheck(delta, X);
+            //Записываем значения текущей симплекс таблицы
+            resultMassive[lastTable].delta = delta;
+            resultMassive[lastTable].L = delta[0];
+            resultMassive[lastTable].C = C;
+            resultMassive[lastTable].X = X;
+            resultMassive[lastTable].fs = fs;
+            resultMassive[lastTable].delta = delta;
+            resultMassive[lastTable].situation = situation;
             switch (situation) {
                 case 1:
-                    //Безобразный вывод в консоль исключительно для теста как выполняется эта вся кухня
                     Console.WriteLine("Решение найдено");
-                    int row = X.GetLength(0);
-                    int col = X.GetLength(1);
-                    Console.WriteLine("L = {0}", delta[0]);
-                    Console.Write("\nFs = {");
-                    for (int i = 0; i < fs.GetLength(0); i++)
-                        Console.Write("A" + fs[i] + " ");
-                    Console.Write("}");
-                    //тут нужно еще вывод вектора значений переменных вывести, но мне уже влом
-                  /*int l = C.GetLength(0);
-                    double[] result = new double[l];
-                    for(int i = 0; i < l; i++) {
-                        if(i == )
-                        result[i] 
-                    }*/
-                        break;
+                    return resultMassive;
                 case 2:
                     Console.WriteLine("Задача не имеет решения");
-                    break;
+                    return resultMassive;
                 case 3:
                     k = findDirectiveColumn(delta);
-                    // Не работает, нужно допилить
-                    //   r = findDirectiveRow(k, X, fs);
-                    r = 1;
-                    fs[Array.IndexOf(fs, r)] = k;   //Делаем замену вектора условий с индексом r на вектор с индексом k 
-                    double[,] Xnew = new double[X.GetLength(0), X.GetLength(1)];
-                    Xnew = newBasicPlanFormation(X, C, fs, k, r);
-                     if (calculationsCheckIsOk(Xnew,C,fs)) {
-                        buildTable(Xnew, C, fs);
-                    } else {
-                          Console.WriteLine("Чет пошло не так");
-                      }
-                    break;
+                    r = findDirectiveRow(k, X, fs);
+                    //Записываем значения текущей симплекс таблицы
+                    resultMassive[lastTable].k = k;
+                    resultMassive[lastTable].r = r;
+                    resultMassive[lastTable].teta = tetaCount(k, X, fs);
+                    fs[Array.IndexOf(fs, r)] = k;                       //Делаем замену вектора условий с индексом r на вектор с индексом k 
+                    double[,] Xnew = new double[X.GetLength(0), X.GetLength(1)]; 
+                    Xnew = newPlanFormation(X, C, fs, k, r);            //Расчитываем новый опорный план для следующей итерации
+                    return optimalityCheck(Xnew, C, fs, resultMassive); //Делаем новую итерацию до тех пор пока не будет найден результат
             }
+            return resultMassive;
         }
 
-        //Не понимаю смысла этой  проверки, думаю удалить этот метод
         /// <summary>
         /// Метод проверки погрешностей вычисления
         /// </summary>
@@ -78,17 +87,16 @@ namespace CourseProject {
         /// <returns>Возвращает true, если погрешность допустима</returns>
         private static Boolean calculationsCheckIsOk(double[,] X, double[] C, int[] fs) {
             int row = X.GetLength(0);
-            int col = X.GetLength(1);
+            int col = X.GetLength(1) - 1;
             double[] delta = deltaCount(C, X, fs);
             double[] checkDelta = new double[col]; //Дельта расчитываемая для сравнения и проверки погрешностей
-            checkDelta[0] = C[fs[0] - 1] * X[0, 0] + C[fs[1] - 1] * X[1, 0];
             for (int i = 1; i < col; i++) {
                 for (int j = 0; j < row; j++) {
                     checkDelta[i] += C[fs[j] - 1] * X[j, i];
                 }
                 checkDelta[i] -= C[i - 1]; 
             }
-            double epsilon = 0.0000001;
+            double epsilon = 0.000001;
             int checkedValues = 0;
             for (int i = 0; i < col; i++) {
                 if(Math.Abs(checkDelta[i]-delta[i]) <= epsilon)
@@ -100,7 +108,6 @@ namespace CourseProject {
                 return false;
         } 
 
-        //Не работает т.к. неправильно сделан выбор i != r, надо допилить
         /// <summary>
         /// Метод формирования нового опорного плана
         /// </summary>
@@ -110,21 +117,29 @@ namespace CourseProject {
         /// <param name="k">Направляющий столбец</param>
         /// <param name="r">Направляющая строка</param>
         /// <returns>Новый опорный план</returns>
-        private static double[,] newBasicPlanFormation(double[,] X, double[] C, int[] fs, int k, int r) {
+        private static double[,] newPlanFormation(double[,] X, double[] C, int[] fs, int k, int r) {
             int row = X.GetLength(0);
-            int col = X.GetLength(1);
-            double[,] Xnew = new double[row,col];
+            int col = X.GetLength(1) - 1;
+            double[,] Xnew = new double[row,col + 1];
+            int rIndexRow = -1;
+            for(int i = 0; i < row; i++) {
+                if (X[i, 0] == r) {
+                    rIndexRow = i; //Находим какая строка имеет индекс r
+                    break;
+                }
+            }
             for(int i = 0; i < row; i++) {
                for(int j = 0; j < col; j++) {
-                    if (i != r - 1) {
-                        //Ошибка из-за того, что в массиве нумерация идёт 0, 1, 2..., а в матрице это может
-                        //быть что-то вроде 3,4,6 или 1, 2, 4 и всякое такое
-                        Xnew[i, j] = Math.Round(X[i, j] - ((X[r - 1, j] * X[i, k]) / X[r - 1, k]),14);
-                    }else {
-                        Xnew[i, j] = Math.Round(X[r-1, j] / X[r-1, k],14);
+                    if (X[i, 0] != r) { //Является ли текущая строка ведущей строкой (r)
+                        Xnew[i, j + 1] = Math.Round((X[i, j + 1] - ((X[rIndexRow, j + 1] * X[i, k + 1]) / X[rIndexRow, k + 1])), 14);
+                    } else {
+                        Xnew[i, j + 1] = Math.Round((X[rIndexRow, j + 1] / X[rIndexRow, k + 1]), 14);
                     }
                 }
             }
+            for (int i = 0; i < row; i++)
+                Xnew[i, 0] = fs[i];
+
             return Xnew;
         }
 
@@ -138,15 +153,29 @@ namespace CourseProject {
         private static int findDirectiveRow(int k, double[,] X, int[] fs) {
             int r = fs[0]; //Направляющая строка
             int length = X.GetLength(0);
-            double[] teta = new double[length];
-            teta[0] = X[0, 0] / X[0, k];
-            for (int i = 1; i < length; i++) {
-                teta[i] = (X[i,0]/X[i,k]);
-                if (teta[i] < teta[i-1]) {
-                    r = fs[i];
-                }
-            }
+            double[] teta = tetaCount(k, X, fs);
+            int minVal = Array.IndexOf(teta, teta.Min());
+            r = fs[minVal];
             return r;
+        }
+
+        /// <summary>
+        /// Метод расчета тета
+        /// </summary>
+        /// <param name="k">Направляющий столбец</param>
+        /// <param name="X">Опорный план</param>
+        /// <param name="fs">Коэффициенты базиса</param>
+        /// <returns>Тета</returns>
+        private static double[] tetaCount(int k, double[,] X, int[] fs) {
+            int length = X.GetLength(0);
+            double[] teta = new double[length];
+            for (int i = 0; i < length; i++) {
+                if (X[i, k + 1] > 0)
+                    teta[i] = (X[i, 1] / X[i, k + 1]);
+                else
+                    teta[i] = 99999999999999; //Неадекватно большое значение, которое показывает, что элемент не рассматривается
+            }
+            return teta;
         }
 
         /// <summary>
@@ -172,22 +201,21 @@ namespace CourseProject {
         /// </summary>
         /// <param name="delta">Вектор дельта</param>
         /// <returns>Номер ситуации</returns>
-        private static int situationCheck(double[] delta) {
-            int situation = 0;
+        private static int situationCheck(double[] delta, double[,] X) {
             int length = delta.GetLength(0);
-            int negativeCount = 0;
-            for(int i = 0; i < length; i++) {
-                if (delta[i] < 0)
-                    negativeCount++;
-            }
-            if(negativeCount == 0) {
-                situation = 1;
-            }else {
-                //тут еще омегу нужно сделать
-                if(negativeCount == length) {
-                    situation = 2;
-                }else {
+            int height = X.GetLength(0);
+            int situation = 1;
+            for (int j = 1; j < length; j++) {
+                if (delta[j-1] < 0) {
+                    int omega = 0;
                     situation = 3;
+                    for (int i = 0; i < height; i++) {
+                        if (X[i, j] >= 0) omega++;
+                    }
+                    if (omega == 0) {
+                        situation = 2;
+                        break;
+                    }
                 }
             }
             return situation;
@@ -198,10 +226,10 @@ namespace CourseProject {
         /// </summary>
         /// <param name="C">Вектор целевой функции</param>
         /// <param name="X">Опорный план задачи</param>
-        /// <param name="fs">Коэффициенты начального базиса</param>
+        /// <param name="fs">Коэффициенты базиса</param>
         /// <returns>Вектор дельта</returns>
         private static double[] deltaCount(double[] C, double[,] X, int[] fs) {
-            int coefCount = X.GetLength(1);
+            int coefCount = X.GetLength(1) - 1; //Потому что [i,0] это не коэффициент, а индекс А
             int leng = fs.GetLength(0);
             double[] Cs = new double[leng]; //Коэффициенты целевой функции начального базиса
             for(int i = 0; i < leng; i++) {
@@ -211,15 +239,86 @@ namespace CourseProject {
             double[] z = new double[coefCount];
             for(int i = 0; i < coefCount; i++) {
                 for (int j = 0; j < leng; j++)
-                    z[i] += Cs[j] * X[j,i];
+                    z[i] += Cs[j] * X[j,i + 1];
             }
             delta[0] = z[0];
             for (int i = 1; i < coefCount; i++)
-                delta[i] = z[i] - C[i-1];
-                       
+                delta[i] = Math.Round(z[i] - C[i-1], 6); //округляем до 6 знаков после запятой
             return delta;
         }
 
+        /// <summary>
+        /// Метод изменения матрицы А с учетом дополнительных переменных
+        /// </summary>
+        /// <param name="AFirst">Исходная матрица АFirst</param>
+        /// <returns>Матрица А</returns>
+        private static double[,] modifyA(double[,] AFirst)
+        {
+            int m = AFirst.GetLength(0);
+            int n = AFirst.GetLength(1);
+            double[,] A = new double[m, m + n + 1]; // Каждый 0-ой элемент строки это индекс А, каждый 1-ый это значение вектора b
+            //добавление элементов в матрицу А
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < m + n; j++)
+                {
+                    //если переменная не новая, т.е. уже была в АFirst
+                    if (j < n) A[i, j + 1] = AFirst[i,j]; //переписываем
+                    //если переменная новая
+                    else
+                    {
+                        //единицы должны быть по диагонали
+                        if (j == i + n) A[i, j + 1] = 1;//диагональный элемент - 1
+                        else A[i, j + 1] = 0;// пишем 0
+                    }
+                }
+            }
+            return A;
+        }
+
+        /// <summary>
+        /// Метод изменения вектора С с учетом дополнительных переменных
+        /// </summary>
+        /// <param name="AFirst">Исходная матрица АFirst</param>
+        /// <param name="СFirst">Исходный вектор СFirst</param>
+        /// <returns>вектор С</returns>
+        private static double[] modifyC(double[] CFirst, double[,]AFirst)
+        {
+            int m = AFirst.GetLength(0);
+            int n = AFirst.GetLength(1);
+            double[] C = new double[m + n - 1];
+            //добавление элементов в вектор С
+            for (int i = 0; i < m + n - 1; i++)
+            {
+                //если переменная не новая, т.е. уже была в СFirst
+                if (i < n - 1) C[i] = CFirst[i];//переписываем
+                else C[i] = 0;  //иначе коэффициент при переменной, которой по условию не было
+                                //в целевой функции, будет = 0
+            }
+            return C;
+        }
+
+        /// <summary>
+        /// Метод изменения матрицы А и вектора С с учетом дополнительных переменных
+        /// </summary>
+        /// <param name="А">Матрица А с учетом дополнительных переменных</param>
+        /// <returns>Базис fs</returns>
+        private static int[] referenceBasis(double[,] AFirst)
+        {
+            int m = AFirst.GetLength(0);
+            int n = AFirst.GetLength(1);
+            int[] fs = new int[m]; //коэффициенты базиса
+            //записываем базис с учетом новых переменных
+            for (int i = 0; i < m; i++)
+            {
+                fs[i] = n + i;
+            }
+            return fs;
+        }
+
+        /* Методы связанные с обработкой начальной матрицы, из-за того, 
+         * что у нас метод нахождения начального базиса это все не требует они теряют актуальность, но на всякий случай оставлю.
+         * 
         /// <summary>
         /// Метод нахождения коэффициентов симплекс таблицы
         /// </summary>
@@ -285,7 +384,7 @@ namespace CourseProject {
             } else {
                 for (int i = 0; i < x; i++) {
                     for (int j = 0; j < y; j++) {
-                        cofactor[i, j] = Math.Pow((-1), (j + 2 + i)) * matrix[(x-1)-i, (y-1)-j];
+                        cofactor[i, j] = Math.Pow((-1), (j + 2 + i)) * matrix[(x - 1) - i, (y - 1) - j];
                     }
                 }
             }
@@ -307,7 +406,7 @@ namespace CourseProject {
             inversed = transposition(matrix);
             for (int i = 0; i < x; i++) {
                 for (int j = 0; j < y; j++)
-                    inversed[i, j] *= 1/determ;
+                    inversed[i, j] *= 1 / determ;
             }
             return inversed;
         }
@@ -348,71 +447,6 @@ namespace CourseProject {
             }
             return C;
         }
-        /// <summary>
-        /// Метод изменения матрицы А с учетом дополнительных переменных
-        /// </summary>
-        /// <param name="AFirst">Исходная матрица АFirst</param>
-        /// <returns>Матрица А</returns>
-        private static double[,] modifyA(double[,] AFirst)
-        {
-            int m = AFirst.GetLength(0);
-            int n = AFirst.GetLength(1);
-            double[,] A = new double[m, m + n];
-            //добавление элементов в матрицу А
-            for (int i = 0; i < m; i++)
-            {
-                for (int j = 0; j < m + n; j++)
-                {
-                    //если переменная не новая, т.е. уже была в АFirst
-                    if (j < n) A[i, j] = AFirst[i, j]; //переписываем
-                    //если переменная новая
-                    else
-                    {
-                        //единицы должны быть по диагонали
-                        if (j == i + n) A[i, j] = 1;//диагональный элемент - 1
-                        else A[i, j] = 0;// пишем 0
-                    }
-                }
-            }
-            return A;
-        }
-        /// <summary>
-        /// Метод изменения вектора С с учетом дополнительных переменных
-        /// </summary>
-        /// <param name="AFirst">Исходная матрица АFirst</param>
-        /// <param name="СFirst">Исходный вектор СFirst</param>
-        /// <returns>вектор С</returns>
-        private static double[] modifyC(double[] CFirst, double[,]AFirst)
-        {
-            int m = AFirst.GetLength(0);
-            int n = AFirst.GetLength(1);
-            double[] C = new double[m + n - 1];
-            //добавление элементов в вектор С
-            for (int i = 0; i < m + n - 1; i++)
-            {
-                //если переменная не новая, т.е. уже была в СFirst
-                if (i < n - 1) C[i] = CFirst[i];//переписываем
-                else C[i] = 0;  //иначе коэффициент при переменной, которой по условию не было
-                                //в целевой функции, будет = 0
-            }
-            return C;
-        }
-        /// <summary>
-        /// Метод изменения матрицы А и вектора С с учетом дополнительных переменных
-        /// </summary>
-        /// <param name="А">Матрица А с учетом дополнительных переменных</param>
-        /// <returns>Базис fs</returns>
-        private static int[] referenceBasis(double[,] AFirst)
-        {
-            int m = AFirst.GetLength(0);
-            int n = AFirst.GetLength(1);
-            int[] fs = new int[m]; //коэффициенты базиса
-            //записываем базис с учетом новых переменных
-            for (int i = 0; i < m; i++)
-            {
-                fs[i] = n + i;
-            }
-            return fs;
-        }
+        */
     }
 }

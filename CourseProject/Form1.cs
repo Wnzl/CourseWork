@@ -68,6 +68,7 @@ namespace CourseProject
         {
             try
             {
+                getDetailSolveButton.Enabled = true;
                 SimplexTable[] results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e));
                 int last = results.Length - 1;
                 AnswerBox.Text = IO.writeSolve(results[last]);

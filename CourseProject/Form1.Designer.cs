@@ -38,9 +38,9 @@
             this.buildMatrix = new System.Windows.Forms.Button();
             this.Solve = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.getDetailSolveButton = new System.Windows.Forms.ToolStripMenuItem();
             this.вихідToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AnswerBox = new System.Windows.Forms.TextBox();
-            this.детальнийРозвязокToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getDetailSolve = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
@@ -133,13 +133,21 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.детальнийРозвязокToolStripMenuItem,
+            this.getDetailSolveButton,
             this.вихідToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1018, 24);
             this.menuStrip1.TabIndex = 14;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // getDetailSolveButton
+            // 
+            this.getDetailSolveButton.Enabled = false;
+            this.getDetailSolveButton.Name = "getDetailSolveButton";
+            this.getDetailSolveButton.Size = new System.Drawing.Size(133, 20);
+            this.getDetailSolveButton.Text = "Детальний розв\'язок";
+            this.getDetailSolveButton.Click += new System.EventHandler(this.getDetailSolve_Click);
             // 
             // вихідToolStripMenuItem
             // 
@@ -159,13 +167,6 @@
             this.AnswerBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.AnswerBox.Size = new System.Drawing.Size(181, 367);
             this.AnswerBox.TabIndex = 15;
-            // 
-            // детальнийРозвязокToolStripMenuItem
-            // 
-            this.детальнийРозвязокToolStripMenuItem.Name = "детальнийРозвязокToolStripMenuItem";
-            this.детальнийРозвязокToolStripMenuItem.Size = new System.Drawing.Size(133, 20);
-            this.детальнийРозвязокToolStripMenuItem.Text = "Детальний розв\'язок";
-            this.детальнийРозвязокToolStripMenuItem.Click += new System.EventHandler(this.getDetailSolve_Click);
             // 
             // getDetailSolve
             // 
@@ -222,7 +223,7 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem вихідToolStripMenuItem;
         private System.Windows.Forms.TextBox AnswerBox;
-        private System.Windows.Forms.ToolStripMenuItem детальнийРозвязокToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem getDetailSolveButton;
         private System.Windows.Forms.CheckBox getDetailSolve;
     }
 }

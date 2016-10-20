@@ -283,7 +283,7 @@ namespace CourseProject
                 solveString += "</tr></table><div style='height: 50px;'></div>";*/
             }
             solveString += "</body>\r\n</html>";
-            using (StreamWriter sw = new StreamWriter("out.html", true, System.Text.Encoding.Default)) //false вказує, що файл буде перезаписано. Далі використовувати true!
+            using (StreamWriter sw = new StreamWriter("out.html", false, Encoding.Default)) //false вказує, що файл буде перезаписано. Далі використовувати true!
             {
                 sw.WriteLine(solveString);
             }

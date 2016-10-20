@@ -40,6 +40,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.вихідToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AnswerBox = new System.Windows.Forms.TextBox();
+            this.детальнийРозвязокToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.getDetailSolve = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -67,18 +69,18 @@
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 27);
+            this.dataGridView1.Location = new System.Drawing.Point(6, 27);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(824, 61);
+            this.dataGridView1.Size = new System.Drawing.Size(829, 61);
             this.dataGridView1.TabIndex = 7;
             // 
             // dataGridView2
             // 
             this.dataGridView2.AllowUserToAddRows = false;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(11, 94);
+            this.dataGridView2.Location = new System.Drawing.Point(6, 94);
             this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(824, 425);
+            this.dataGridView2.Size = new System.Drawing.Size(829, 493);
             this.dataGridView2.TabIndex = 8;
             // 
             // sameSign
@@ -131,6 +133,7 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.детальнийРозвязокToolStripMenuItem,
             this.вихідToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -149,13 +152,30 @@
             // 
             this.AnswerBox.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.AnswerBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.AnswerBox.Location = new System.Drawing.Point(836, 152);
+            this.AnswerBox.Location = new System.Drawing.Point(836, 220);
             this.AnswerBox.Multiline = true;
             this.AnswerBox.Name = "AnswerBox";
             this.AnswerBox.ReadOnly = true;
             this.AnswerBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.AnswerBox.Size = new System.Drawing.Size(181, 367);
             this.AnswerBox.TabIndex = 15;
+            // 
+            // детальнийРозвязокToolStripMenuItem
+            // 
+            this.детальнийРозвязокToolStripMenuItem.Name = "детальнийРозвязокToolStripMenuItem";
+            this.детальнийРозвязокToolStripMenuItem.Size = new System.Drawing.Size(133, 20);
+            this.детальнийРозвязокToolStripMenuItem.Text = "Детальний розв\'язок";
+            this.детальнийРозвязокToolStripMenuItem.Click += new System.EventHandler(this.getDetailSolve_Click);
+            // 
+            // getDetailSolve
+            // 
+            this.getDetailSolve.AutoSize = true;
+            this.getDetailSolve.Location = new System.Drawing.Point(840, 152);
+            this.getDetailSolve.Name = "getDetailSolve";
+            this.getDetailSolve.Size = new System.Drawing.Size(177, 17);
+            this.getDetailSolve.TabIndex = 9;
+            this.getDetailSolve.Text = "Вивести детальний розв\'язок";
+            this.getDetailSolve.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -167,6 +187,7 @@
             this.Controls.Add(this.buildMatrix);
             this.Controls.Add(this.numRows);
             this.Controls.Add(this.numCols);
+            this.Controls.Add(this.getDetailSolve);
             this.Controls.Add(this.sameSign);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.dataGridView1);
@@ -201,6 +222,8 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem вихідToolStripMenuItem;
         private System.Windows.Forms.TextBox AnswerBox;
+        private System.Windows.Forms.ToolStripMenuItem детальнийРозвязокToolStripMenuItem;
+        private System.Windows.Forms.CheckBox getDetailSolve;
     }
 }
 

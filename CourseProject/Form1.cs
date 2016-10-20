@@ -72,8 +72,10 @@ namespace CourseProject
                 int last = results.Length - 1;
                 AnswerBox.Text = IO.writeSolve(results[last]);
 
-                IO.drowSolve(results, 0);
-                IO.drowSolve(results, 1);
+                IO.drowSolve(results);
+                //Якщо 
+                if (getDetailSolve.Checked)
+                    getDetailSolve_Click(sender, e);
             }
             catch (Exception ex) { MessageBox.Show("Виникла помилка при розв'язанні задачі\r\n\r\nДеталі:\r\n" + ex, "Помилка"); }
         }
@@ -133,6 +135,14 @@ namespace CourseProject
         private void exit_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+
+
+        private void getDetailSolve_Click(object sender, EventArgs e)
+        {
+            detailSolve form = new detailSolve();
+            form.Show();
         }
     }
 }

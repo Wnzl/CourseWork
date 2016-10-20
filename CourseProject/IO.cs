@@ -192,98 +192,101 @@ namespace CourseProject
             return answer;
         }
 
-        public static void drowSolve(SimplexTable[] tables, int action)
+        public static void drowSolve(SimplexTable[] tables)
         {
-            switch (action)
+            string solveString = "<!DOCTYPE html>\r\n<html lang='uk'>\r\n<head>\r\n<meta charset='UTF-8'>\r\n<title>Detail solve</title>\r\n<style>\r\ndiv{font-size: 14pt; padding: 10px 0px;}\r\n</style>\r\n</head>\r\n<body>";
+            //Вивід початку таблиці
+            int lastTable = tables.GetLength(0);
+            for (int currentTable = 0; currentTable < lastTable; currentTable++)
             {
-                case 0:
-                    {
-                        using (StreamWriter sw = new StreamWriter("out.html", false, Encoding.GetEncoding(1251))) //false вказує, що файл буде перезаписано. Далі використовувати true!
-                        {
-                            sw.WriteLine("<!DOCTYPE html>\r\n<html lang='uk'>\r\n<head>\r\n<meta charset='UTF-8'>\r\n<title>Detail solve</title>\r\n</head>\r\n<body>");
-                        }
-                        break;
+                solveString += "<table border = '1'><tr><td></td><td></td><td></td><td>C</td>";
+                SimplexTable table = tables[currentTable];
+                //Цикл значень С
+                foreach (int i in table.C)
+                {
+                    solveString += "<td>" + i + "</td>";
+                }
+                solveString += "<td></td></tr>";
+                //Ще заголовки, 2-й ряд
+                solveString += "<tr><td>N</td><td>Cs</td><td>Fs</td>";
+                //Виводимо індекси А в заголовку
+                for (int i = 0; i < table.X.GetLength(1) - 1; i++)
+                {
+                    solveString += "<td>A" + i + "</td>";
+                }
+                solveString += "<td>Teta</td></tr>";
+                int index = 0;
+                for (; index < table.X.GetLength(0); index++)
+                {
+                    //Виводимо номер, Cs, Fs
+                    solveString += "<tr><td>" + (index + 1) + "</td><td>" + table.Cs[index] + "</td><td>" + table.fs[index] + "</td>";
+                    //Цикл для значень Х
+                    for (int i = 1; i < table.X.GetLength(1); i++)
+                        solveString += "<td>" + Math.Round(table.X[index, i], 3) + "</td>";
+                    //Вывод теты
+                    if (table.situation == 3)
+                    { //Проверяем не является ли табилца последней (в последней не считаем тету)
+                        if (table.teta[index] != 99999999999999)
+                            solveString += "<td>" + Math.Round(table.teta[index], 3) + "</td>";
+                        else
+                            solveString += "<td>---</td>";
+                        solveString += "</tr>";
                     }
-                case 1:
+                }
+                //Вывод дельты
+                solveString += "<tr><td>" + (index + 1) + "</td><td></td><td></td>";
+                for (int i = 0; i < table.delta.GetLength(0); i++)
+                {
+                    solveString += "<td>" + Math.Round(table.delta[i], 3) + "</td>";
+                }
+                solveString += "</tr>";
+                //Сравниваем дельту с "тестовыми данным", если совпадает (мы тут делаем обман т.к. выводит одно и то же) значит все ок
+                if (currentTable != 0)
+                { //Проверяем не является ли таблица первой (для первой не нужна эта проверка)
+                    solveString += "<tr><td>" + (index + 1) + "'</td><td></td><td></td>";
+                    for (int i = 0; i < table.delta.GetLength(0); i++)
                     {
-                        string solveString = "";
-                        //Вивід початку таблиці
-                        int lastTable = tables.GetLength(0);
-                        for (int currentTable = 0; currentTable < lastTable; currentTable++) {
-                            solveString += "<table border = '1'><tr><td></td><td></td><td></td><td>C</td>";
-                            SimplexTable table = tables[currentTable];
-                            //Цикл значень С
-                            foreach (int i in table.C) {
-                                solveString += "<td>" + i + "</td>";
-                            }
-                            solveString += "<td></td></tr>";
-                            //Ще заголовки, 2-й ряд
-                            solveString += "<tr><td>N</td><td>Cs</td><td>Fs</td>";
-                            //Виводимо індекси А в заголовку
-                            for (int i = 0; i < table.X.GetLength(1) - 1; i++) {
-                                solveString += "<td>A" + i + "</td>";
-                            }
-                            solveString += "<td>Θ</td></tr>";
-                            int index = 0;
-                            for (; index < table.X.GetLength(0); index++) {
-                                //Виводимо номер, Cs, Fs
-                                solveString += "<tr><td>" + (index + 1) + "</td><td>" + table.Cs[index] + "</td><td>" + table.fs[index] + "</td>";
-                                //Цикл для значень Х
-                                for (int i = 1; i < table.X.GetLength(1); i++)
-                                    solveString += "<td>" + Math.Round(table.X[index, i], 3) + "</td>";
-                                //Вывод теты
-                                if (table.situation == 3) { //Проверяем не является ли табилца последней (в последней не считаем тету)
-                                    if (table.teta[index] != 99999999999999)
-                                        solveString += "<td>" + Math.Round(table.teta[index], 3) + "</td>";
-                                    else
-                                        solveString += "<td>---</td>";
-                                    solveString += "</tr>";
-                                }
-                            }
-                            //Вывод дельты
-                            solveString += "<tr><td>" + (index + 1) + "</td><td></td><td></td>";
-                            for (int i = 0; i < table.delta.GetLength(0); i++) {
-                                solveString += "<td>" + Math.Round(table.delta[i],3) + "</td>";
-                            }
-                            solveString += "</tr>";
-                            //Сравниваем дельту с "тестовыми данным", если совпадает (мы тут делаем обман т.к. выводит одно и то же) значит все ок
-                            if (currentTable != 0) { //Проверяем не является ли таблица первой (для первой не нужна эта проверка)
-                                solveString += "<tr><td>" + (index + 1) + "'</td><td></td><td></td>";
-                                for (int i = 0; i < table.delta.GetLength(0); i++) {
-                                    solveString += "<td>" + Math.Round(table.delta[i],3) + "</td>";
-                                }
-                                solveString += "</tr> </table>";
-                            }
-                            if (table.situation == 3) {
-                                solveString += "Iteration number: "+currentTable+
-                                                "\nsituation = " + table.situation +
-                                                "\nSelected r = " + table.r +
-                                                "\nSelected k = " + table.k; 
+                        solveString += "<td>" + Math.Round(table.delta[i], 3) + "</td>";
+                    }
+                    //solveString += "</tr> </table>";
+                }
+                solveString += "</tr></table>";
+                if (table.situation == 3)
+                {
+                    solveString += "<div style='height: 50px;'>Iteration number: " + currentTable +
+                                    "\nsituation = " + table.situation +
+                                    "\nSelected r = " + table.r +
+                                    "\nSelected k = " + table.k + "</div>";
 
-                            }
-                            if(table.situation == 2) {
-                                //тут нельзя найти решение
-                            }
-                            if(table.situation == 1) {
-                                // тут нашли решение и может быть стоит вывести в хтмл
-                            }
-                        }
-                        using (StreamWriter sw = new StreamWriter("out.html", true, System.Text.Encoding.Default)) //false вказує, що файл буде перезаписано. Далі використовувати true!
-                        {
-                            sw.WriteLine(solveString);
-                        }
-                        break;
-                    }
-                case 2:
-                    {
-                        using (StreamWriter sw = new StreamWriter("out.html", true, System.Text.Encoding.Default))
-                        {
-                            sw.WriteLine("</body>\r\n</html>");
-                        }
-                        break;
-                    }
+                }
+                if (table.situation == 2)
+                {
+                    //тут нельзя найти решение
+                }
+                if (table.situation == 1)
+                {
+                    // тут нашли решение и может быть стоит вывести в хтмл
+                }
+                /*if (table.situation == 3) {
+                    solveString += "</tr><tr><td colspan = '29'><div>Iteration number: " + currentTable+
+                                    "\nsituation = " + table.situation +
+                                    "\nSelected r = " + table.r +
+                                    "\nSelected k = " + table.k+ "</div>"; 
+
+                }
+                if(table.situation == 2) {
+                    //тут нельзя найти решение
+                }
+                if(table.situation == 1) {
+                    // тут нашли решение и может быть стоит вывести в хтмл
+                }
+                solveString += "</tr></table><div style='height: 50px;'></div>";*/
             }
-
+            solveString += "</body>\r\n</html>";
+            using (StreamWriter sw = new StreamWriter("out.html", true, System.Text.Encoding.Default)) //false вказує, що файл буде перезаписано. Далі використовувати true!
+            {
+                sw.WriteLine(solveString);
+            }
         }
     }
 }

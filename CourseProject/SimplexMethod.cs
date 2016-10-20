@@ -53,7 +53,6 @@ namespace CourseProject {
             resultMassive[lastTable].L = delta[0];
             resultMassive[lastTable].C = C;
             resultMassive[lastTable].X = X;
-            resultMassive[lastTable].fs = fs;
             resultMassive[lastTable].delta = delta;
             resultMassive[lastTable].situation = situation;
             switch (situation) {

@@ -19,7 +19,15 @@ namespace CourseProject {
                 return Cs;
             }}
         //Индексы направляющих строк
-        public int[] fs { get; set; }
+        public int[] fs {
+            get {
+                int leng = X.GetLength(0);
+                int[] fs = new int[leng];
+                for (int i = 0; i < leng; i++) {
+                    fs[i] = (int)X[i,0];
+                }
+                return fs; 
+            }}
         //Опорный план
         public double[,] X { get; set; }
         //Параметр для определения номера направляющей строки

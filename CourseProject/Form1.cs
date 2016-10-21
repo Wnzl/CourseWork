@@ -145,5 +145,11 @@ namespace CourseProject
             detailSolve form = new detailSolve();
             form.Show();
         }
+
+        private void проПрограмуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            About form = new About();
+            form.Show();
+        }
     }
 }

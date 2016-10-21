@@ -47,7 +47,8 @@
             this.ClientSize = new System.Drawing.Size(1184, 661);
             this.Controls.Add(this.webBrowser1);
             this.Name = "detailSolve";
-            this.Text = "detailSolve";
+            this.ShowIcon = false;
+            this.Text = "Табуляграма";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.ResumeLayout(false);
 

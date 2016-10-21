@@ -36,7 +36,7 @@ namespace CourseProject
                 int colIndex = i + 1;
                 string colName = "x" + colIndex.ToString();
                 dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
-                { Name = colName, HeaderText = colName, Width = 50 });
+                { Name = colName, HeaderText = colName, Width = 38 });
             }
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
             { HeaderText = "→", Width = 34 });
@@ -44,7 +44,7 @@ namespace CourseProject
             comboboxColumnMaxMin.Items.AddRange("max", "min");
             comboboxColumnMaxMin.HeaderText = "MaxMin";
             comboboxColumnMaxMin.Name = "MaxMin";
-            comboboxColumnMaxMin.Width = 50;
+            comboboxColumnMaxMin.Width = 38;
             dataGridView1.Columns.Add(comboboxColumnMaxMin);
 
             //Створимо таблицю для введення матриці обмежень
@@ -54,7 +54,7 @@ namespace CourseProject
                 int colIndex = i + 1;
                 string colName = "a" + colIndex.ToString();
                 dataGridView2.Columns.Add(new DataGridViewTextBoxColumn()
-                { Name = colName, HeaderText = colName, Width = 50 });
+                { Name = colName, HeaderText = colName, Width = 38 });
             }
             //Колонка з comboBox для знаку
             DataGridViewComboBoxColumn comboboxColumnsign = new DataGridViewComboBoxColumn();
@@ -65,7 +65,7 @@ namespace CourseProject
             dataGridView2.Columns.Add(comboboxColumnsign);
             //Колонка для b
             dataGridView2.Columns.Add(new DataGridViewTextBoxColumn()
-            { Name = "b", HeaderText = "b", Width = 50 });
+            { Name = "b", HeaderText = "b", Width = 38 });
 
             //Додаємо рядки
             dataGridView1.RowCount = 1;

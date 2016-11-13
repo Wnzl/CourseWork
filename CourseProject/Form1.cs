@@ -23,20 +23,20 @@ namespace CourseProject
         }
 
         private void insertValues_Click(object sender, EventArgs e) {
-                 double[,] AFirst = new double[,] { {1300, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                                                    {9100, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13},
-                                                    {12400, 11, 5, 9, 21, 1, 19, 1, 31, 1, 0, 0, 0, 29},
-                                                    {11240, 0, 7, 11, 9, 21, 1, 19, 31, 11, 29, 0, 0, 3},
-                                                    {12402, 0, 0, 7, 21, 11, 9, 1, 19, 1, 31, 29, 0, 4},
-                                                    {41240, 0, 0, 0, 7, 9, 11, 21, 19, 1, 29, 31, 6, 5},
-                                                    {12405, 7, 0, 19, 11, 9, 31, 29, 21, 11, 6, 0, 0, 6},
-                                                    {21240, 9, 0, 0, 11, 29, 31, 19, 21, 1, 11, 6, 0, 7},
-                                                    {12407, 11, 0, 0, 0, 5, 9, 19, 31, 21, 29, 11, 6, 8},
-                                                    {51240, 0, 31, 9, 11, 1, 21, 19, 29, 11, 70, 0, 0, 9},
-                                                    {12408, 7, 0, 0, 5, 1, 9, 11, 1, 19, 21, 29, 0, 31},
-                                                    {12410, 11, 0, 0, 0, 9, 1, 19, 1, 21, 1, 29, 31, 10},
-                 };
-                 double[] CFirst = new double[] { 315, 489, 663, 837, 1011, 1185, 1359, 1533, 1707, 1881, 2055, 2229, 2403};
+            decimal[,] AFirst = new decimal[,] { {1300, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                                                      {9100, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13},
+                                                      {12400, 11, 5, 9, 21, 1, 19, 1, 31, 1, 0, 0, 0, 29},
+                                                      {11240, 0, 7, 11, 9, 21, 1, 19, 31, 11, 29, 0, 0, 3},
+                                                      {12402, 0, 0, 7, 21, 11, 9, 1, 19, 1, 31, 29, 0, 4},
+                                                      {41240, 0, 0, 0, 7, 9, 11, 21, 19, 1, 29, 31, 6, 5},
+                                                      {12405, 7, 0, 19, 11, 9, 31, 29, 21, 11, 6, 0, 0, 6},
+                                                      {21240, 9, 0, 0, 11, 29, 31, 19, 21, 1, 11, 6, 0, 7},
+                                                      {12407, 11, 0, 0, 0, 5, 9, 19, 31, 21, 29, 11, 6, 8},
+                                                      {51240, 0, 31, 9, 11, 1, 21, 19, 29, 11, 70, 0, 0, 9},
+                                                      {12408, 7, 0, 0, 5, 1, 9, 11, 1, 19, 21, 29, 0, 31},
+                                                      {12410, 11, 0, 0, 0, 9, 1, 19, 1, 21, 1, 29, 31, 10},
+                   };
+            decimal[] CFirst = new decimal[] { 315, 489, 663, 837, 1011, 1185, 1359, 1533, 1707, 1881, 2055, 2229, 2403 };
 
             //-----Заповнення таблиці даними з масиву-----
             //Отримання розмірності
@@ -74,6 +74,7 @@ namespace CourseProject
                 AnswerBox.Text = IO.writeSolve(results[last]);
 
                 IO.drowSolve(results);
+                IO.drowAdmissibility(results); 
                 //Якщо 
                 if (getDetailSolve.Checked)
                     getDetailSolve_Click(sender, e);
@@ -110,7 +111,7 @@ namespace CourseProject
         /// <summary>
         /// Отримання вектора цільової функції (масив)
         /// </summary>
-        private double[] getTargetFunction(object sender, EventArgs e)
+        private decimal[] getTargetFunction(object sender, EventArgs e)
         {
             return IO.getTargetFunction(sender, e, dataGridView1);
         }
@@ -118,7 +119,7 @@ namespace CourseProject
         /// <summary>
         /// Отримання матриці обмежень (масив)
         /// </summary>
-        private double[,] getLimitationMatrix(object sender, EventArgs e)
+        private decimal[,] getLimitationMatrix(object sender, EventArgs e)
         {
             return IO.getLimitationMatrix(sender, e, dataGridView2);
         }
@@ -131,14 +132,11 @@ namespace CourseProject
             return IO.getMaxMin(sender, e, dataGridView1);
         }
         
-
         //Елемент меню. Кнопка Вийти
         private void exit_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
-
 
         private void getDetailSolve_Click(object sender, EventArgs e)
         {
@@ -149,6 +147,12 @@ namespace CourseProject
         private void проПрограмуToolStripMenuItem_Click(object sender, EventArgs e)
         {
             About form = new About();
+            form.Show();
+        }
+
+        private void перевіркаОптимальностіToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            admissibilityCheck form = new admissibilityCheck();
             form.Show();
         }
     }

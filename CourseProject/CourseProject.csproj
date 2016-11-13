@@ -53,6 +53,12 @@
     <Compile Include="About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
+    <Compile Include="admissibilityCheck.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="admissibilityCheck.Designer.cs">
+      <DependentUpon>admissibilityCheck.cs</DependentUpon>
+    </Compile>
     <Compile Include="detailSolve.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +78,9 @@
     <Compile Include="SimplexTable.cs" />
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="admissibilityCheck.resx">
+      <DependentUpon>admissibilityCheck.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="detailSolve.resx">
       <DependentUpon>detailSolve.cs</DependentUpon>

@@ -11,17 +11,18 @@ namespace CourseProject {
     /// Метод последовательного улучшения плана (1 алгоритм)
     /// </summary>
     class SimplexMethod {
+
         /// <summary>
         /// Метод нахождения оптимального плана методом последовательного улучшения плана (1 алгоритм)
         /// </summary>
         /// <param name="AFirst">Матрица ограничений</param>
         /// <param name="CFirst">Вектор коэффициентов целевой функции</param>
-        public static SimplexTable[] solve(double[,] AFirst, double[] CFirst) {
+        public static SimplexTable[] solve(decimal[,] AFirst, decimal[] CFirst) {
             
             //матрица ограничений с учётом добавленных переменных 
-            double[,] A = modifyA(AFirst);
+            decimal[,] A = modifyA(AFirst);
             //коэффициенты целевой функции с учетом добавленных переменных
-            double[] C = modifyC(CFirst, AFirst);
+            decimal[] C = modifyC(CFirst, AFirst);
             //коэффициенты базиса
             int[] fs = referenceBasis(AFirst);
             int rows = A.GetLength(0);                               //Получаем количество строк матрицы ограничений
@@ -39,23 +40,21 @@ namespace CourseProject {
         /// <param name="X">Матрица ограничений, где [i,0] это индекс А, а [i,1] значение вектора b</param>
         /// <param name="C">Вектор коэффициентов целевой функции</param>
         /// <param name="fs">Коэффициенты начального базиса</param>
-        private static SimplexTable[] optimalityCheck(double[,] X, double[] C, int[] fs, SimplexTable[] oldMassive) {
-            SimplexTable[] resultMassive = new SimplexTable[oldMassive.GetLength(0) + 1]; //Создаем новую симпл таблицу для новой итерации
+        private static SimplexTable[] optimalityCheck(decimal[,] X, decimal[] C, int[] fs, SimplexTable[] oldMassive) {
+            SimplexTable[] resultMassive = 
+                new SimplexTable[oldMassive.GetLength(0) + 1];                  //Создаем новую симпл таблицу для новой итерации
             Array.Copy(oldMassive, resultMassive, oldMassive.GetLength(0));
-            int lastTable = resultMassive.GetLength(0) - 1;                               //Выбираем индекс последней таблицы
+            int lastTable = resultMassive.GetLength(0) - 1;                     //Выбираем индекс последней таблицы
             resultMassive[lastTable] = new SimplexTable();
-            double[] delta = deltaCount(C, X, fs);
-            int k = 0; //Направляющий столбец
-            int r = 0; //Направляющая строка
-            int situation = situationCheck(delta, X);
-            //Записываем значения текущей симплекс таблицы
-            resultMassive[lastTable].delta = delta;
-            resultMassive[lastTable].L = delta[0];
+
+            resultMassive[lastTable].delta = deltaCount(C, X, fs);
+            resultMassive[lastTable].situation = 
+                situationCheck(resultMassive[lastTable].delta, X);
+            resultMassive[lastTable].L = resultMassive[lastTable].delta[0];
             resultMassive[lastTable].C = C;
             resultMassive[lastTable].X = X;
-            resultMassive[lastTable].delta = delta;
-            resultMassive[lastTable].situation = situation;
-            switch (situation) {
+           
+            switch (resultMassive[lastTable].situation) {
                 case 1:
                     Console.WriteLine("Решение найдено");
                     return resultMassive;
@@ -63,16 +62,25 @@ namespace CourseProject {
                     Console.WriteLine("Задача не имеет решения");
                     return resultMassive;
                 case 3:
-                    k = findDirectiveColumn(delta);
-                    r = findDirectiveRow(k, X, fs);
-                    //Записываем значения текущей симплекс таблицы
-                    resultMassive[lastTable].k = k;
-                    resultMassive[lastTable].r = r;
-                    resultMassive[lastTable].teta = tetaCount(k, X, fs);
-                    fs[Array.IndexOf(fs, r)] = k;                       //Делаем замену вектора условий с индексом r на вектор с индексом k 
-                    double[,] Xnew = new double[X.GetLength(0), X.GetLength(1)]; 
-                    Xnew = newPlanFormation(X, C, fs, k, r);            //Расчитываем новый опорный план для следующей итерации
-                    return optimalityCheck(Xnew, C, fs, resultMassive); //Делаем новую итерацию до тех пор пока не будет найден результат
+                    resultMassive[lastTable].k = 
+                        findDirectiveColumn(resultMassive[lastTable].delta);     //Направляющий столбец
+                    resultMassive[lastTable].r = 
+                        findDirectiveRow(resultMassive[lastTable].k, X, fs);     //Направляющая строка
+                    resultMassive[lastTable].teta = 
+                        tetaCount(resultMassive[lastTable].k, X, fs);            //Находим тету
+                    fs[Array.IndexOf(fs, resultMassive[lastTable].r)] =
+                        resultMassive[lastTable].k;                              //Делаем замену вектора условий с индексом r на вектор с индексом k 
+                    decimal[,] Xnew = newPlanFormation(X, C, fs, 
+                        resultMassive[lastTable].k, resultMassive[lastTable].r); //Расчитываем новый опорный план для следующей итерации
+                    resultMassive[lastTable].checkRow = checkRowCalculation(resultMassive[lastTable].delta,
+                        resultMassive[lastTable].X, resultMassive[lastTable].r, resultMassive[lastTable].k);
+                    if (calculationsCheckIsOk(Xnew, resultMassive[lastTable].C, fs, resultMassive[lastTable].checkRow)) 
+                        return optimalityCheck(Xnew, C, fs, resultMassive);          //Делаем новую итерацию до тех пор пока не будет найден результат
+                    else {
+                        Console.WriteLine("Все сломалось");
+                        return resultMassive;
+                    }
+                    
             }
             return resultMassive;
         }
@@ -84,21 +92,13 @@ namespace CourseProject {
         /// <param name="C">Коэффециенты линейной функции</param>
         /// <param name="fs">Коэффициенты базиса</param>
         /// <returns>Возвращает true, если погрешность допустима</returns>
-        private static Boolean calculationsCheckIsOk(double[,] X, double[] C, int[] fs) {
-            int row = X.GetLength(0);
+        private static Boolean calculationsCheckIsOk(decimal[,] X, decimal[] C, int[] fs, decimal[]checkRow) {
             int col = X.GetLength(1) - 1;
-            double[] delta = deltaCount(C, X, fs);
-            double[] checkDelta = new double[col]; //Дельта расчитываемая для сравнения и проверки погрешностей
-            for (int i = 1; i < col; i++) {
-                for (int j = 0; j < row; j++) {
-                    checkDelta[i] += C[fs[j] - 1] * X[j, i];
-                }
-                checkDelta[i] -= C[i - 1]; 
-            }
-            double epsilon = 0.000001;
+            decimal[] delta = deltaCount(C, X, fs);
+            decimal epsilon = 0.000001m;
             int checkedValues = 0;
             for (int i = 0; i < col; i++) {
-                if(Math.Abs(checkDelta[i]-delta[i]) <= epsilon)
+                if(Math.Abs(delta[i] - checkRow[i]) <= epsilon)
                     checkedValues++;
             }
             if (checkedValues == col)
@@ -116,10 +116,10 @@ namespace CourseProject {
         /// <param name="k">Направляющий столбец</param>
         /// <param name="r">Направляющая строка</param>
         /// <returns>Новый опорный план</returns>
-        private static double[,] newPlanFormation(double[,] X, double[] C, int[] fs, int k, int r) {
+        private static decimal[,] newPlanFormation(decimal[,] X, decimal[] C, int[] fs, int k, int r) {
             int row = X.GetLength(0);
             int col = X.GetLength(1) - 1;
-            double[,] Xnew = new double[row,col + 1];
+            decimal[,] Xnew = new decimal[row,col + 1];
             int rIndexRow = -1;
             for(int i = 0; i < row; i++) {
                 if (X[i, 0] == r) {
@@ -130,9 +130,9 @@ namespace CourseProject {
             for(int i = 0; i < row; i++) {
                for(int j = 0; j < col; j++) {
                     if (X[i, 0] != r) { //Является ли текущая строка ведущей строкой (r)
-                        Xnew[i, j + 1] = Math.Round((X[i, j + 1] - ((X[rIndexRow, j + 1] * X[i, k + 1]) / X[rIndexRow, k + 1])), 14);
+                        Xnew[i, j + 1] = (X[i, j + 1] - ((X[rIndexRow, j + 1] * X[i, k + 1]) / X[rIndexRow, k + 1]));
                     } else {
-                        Xnew[i, j + 1] = Math.Round((X[rIndexRow, j + 1] / X[rIndexRow, k + 1]), 14);
+                        Xnew[i, j + 1] = (X[rIndexRow, j + 1] / X[rIndexRow, k + 1]);
                     }
                 }
             }
@@ -143,16 +143,43 @@ namespace CourseProject {
         }
 
         /// <summary>
+        /// Метод нахождения новой строки для проверки вычислений
+        /// </summary>
+        /// <param name="delta">Массив дельта</param>
+        /// <param name="X">Опорный план</param>
+        /// <param name="r">Направляющая строка</param>
+        /// <param name="k">Направляющий столбец</param>
+        /// <returns>Строка для проверки вычислений</returns>
+        private static decimal[] checkRowCalculation(decimal[] delta, decimal[,] X, int r, int k) {
+            int row = X.GetLength(0);
+            int col = X.GetLength(1) - 1;
+            decimal[] checkRow = new decimal[col];
+
+            int rIndexRow = -1;
+            for (int i = 0; i < row; i++) {
+                if (X[i, 0] == r) {
+                    rIndexRow = i; //Находим какая строка имеет индекс r
+                    break;
+                }
+            }
+
+            for(int i = 0; i < col; i++) {
+                checkRow[i] = delta[i] - ((X[rIndexRow, i+1] * delta[k]) / X[rIndexRow, k+1]);
+            }
+            return checkRow;
+        }
+
+        /// <summary>
         /// Метод нахождения направляющей строки
         /// </summary>
         /// <param name="k">Направляющий столбец</param>
         /// <param name="X">Опорный план задачи</param>
         /// <param name="fs">Коэффициенты начального базиса</param>
         /// <returns>Направляющая строка</returns>
-        private static int findDirectiveRow(int k, double[,] X, int[] fs) {
+        private static int findDirectiveRow(int k, decimal[,] X, int[] fs) {
             int r = fs[0]; //Направляющая строка
             int length = X.GetLength(0);
-            double[] teta = tetaCount(k, X, fs);
+            decimal[] teta = tetaCount(k, X, fs);
             int minVal = Array.IndexOf(teta, teta.Min());
             r = fs[minVal];
             return r;
@@ -165,15 +192,15 @@ namespace CourseProject {
         /// <param name="X">Опорный план</param>
         /// <param name="fs">Коэффициенты базиса</param>
         /// <returns>Тета</returns>
-        private static double[] tetaCount(int k, double[,] X, int[] fs) {
-            int length = X.GetLength(0);
-            double[] teta = new double[length];
-            for (int i = 0; i < length; i++) {
-                if (X[i, k + 1] > 0)
-                    teta[i] = (X[i, 1] / X[i, k + 1]);
-                else
-                    teta[i] = 99999999999999; //Неадекватно большое значение, которое показывает, что элемент не рассматривается
-            }
+        private static decimal[] tetaCount(int k, decimal[,] X, int[] fs) {
+                int length = X.GetLength(0);
+                decimal[] teta = new decimal[length];
+                for (int i = 0; i < length; i++) {
+                    if (Math.Round(X[i, k + 1],25) > 0)
+                        teta[i] = (X[i, 1] / X[i, k + 1]);
+                    else
+                        teta[i] = 99999999999999; //Неадекватно большое значение, которое показывает, что элемент не рассматривается
+                }
             return teta;
         }
 
@@ -182,10 +209,10 @@ namespace CourseProject {
         /// </summary>
         /// <param name="delta">Вектор дельта</param>
         /// <returns>Направляющий столбец</returns>
-        private static int findDirectiveColumn(double[] delta) {
+        private static int findDirectiveColumn(decimal[] delta) {
             int k = 0; //Направляющий столбец
             int length = delta.GetLength(0);
-            double min = delta[0];
+            decimal min = delta[0];
             for(int i = 1; i < length; i++) {
                 if (min > delta[i]) {
                     min = delta[i];
@@ -200,7 +227,7 @@ namespace CourseProject {
         /// </summary>
         /// <param name="delta">Вектор дельта</param>
         /// <returns>Номер ситуации</returns>
-        private static int situationCheck(double[] delta, double[,] X) {
+        private static int situationCheck(decimal[] delta, decimal[,] X) {
             int length = delta.GetLength(0);
             int height = X.GetLength(0);
             int situation = 1;
@@ -227,22 +254,22 @@ namespace CourseProject {
         /// <param name="X">Опорный план задачи</param>
         /// <param name="fs">Коэффициенты базиса</param>
         /// <returns>Вектор дельта</returns>
-        private static double[] deltaCount(double[] C, double[,] X, int[] fs) {
+        private static decimal[] deltaCount(decimal[] C, decimal[,] X, int[] fs) {
             int coefCount = X.GetLength(1) - 1; //Потому что [i,0] это не коэффициент, а индекс А
             int leng = fs.GetLength(0);
-            double[] Cs = new double[leng]; //Коэффициенты целевой функции начального базиса
+            decimal[] Cs = new decimal[leng]; //Коэффициенты целевой функции начального базиса
             for(int i = 0; i < leng; i++) {
                 Cs[i] = C[fs[i] - 1];
             }
-            double[] delta = new double[coefCount];
-            double[] z = new double[coefCount];
+            decimal[] delta = new decimal[coefCount];
+            decimal[] z = new decimal[coefCount];
             for(int i = 0; i < coefCount; i++) {
                 for (int j = 0; j < leng; j++)
                     z[i] += Cs[j] * X[j,i + 1];
             }
             delta[0] = z[0];
             for (int i = 1; i < coefCount; i++)
-                delta[i] = Math.Round(z[i] - C[i-1], 6); //округляем до 6 знаков после запятой
+                  delta[i] = z[i] - C[i-1];
             return delta;
         }
 
@@ -251,11 +278,11 @@ namespace CourseProject {
         /// </summary>
         /// <param name="AFirst">Исходная матрица АFirst</param>
         /// <returns>Матрица А</returns>
-        private static double[,] modifyA(double[,] AFirst)
+        private static decimal[,] modifyA(decimal[,] AFirst)
         {
             int m = AFirst.GetLength(0);
             int n = AFirst.GetLength(1);
-            double[,] A = new double[m, m + n + 1]; // Каждый 0-ой элемент строки это индекс А, каждый 1-ый это значение вектора b
+            decimal[,] A = new decimal[m, m + n + 1]; // Каждый 0-ой элемент строки это индекс А, каждый 1-ый это значение вектора b
             //добавление элементов в матрицу А
             for (int i = 0; i < m; i++)
             {
@@ -281,11 +308,11 @@ namespace CourseProject {
         /// <param name="AFirst">Исходная матрица АFirst</param>
         /// <param name="СFirst">Исходный вектор СFirst</param>
         /// <returns>вектор С</returns>
-        private static double[] modifyC(double[] CFirst, double[,]AFirst)
+        private static decimal[] modifyC(decimal[] CFirst, decimal[,]AFirst)
         {
             int m = AFirst.GetLength(0);
             int n = AFirst.GetLength(1);
-            double[] C = new double[m + n - 1];
+            decimal[] C = new decimal[m + n - 1];
             //добавление элементов в вектор С
             for (int i = 0; i < m + n - 1; i++)
             {
@@ -302,7 +329,7 @@ namespace CourseProject {
         /// </summary>
         /// <param name="А">Матрица А с учетом дополнительных переменных</param>
         /// <returns>Базис fs</returns>
-        private static int[] referenceBasis(double[,] AFirst)
+        private static int[] referenceBasis(decimal[,] AFirst)
         {
             int m = AFirst.GetLength(0);
             int n = AFirst.GetLength(1);

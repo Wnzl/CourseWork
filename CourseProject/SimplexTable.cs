@@ -10,9 +10,9 @@ namespace CourseProject {
     /// </summary>
     class SimplexTable {
         //Коэффициенты целевой функции при направляющих строках
-        public double[] Cs { get {
+        public decimal[] Cs { get {
                 int leng = fs.GetLength(0);
-                double[] Cs = new double[leng];
+                decimal[] Cs = new decimal[leng];
                 for (int i = 0; i < leng; i++) {
                     Cs[i] = C[fs[i] - 1];
                 }
@@ -29,22 +29,23 @@ namespace CourseProject {
                 return fs; 
             }}
         //Опорный план
-        public double[,] X { get; set; }
+        public decimal[,] X { get; set; }
         //Параметр для определения номера направляющей строки
-        public double[] teta { get; set; }
+        public decimal[] teta { get; set; }
         //Оценка разложений вектора условий по базису опорного плана
-        public double[] delta { get; set; }
+        public decimal[] delta { get; set; }
         //Направляющая строка
         public int r { get; set; }
         //Направляющий столбец
         public int k { get; set; }
         //Коэффициенты целевой функции
-        public double[] C { get; set; }
+        public decimal[] C { get; set; }
         //Значение целевой функции на данном базисе
-        public double L { get; set; }
+        public decimal L { get; set; }
         //Ситуация на данном базисе
         public int situation { get; set; }
-
+        //Дополнительная строка для проверки вычислений
+        public decimal[] checkRow { get; set; }
         public SimplexTable() { }
 
     }

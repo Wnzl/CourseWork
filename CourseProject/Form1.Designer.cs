@@ -40,13 +40,13 @@
             this.Solve = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.getDetailSolveButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.перевіркаОптимальностіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.дослідженняСтійкостіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.допомогаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.проПрограмуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.вихідToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AnswerBox = new System.Windows.Forms.TextBox();
             this.getDetailSolve = new System.Windows.Forms.CheckBox();
-            this.допомогаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.проПрограмуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.перевіркаОптимальностіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.дослідженняСтійкостіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
@@ -179,6 +179,32 @@
             this.getDetailSolveButton.Text = "Табуляграма";
             this.getDetailSolveButton.Click += new System.EventHandler(this.getDetailSolve_Click);
             // 
+            // перевіркаОптимальностіToolStripMenuItem
+            // 
+            this.перевіркаОптимальностіToolStripMenuItem.Name = "перевіркаОптимальностіToolStripMenuItem";
+            this.перевіркаОптимальностіToolStripMenuItem.Size = new System.Drawing.Size(160, 20);
+            this.перевіркаОптимальностіToolStripMenuItem.Text = "Перевірка оптимальності";
+            this.перевіркаОптимальностіToolStripMenuItem.Click += new System.EventHandler(this.перевіркаОптимальностіToolStripMenuItem_Click_1);
+            // 
+            // дослідженняСтійкостіToolStripMenuItem
+            // 
+            this.дослідженняСтійкостіToolStripMenuItem.Name = "дослідженняСтійкостіToolStripMenuItem";
+            this.дослідженняСтійкостіToolStripMenuItem.Size = new System.Drawing.Size(142, 20);
+            this.дослідженняСтійкостіToolStripMenuItem.Text = "Дослідження стійкості";
+            // 
+            // допомогаToolStripMenuItem
+            // 
+            this.допомогаToolStripMenuItem.Name = "допомогаToolStripMenuItem";
+            this.допомогаToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.допомогаToolStripMenuItem.Text = "Довідка";
+            // 
+            // проПрограмуToolStripMenuItem
+            // 
+            this.проПрограмуToolStripMenuItem.Name = "проПрограмуToolStripMenuItem";
+            this.проПрограмуToolStripMenuItem.Size = new System.Drawing.Size(99, 20);
+            this.проПрограмуToolStripMenuItem.Text = "Про програму";
+            this.проПрограмуToolStripMenuItem.Click += new System.EventHandler(this.проПрограмуToolStripMenuItem_Click);
+            // 
             // вихідToolStripMenuItem
             // 
             this.вихідToolStripMenuItem.Name = "вихідToolStripMenuItem";
@@ -213,31 +239,6 @@
             this.getDetailSolve.Text = "Вивести детальний розв\'язок";
             this.toolTip1.SetToolTip(this.getDetailSolve, "Виводить детальний покроковий розв\'язок задачі");
             this.getDetailSolve.UseVisualStyleBackColor = true;
-            // 
-            // допомогаToolStripMenuItem
-            // 
-            this.допомогаToolStripMenuItem.Name = "допомогаToolStripMenuItem";
-            this.допомогаToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.допомогаToolStripMenuItem.Text = "Довідка";
-            // 
-            // проПрограмуToolStripMenuItem
-            // 
-            this.проПрограмуToolStripMenuItem.Name = "проПрограмуToolStripMenuItem";
-            this.проПрограмуToolStripMenuItem.Size = new System.Drawing.Size(99, 20);
-            this.проПрограмуToolStripMenuItem.Text = "Про програму";
-            this.проПрограмуToolStripMenuItem.Click += new System.EventHandler(this.проПрограмуToolStripMenuItem_Click);
-            // 
-            // перевіркаОптимальностіToolStripMenuItem
-            // 
-            this.перевіркаОптимальностіToolStripMenuItem.Name = "перевіркаОптимальностіToolStripMenuItem";
-            this.перевіркаОптимальностіToolStripMenuItem.Size = new System.Drawing.Size(160, 20);
-            this.перевіркаОптимальностіToolStripMenuItem.Text = "Перевірка оптимальності";
-            // 
-            // дослідженняСтійкостіToolStripMenuItem
-            // 
-            this.дослідженняСтійкостіToolStripMenuItem.Name = "дослідженняСтійкостіToolStripMenuItem";
-            this.дослідженняСтійкостіToolStripMenuItem.Size = new System.Drawing.Size(142, 20);
-            this.дослідженняСтійкостіToolStripMenuItem.Text = "Дослідження стійкості";
             // 
             // Form1
             // 

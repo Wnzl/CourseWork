@@ -104,31 +104,31 @@ namespace CourseProject
         /// <summary>
         /// Отримання вектора цільової функції (масив)
         /// </summary>
-        public static double[] getTargetFunction(object sender, EventArgs e, DataGridView dataGridView1)
+        public static decimal[] getTargetFunction(object sender, EventArgs e, DataGridView dataGridView1)
         {
             int colsNum = dataGridView1.ColumnCount;
             int colsOfFunction = colsNum - 2;
-            double[] targetFunction = new double[colsOfFunction];
+            decimal[] targetFunction = new decimal[colsOfFunction];
             for (int i = 0; i < colsOfFunction; i++)
-                targetFunction[i] = Convert.ToDouble(dataGridView1.Rows[0].Cells[i].Value);
+                targetFunction[i] = Convert.ToDecimal(dataGridView1.Rows[0].Cells[i].Value);
             return targetFunction;
         }
 
         /// <summary>
         /// Отримання матриці обмежень (масив)
         /// </summary>
-        public static double[,] getLimitationMatrix(object sender, EventArgs e, DataGridView dataGridView)
+        public static decimal[,] getLimitationMatrix(object sender, EventArgs e, DataGridView dataGridView)
         {
             int colsNum = Convert.ToInt16(dataGridView.ColumnCount);
             int rowsNum = Convert.ToInt16(dataGridView.RowCount);
             int colsOfMassive = colsNum - 1;
-            double[,] limitationMatrix = new double[rowsNum, colsOfMassive];
+            decimal[,] limitationMatrix = new decimal[rowsNum, colsOfMassive];
             //Індекс b = кількість колонок - 1
             int bIndex = colsNum - 1;
 
             //забираємо значення b
             for (int rowIndex = 0; rowIndex < rowsNum; rowIndex++)
-                limitationMatrix[rowIndex, 0] = Convert.ToDouble(dataGridView.Rows[rowIndex].Cells[bIndex].Value);
+                limitationMatrix[rowIndex, 0] = Convert.ToDecimal(dataGridView.Rows[rowIndex].Cells[bIndex].Value);
 
             //забираємо значення A
             //colMassive для виводу значень A в масив береться індекс на 1 більше, перший займає b
@@ -136,7 +136,7 @@ namespace CourseProject
             for (int rowIndex = 0; rowIndex < rowsNum; rowIndex++) 
                 for (int colGridIndex = 0, colIndexMassive = 1; colGridIndex < colsNum - 2; colGridIndex++, colIndexMassive++)
                 {
-                    limitationMatrix[rowIndex, colIndexMassive] = Convert.ToDouble(dataGridView.Rows[rowIndex].Cells[colGridIndex].Value);
+                    limitationMatrix[rowIndex, colIndexMassive] = Convert.ToDecimal(dataGridView.Rows[rowIndex].Cells[colGridIndex].Value);
                 }
 
             /*string a = ""; //це було для перевірки масиву
@@ -201,6 +201,10 @@ namespace CourseProject
             {
                 solveString += "<table border = '1'><tr><td></td><td></td><td></td><td>C</td>";
                 SimplexTable table = tables[currentTable];
+                SimplexTable previousTable = new SimplexTable();
+                if (currentTable != 0) {
+                    previousTable = tables[currentTable - 1]; //Предыдущая таблица для вывода checkRow (косяк с записью этой строки в таблицы)
+                }
                 //Цикл значень С
                 foreach (int i in table.C)
                 {
@@ -222,33 +226,32 @@ namespace CourseProject
                     solveString += "<tr><td>" + (index + 1) + "</td><td>" + table.Cs[index] + "</td><td>" + table.fs[index] + "</td>";
                     //Цикл для значень Х
                     for (int i = 1; i < table.X.GetLength(1); i++)
-                        solveString += "<td>" + Math.Round(table.X[index, i], 3) + "</td>";
+                        solveString += "<td>" + table.X[index, i] + "</td>";
                     //Вывод теты
                     if (table.situation == 3)
                     { //Проверяем не является ли табилца последней (в последней не считаем тету)
                         if (table.teta[index] != 99999999999999)
-                            solveString += "<td>" + Math.Round(table.teta[index], 3) + "</td>";
+                            solveString += "<td>" + table.teta[index] + "</td>";
                         else
                             solveString += "<td>---</td>";
                         solveString += "</tr>";
                     }
                 }
                 //Вывод дельты
-                solveString += "<tr><td>" + (index + 1) + "</td><td></td><td></td>";
+                solveString += "<tr><td>" + (index + 1) + "</td><td></td><td>delta</td>";
                 for (int i = 0; i < table.delta.GetLength(0); i++)
                 {
-                    solveString += "<td>" + Math.Round(table.delta[i], 3) + "</td>";
+                    solveString += "<td>" + table.delta[i] + "</td>";
                 }
                 solveString += "</tr>";
-                //Сравниваем дельту с "тестовыми данным", если совпадает (мы тут делаем обман т.к. выводит одно и то же) значит все ок
+                //Сравниваем дельту с "тестовыми данным", если совпадает значит все ок
                 if (currentTable != 0)
                 { //Проверяем не является ли таблица первой (для первой не нужна эта проверка)
                     solveString += "<tr><td>" + (index + 1) + "'</td><td></td><td></td>";
-                    for (int i = 0; i < table.delta.GetLength(0); i++)
+                    for (int i = 0; i < previousTable.checkRow.GetLength(0); i++)
                     {
-                        solveString += "<td>" + Math.Round(table.delta[i], 3) + "</td>";
+                        solveString += "<td>" + previousTable.checkRow[i] + "</td>";
                     }
-                    //solveString += "</tr> </table>";
                 }
                 solveString += "</tr></table>";
                 if (table.situation == 3)
@@ -267,23 +270,68 @@ namespace CourseProject
                 {
                     // тут нашли решение и может быть стоит вывести в хтмл
                 }
-                /*if (table.situation == 3) {
-                    solveString += "</tr><tr><td colspan = '29'><div>Iteration number: " + currentTable+
-                                    "\nsituation = " + table.situation +
-                                    "\nSelected r = " + table.r +
-                                    "\nSelected k = " + table.k+ "</div>"; 
 
-                }
-                if(table.situation == 2) {
-                    //тут нельзя найти решение
-                }
-                if(table.situation == 1) {
-                    // тут нашли решение и может быть стоит вывести в хтмл
-                }
-                solveString += "</tr></table><div style='height: 50px;'></div>";*/
             }
             solveString += "</body>\r\n</html>";
             using (StreamWriter sw = new StreamWriter("out.html", false, Encoding.Default)) //false вказує, що файл буде перезаписано. Далі використовувати true!
+            {
+                sw.WriteLine(solveString);
+            }
+        }
+
+        public static void drowAdmissibility(SimplexTable[] tables)
+        {
+            string solveString = "<!DOCTYPE html>\r\n<html lang='uk'>\r\n<head>\r\n <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>\r\n<title>Admissibility check</title>\r\n<style>\r\ndiv{font-size: 14pt; padding: 10px 0px;}\r\n</style>\r\n</head>\r\n<body>";
+            solveString += "Posle resheniya polychaem oporniy plan: <br>";
+            int lastTable = tables.GetLength(0) - 1;
+            int xCount = tables[lastTable].X.GetLength(1) - 2;
+            int simplexTableLength = tables[lastTable].X.GetLength(0);
+            solveString += "x* = { ";
+            Boolean xIsPositive = true;
+            decimal[] xResults = new decimal[xCount];
+            for (int index = 1; index <= xCount; index++)
+            {
+                for (int i = 0; i < simplexTableLength; i++)
+                {
+                    if (tables[lastTable].X[i, 0] == index)
+                    {
+                        if (tables[lastTable].X[i, 0] < 0)
+                            xIsPositive = false;
+                        solveString += tables[lastTable].X[i, 1] + "; ";
+                        xResults[index-1] = tables[lastTable].X[i, 1];
+                        break;
+                    }
+                    else if (i == simplexTableLength - 1)
+                    {
+                        solveString += "0; ";
+                        xResults[index-1] = 0;
+                    }
+                }
+            }
+            solveString += "} <br><b>";
+            if (xIsPositive == true)
+                solveString += "x* >= 0 <br>";
+            else
+                solveString += "x* <= 0 <br>";
+
+            solveString += "</b>Proverim vipolnenie uslovii Ax* = b <br>";
+
+            decimal[] gamma = new decimal[simplexTableLength];
+            for (int row = 0; row < simplexTableLength; row++)
+            {
+                gamma[row] = 0;
+                for(int currentX = 2; currentX < xCount; currentX++)
+                {
+                    gamma[row] += tables[0].X[row, currentX] * xResults[currentX - 2];
+                    solveString += tables[0].X[row, currentX]+ " * "+ xResults[currentX - 2] + " + ";
+                }
+                solveString += " = " + gamma[row];
+                solveString += "<br><b> Gamma" + (row+1) + "= " + tables[0].X[row,1] +" - "+ gamma[row] + " = "+ (tables[0].X[row, 1] - gamma[row]) + "</b><br>";
+
+            }
+
+            solveString += "</body>\r\n</html>";
+            using (StreamWriter sw = new StreamWriter("admissibility.html", false, Encoding.Default)) //false вказує, що файл буде перезаписано. Далі використовувати true!
             {
                 sw.WriteLine(solveString);
             }

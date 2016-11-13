@@ -62,12 +62,15 @@ namespace CourseProject {
                     Console.WriteLine("Задача не имеет решения");
                     return resultMassive;
                 case 3:
-                    resultMassive[lastTable].k = 
-                        findDirectiveColumn(resultMassive[lastTable].delta);     //Направляющий столбец
+                 /*   resultMassive[lastTable].k = 
+                          findDirectiveColumn(resultMassive[lastTable].delta); */    //Приближенный метод нахождения столбца
+                     resultMassive[lastTable].k =
+                          findDirectiveColimnTrue(resultMassive[lastTable].C,        //Точный метод нахождения столбца
+                          resultMassive[lastTable].X, resultMassive[lastTable].fs);
                     resultMassive[lastTable].r = 
                         findDirectiveRow(resultMassive[lastTable].k, X, fs);     //Направляющая строка
                     resultMassive[lastTable].teta = 
-                        tetaCount(resultMassive[lastTable].k, X, fs);            //Находим тету
+                        tetaCount(resultMassive[lastTable].k, X);                //Находим тету
                     fs[Array.IndexOf(fs, resultMassive[lastTable].r)] =
                         resultMassive[lastTable].k;                              //Делаем замену вектора условий с индексом r на вектор с индексом k 
                     decimal[,] Xnew = newPlanFormation(X, C, fs, 
@@ -112,7 +115,7 @@ namespace CourseProject {
         /// </summary>
         /// <param name="X">Начальный опорный план</param>
         /// <param name="C">Вектор коэффициентов линейной функции</param>
-        /// <param name="fs">Коэффециенты начального базиса</param>
+        /// <param name="fs">Коэффециенты базиса</param>
         /// <param name="k">Направляющий столбец</param>
         /// <param name="r">Направляющая строка</param>
         /// <returns>Новый опорный план</returns>
@@ -174,12 +177,12 @@ namespace CourseProject {
         /// </summary>
         /// <param name="k">Направляющий столбец</param>
         /// <param name="X">Опорный план задачи</param>
-        /// <param name="fs">Коэффициенты начального базиса</param>
+        /// <param name="fs">Коэффициенты базиса</param>
         /// <returns>Направляющая строка</returns>
         private static int findDirectiveRow(int k, decimal[,] X, int[] fs) {
             int r = fs[0]; //Направляющая строка
             int length = X.GetLength(0);
-            decimal[] teta = tetaCount(k, X, fs);
+            decimal[] teta = tetaCount(k, X);
             int minVal = Array.IndexOf(teta, teta.Min());
             r = fs[minVal];
             return r;
@@ -192,11 +195,11 @@ namespace CourseProject {
         /// <param name="X">Опорный план</param>
         /// <param name="fs">Коэффициенты базиса</param>
         /// <returns>Тета</returns>
-        private static decimal[] tetaCount(int k, decimal[,] X, int[] fs) {
+        private static decimal[] tetaCount(int k, decimal[,] X) {
                 int length = X.GetLength(0);
                 decimal[] teta = new decimal[length];
                 for (int i = 0; i < length; i++) {
-                    if (Math.Round(X[i, k + 1],25) > 0)
+                    if (Math.Round(X[i, k + 1],24) > 0)
                         teta[i] = (X[i, 1] / X[i, k + 1]);
                     else
                         teta[i] = 99999999999999; //Неадекватно большое значение, которое показывает, что элемент не рассматривается
@@ -205,7 +208,7 @@ namespace CourseProject {
         }
 
         /// <summary>
-        /// Метод нахождения направляющего столбца
+        /// Приближенный метод нахождения направляющего столбца
         /// </summary>
         /// <param name="delta">Вектор дельта</param>
         /// <returns>Направляющий столбец</returns>
@@ -216,6 +219,32 @@ namespace CourseProject {
             for(int i = 1; i < length; i++) {
                 if (min > delta[i]) {
                     min = delta[i];
+                    k = i;
+                }
+            }
+            return k;
+        }
+
+        /// <summary>
+        /// Точный метод нахождения направляющего столбца
+        /// </summary>
+        /// <param name="C">Вектор коэффициентов линейной функции </param>
+        /// <param name="X">Опорный план</param>
+        /// <param name="fs">Коэффициенты базиса</param>
+        /// <returns></returns>
+        private static int findDirectiveColimnTrue(decimal[] C, decimal[,] X, int[] fs) {
+            int row = X.GetLength(0);
+            int col = X.GetLength(1) - 1;
+            decimal[] arrayL = new decimal[col];
+            int k = 0;
+            decimal[] delta = deltaCount(C, X, fs);
+            for(int j = 0; j < col; j++) {
+                if (delta[j] < 0) {
+                    arrayL[j] = -1 * tetaCount(j, X).Min() * delta[j];
+                }
+            }
+            for (int i = 0; i < col; i++) {
+                if (arrayL[i] > k) {
                     k = i;
                 }
             }
@@ -341,6 +370,7 @@ namespace CourseProject {
             }
             return fs;
         }
+
 
         /* Методы связанные с обработкой начальной матрицы, из-за того, 
          * что у нас метод нахождения начального базиса это все не требует они теряют актуальность, но на всякий случай оставлю.

@@ -38,14 +38,6 @@ namespace CourseProject
                 dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
                 { Name = colName, HeaderText = colName, Width = 38 });
             }
-            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
-            { HeaderText = "→", Width = 34 });
-            DataGridViewComboBoxColumn comboboxColumnMaxMin = new DataGridViewComboBoxColumn();
-            comboboxColumnMaxMin.Items.AddRange("max", "min");
-            comboboxColumnMaxMin.HeaderText = "MaxMin";
-            comboboxColumnMaxMin.Name = "MaxMin";
-            comboboxColumnMaxMin.Width = 38;
-            dataGridView1.Columns.Add(comboboxColumnMaxMin);
 
             //Створимо таблицю для введення матриці обмежень
             //Додаємо колонки для Ax
@@ -56,13 +48,6 @@ namespace CourseProject
                 dataGridView2.Columns.Add(new DataGridViewTextBoxColumn()
                 { Name = colName, HeaderText = colName, Width = 38 });
             }
-            //Колонка з comboBox для знаку
-            DataGridViewComboBoxColumn comboboxColumnsign = new DataGridViewComboBoxColumn();
-            comboboxColumnsign.Items.AddRange("≤", "≥");
-            comboboxColumnsign.HeaderText = "sign";
-            comboboxColumnsign.Name = "sign";
-            comboboxColumnsign.Width = 34;
-            dataGridView2.Columns.Add(comboboxColumnsign);
             //Колонка для b
             dataGridView2.Columns.Add(new DataGridViewTextBoxColumn()
             { Name = "b", HeaderText = "b", Width = 38 });
@@ -71,35 +56,6 @@ namespace CourseProject
             dataGridView1.RowCount = 1;
             dataGridView2.RowCount = rowsNum;
         }
-        
-        /// <summary>
-        /// Задання знаків у матриці обмежень
-        /// </summary>
-        public static void sameSign_Check(object sender, EventArgs e, DataGridView dataGridView, CheckBox sameSign)
-        {
-            int colsNum = dataGridView.ColumnCount;
-            int rowsNum = dataGridView.RowCount;
-            if (colsNum > 1)
-            {
-                int cellNum = dataGridView.ColumnCount - 2;
-                for (int i = 1; i < rowsNum; i++)
-                {
-                    string signValue = null;
-                    if (dataGridView.Rows[0].Cells[cellNum].Value != null)
-                        signValue = dataGridView.Rows[0].Cells[cellNum].Value.ToString();
-                    if (sameSign.Checked)
-                    {
-                        if (signValue != null)
-                            dataGridView.Rows[i].Cells[cellNum].Value = signValue;
-                        dataGridView.Rows[i].Cells[cellNum].ReadOnly = true;
-                    }
-                    else
-                    {
-                        dataGridView.Rows[i].Cells[cellNum].ReadOnly = false;
-                    }
-                }
-            }
-        }
 
         /// <summary>
         /// Отримання вектора цільової функції (масив)
@@ -107,7 +63,7 @@ namespace CourseProject
         public static decimal[] getTargetFunction(object sender, EventArgs e, DataGridView dataGridView1)
         {
             int colsNum = dataGridView1.ColumnCount;
-            int colsOfFunction = colsNum - 2;
+            int colsOfFunction = colsNum;
             decimal[] targetFunction = new decimal[colsOfFunction];
             for (int i = 0; i < colsOfFunction; i++)
                 targetFunction[i] = Convert.ToDecimal(dataGridView1.Rows[0].Cells[i].Value);
@@ -121,7 +77,7 @@ namespace CourseProject
         {
             int colsNum = Convert.ToInt16(dataGridView.ColumnCount);
             int rowsNum = Convert.ToInt16(dataGridView.RowCount);
-            int colsOfMassive = colsNum - 1;
+            int colsOfMassive = colsNum;
             decimal[,] limitationMatrix = new decimal[rowsNum, colsOfMassive];
             //Індекс b = кількість колонок - 1
             int bIndex = colsNum - 1;
@@ -134,7 +90,7 @@ namespace CourseProject
             //colMassive для виводу значень A в масив береться індекс на 1 більше, перший займає b
             //colsOfFunction - 2, адже беремо лише значення А
             for (int rowIndex = 0; rowIndex < rowsNum; rowIndex++) 
-                for (int colGridIndex = 0, colIndexMassive = 1; colGridIndex < colsNum - 2; colGridIndex++, colIndexMassive++)
+                for (int colGridIndex = 0, colIndexMassive = 1; colGridIndex < colsNum - 1; colGridIndex++, colIndexMassive++)
                 {
                     limitationMatrix[rowIndex, colIndexMassive] = Convert.ToDecimal(dataGridView.Rows[rowIndex].Cells[colGridIndex].Value);
                 }
@@ -153,13 +109,16 @@ namespace CourseProject
         /// <summary>
         /// Отримання значення куди прямує функція MIN/MAX
         /// </summary>
-        public static bool getMaxMin(object sender, EventArgs e, DataGridView dataGridView)
+        public static bool getMaxMin(object sender, EventArgs e, ComboBox MaxMinBox)
         {
-            //отримати індекс comboBox з dataGridView не вдалося, тому беремо його зачення
-            if (dataGridView.Rows[0].Cells[dataGridView.ColumnCount - 1].Value.ToString() == "max")
-                return true;
+            if (MaxMinBox.SelectedItem == null)
+                MessageBox.Show("Не обране значення Max/Min. За замовчуванням обереться Max");
             else
-                return false;
+            {
+                if (MaxMinBox.SelectedItem.ToString() == "Min")
+                    return false;
+            }
+            return true;
         }
         /// <summary>
         /// Виведення результату в рядок

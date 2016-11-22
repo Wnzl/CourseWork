@@ -59,6 +59,8 @@ namespace CourseProject
                     //Задаємо A
                     dataGridView2.Rows[i].Cells[j].Value = AFirst[i, matrJ].ToString();
             }
+            // Табуляграма неактивна поки не розв'язали задачу
+            getDetailSolveButton.Enabled = false;
         }
 
         /// <summary>
@@ -93,21 +95,13 @@ namespace CourseProject
                 int colsNum = Convert.ToInt16(numCols.Text);
                 int rowsNum = Convert.ToInt16(numRows.Text);
                 if (colsNum < 2 || rowsNum < 2)
-                    throw new System.ArgumentException("Недійсні значення");
+                    throw new System.ArgumentException("Недійсні значення. Мінімальний розмір 2х2");
                 IO.buildMatrix(sender, e, dataGridView1, dataGridView2, colsNum, rowsNum);
+                // Табуляграма неактивна поки не розв'язали задачу
+                getDetailSolveButton.Enabled = false;
             }
             catch (Exception ex) { MessageBox.Show("Не вдалося побудувати матрицю, перевірте значення\r\n\r\nДеталі:\r\n" + ex, "Помилка"); }
         }
-
-        /// <summary>
-        /// Зміна поведінки знаків після зміни значення прапорця sameSign 
-        /// (sameSign - В матриці обмежень однакові знаки нерівностей?)
-        /// </summary>
-        private void sameSign_Click(object sender, EventArgs e)
-        {
-            IO.sameSign_Check(sender, e, dataGridView2, sameSign);
-        }
-
         /// <summary>
         /// Отримання вектора цільової функції (масив)
         /// </summary>
@@ -129,28 +123,36 @@ namespace CourseProject
         /// </summary>
         private bool getMaxMin(object sender, EventArgs e)
         {
-            return IO.getMaxMin(sender, e, dataGridView1);
+            return IO.getMaxMin(sender, e, MaxMinBox);
         }
-        
-        //Елемент меню. Кнопка Вийти
+
+        /// <summary>
+        /// Вихід з програми
+        /// </summary>
         private void exit_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
+        /// <summary>
+        /// Виведеня вікна з детальним розв'язком
+        /// </summary>
         private void getDetailSolve_Click(object sender, EventArgs e)
         {
             detailSolve form = new detailSolve();
             form.Show();
         }
 
+        /// <summary>
+        /// Виведеня вікна "Про програму"
+        /// </summary>
         private void проПрограмуToolStripMenuItem_Click(object sender, EventArgs e)
         {
             About form = new About();
             form.Show();
         }
 
-        private void перевіркаОптимальностіToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void admissibilityCheck_Click(object sender, EventArgs e)
         {
             admissibilityCheck form = new admissibilityCheck();
             form.Show();

@@ -33,21 +33,25 @@
             this.out1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.sameSign = new System.Windows.Forms.CheckBox();
             this.numCols = new System.Windows.Forms.TextBox();
             this.numRows = new System.Windows.Forms.TextBox();
             this.buildMatrix = new System.Windows.Forms.Button();
             this.Solve = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.getDetailSolveButton = new System.Windows.Forms.ToolStripMenuItem();
-            this.перевіркаОптимальностіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.дослідженняСтійкостіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.оптимавльностіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ефективностіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.стійкостіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.допомогаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.проПрограмуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.вихідToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AnswerBox = new System.Windows.Forms.TextBox();
             this.getDetailSolve = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.label1 = new System.Windows.Forms.Label();
+            this.MaxMinBox = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -82,7 +86,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(6, 27);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(829, 61);
+            this.dataGridView1.Size = new System.Drawing.Size(740, 61);
             this.dataGridView1.TabIndex = 7;
             this.toolTip1.SetToolTip(this.dataGridView1, "Введіть цільову функцію");
             // 
@@ -99,23 +103,10 @@
             this.dataGridView2.TabIndex = 8;
             this.toolTip1.SetToolTip(this.dataGridView2, "Введіть матрицю обмежень");
             // 
-            // sameSign
-            // 
-            this.sameSign.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.sameSign.AutoSize = true;
-            this.sameSign.Location = new System.Drawing.Point(909, 27);
-            this.sameSign.Name = "sameSign";
-            this.sameSign.Size = new System.Drawing.Size(109, 17);
-            this.sameSign.TabIndex = 9;
-            this.sameSign.Text = "Однаковий знак";
-            this.toolTip1.SetToolTip(this.sameSign, "Задає однаковий знак в матриці обмежень");
-            this.sameSign.UseVisualStyleBackColor = true;
-            this.sameSign.Click += new System.EventHandler(this.sameSign_Click);
-            // 
             // numCols
             // 
             this.numCols.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.numCols.Location = new System.Drawing.Point(841, 27);
+            this.numCols.Location = new System.Drawing.Point(950, 27);
             this.numCols.Name = "numCols";
             this.numCols.Size = new System.Drawing.Size(23, 20);
             this.numCols.TabIndex = 10;
@@ -125,7 +116,7 @@
             // numRows
             // 
             this.numRows.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.numRows.Location = new System.Drawing.Point(870, 27);
+            this.numRows.Location = new System.Drawing.Point(983, 27);
             this.numRows.Name = "numRows";
             this.numRows.Size = new System.Drawing.Size(23, 20);
             this.numRows.TabIndex = 11;
@@ -160,7 +151,6 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.getDetailSolveButton,
-            this.перевіркаОптимальностіToolStripMenuItem,
             this.дослідженняСтійкостіToolStripMenuItem,
             this.допомогаToolStripMenuItem,
             this.проПрограмуToolStripMenuItem,
@@ -179,18 +169,34 @@
             this.getDetailSolveButton.Text = "Табуляграма";
             this.getDetailSolveButton.Click += new System.EventHandler(this.getDetailSolve_Click);
             // 
-            // перевіркаОптимальностіToolStripMenuItem
-            // 
-            this.перевіркаОптимальностіToolStripMenuItem.Name = "перевіркаОптимальностіToolStripMenuItem";
-            this.перевіркаОптимальностіToolStripMenuItem.Size = new System.Drawing.Size(160, 20);
-            this.перевіркаОптимальностіToolStripMenuItem.Text = "Перевірка оптимальності";
-            this.перевіркаОптимальностіToolStripMenuItem.Click += new System.EventHandler(this.перевіркаОптимальностіToolStripMenuItem_Click_1);
-            // 
             // дослідженняСтійкостіToolStripMenuItem
             // 
+            this.дослідженняСтійкостіToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.оптимавльностіToolStripMenuItem,
+            this.ефективностіToolStripMenuItem,
+            this.стійкостіToolStripMenuItem});
             this.дослідженняСтійкостіToolStripMenuItem.Name = "дослідженняСтійкостіToolStripMenuItem";
-            this.дослідженняСтійкостіToolStripMenuItem.Size = new System.Drawing.Size(142, 20);
-            this.дослідженняСтійкостіToolStripMenuItem.Text = "Дослідження стійкості";
+            this.дослідженняСтійкостіToolStripMenuItem.Size = new System.Drawing.Size(84, 20);
+            this.дослідженняСтійкостіToolStripMenuItem.Text = "Перевірка...";
+            // 
+            // оптимавльностіToolStripMenuItem
+            // 
+            this.оптимавльностіToolStripMenuItem.Name = "оптимавльностіToolStripMenuItem";
+            this.оптимавльностіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.оптимавльностіToolStripMenuItem.Text = "Оптимальності";
+            this.оптимавльностіToolStripMenuItem.Click += new System.EventHandler(this.admissibilityCheck_Click);
+            // 
+            // ефективностіToolStripMenuItem
+            // 
+            this.ефективностіToolStripMenuItem.Name = "ефективностіToolStripMenuItem";
+            this.ефективностіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.ефективностіToolStripMenuItem.Text = "Ефективності";
+            // 
+            // стійкостіToolStripMenuItem
+            // 
+            this.стійкостіToolStripMenuItem.Name = "стійкостіToolStripMenuItem";
+            this.стійкостіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.стійкостіToolStripMenuItem.Text = "Стійкості";
             // 
             // допомогаToolStripMenuItem
             // 
@@ -240,18 +246,51 @@
             this.toolTip1.SetToolTip(this.getDetailSolve, "Виводить детальний покроковий розв\'язок задачі");
             this.getDetailSolve.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(752, 53);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(18, 13);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "→";
+            // 
+            // MaxMinBox
+            // 
+            this.MaxMinBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MaxMinBox.FormattingEnabled = true;
+            this.MaxMinBox.Items.AddRange(new object[] {
+            "Max",
+            "Min"});
+            this.MaxMinBox.Location = new System.Drawing.Point(776, 50);
+            this.MaxMinBox.Name = "MaxMinBox";
+            this.MaxMinBox.Size = new System.Drawing.Size(54, 21);
+            this.MaxMinBox.TabIndex = 17;
+            this.toolTip1.SetToolTip(this.MaxMinBox, "Куди прямує функція");
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(840, 30);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(104, 13);
+            this.label2.TabIndex = 18;
+            this.label2.Text = "Змінних/обмежень";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1018, 599);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.MaxMinBox);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.AnswerBox);
             this.Controls.Add(this.Solve);
             this.Controls.Add(this.buildMatrix);
             this.Controls.Add(this.numRows);
             this.Controls.Add(this.numCols);
             this.Controls.Add(this.getDetailSolve);
-            this.Controls.Add(this.sameSign);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.out1);
@@ -277,7 +316,6 @@
         private System.Windows.Forms.Button insertValues;
         private System.Windows.Forms.Label out1;
         private System.Windows.Forms.DataGridView dataGridView2;
-        private System.Windows.Forms.CheckBox sameSign;
         private System.Windows.Forms.TextBox numCols;
         private System.Windows.Forms.TextBox numRows;
         private System.Windows.Forms.Button buildMatrix;
@@ -290,9 +328,14 @@
         private System.Windows.Forms.CheckBox getDetailSolve;
         private System.Windows.Forms.ToolStripMenuItem допомогаToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem проПрограмуToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem перевіркаОптимальностіToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem дослідженняСтійкостіToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox MaxMinBox;
+        private System.Windows.Forms.ToolStripMenuItem оптимавльностіToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ефективностіToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem стійкостіToolStripMenuItem;
+        private System.Windows.Forms.Label label2;
     }
 }
 

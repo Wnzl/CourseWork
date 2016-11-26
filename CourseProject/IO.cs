@@ -153,7 +153,7 @@ namespace CourseProject
 
         public static void drowSolve(SimplexTable[] tables)
         {
-            string solveString = "<!DOCTYPE html>\r\n<html lang='uk'>\r\n<head>\r\n<meta charset='UTF-8'>\r\n<title>Detail solve</title>\r\n<style>\r\ndiv{font-size: 14pt; padding: 10px 0px;}\r\n</style>\r\n</head>\r\n<body>";
+            string solveString = "<!DOCTYPE html>\r\n<html lang='uk'>\r\n<head>\r\n<title>Детальний розв'язок</title>\r\n<style>\r\ndiv{font-size: 14pt; padding: 10px 0px;}\r\n</style>\r\n</head>\r\n<body>";
             //Вивід початку таблиці
             int lastTable = tables.GetLength(0);
             for (int currentTable = 0; currentTable < lastTable; currentTable++)
@@ -177,7 +177,7 @@ namespace CourseProject
                 {
                     solveString += "<td>A" + i + "</td>";
                 }
-                solveString += "<td>Teta</td></tr>";
+                solveString += "<td>&Theta;</td></tr>";
                 int index = 0;
                 for (; index < table.X.GetLength(0); index++)
                 {
@@ -197,7 +197,7 @@ namespace CourseProject
                     }
                 }
                 //Вывод дельты
-                solveString += "<tr><td>" + (index + 1) + "</td><td></td><td>delta</td>";
+                solveString += "<tr><td>" + (index + 1) + "</td><td></td><td>&Delta;</td>";
                 for (int i = 0; i < table.delta.GetLength(0); i++)
                 {
                     solveString += "<td>" + table.delta[i] + "</td>";
@@ -215,10 +215,10 @@ namespace CourseProject
                 solveString += "</tr></table>";
                 if (table.situation == 3)
                 {
-                    solveString += "<div style='height: 50px;'>Iteration number: " + currentTable +
-                                    "\nsituation = " + table.situation +
-                                    "\nSelected r = " + table.r +
-                                    "\nSelected k = " + table.k + "</div>";
+                    solveString += "<div style='height: 50px;'>Ітерація: " + currentTable + ", " +
+                                    "\nситуація = " + table.situation + ", "+
+                                    "\nобране r = " + table.r + ", " +
+                                    "\nобране k = " + table.k + ".</div>";
 
                 }
                 if (table.situation == 2)
@@ -232,7 +232,7 @@ namespace CourseProject
 
             }
             solveString += "</body>\r\n</html>";
-            using (StreamWriter sw = new StreamWriter("out.html", false, Encoding.Default)) //false вказує, що файл буде перезаписано. Далі використовувати true!
+            using (StreamWriter sw = new StreamWriter("out.html", false, Encoding.Default)) //false вказує, що файл буде перезаписано.
             {
                 sw.WriteLine(solveString);
             }
@@ -240,8 +240,8 @@ namespace CourseProject
 
         public static void drowAdmissibility(SimplexTable[] tables)
         {
-            string solveString = "<!DOCTYPE html>\r\n<html lang='uk'>\r\n<head>\r\n <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>\r\n<title>Admissibility check</title>\r\n<style>\r\ndiv{font-size: 14pt; padding: 10px 0px;}\r\n</style>\r\n</head>\r\n<body>";
-            solveString += "Posle resheniya polychaem oporniy plan: <br>";
+            string solveString = "<!DOCTYPE html>\r\n<html lang='uk'>\r\n<head>\r\n<title>Admissibility check</title>\r\n<style>\r\ndiv{font-size: 14pt; padding: 10px 0px;}\r\n</style>\r\n</head>\r\n<body>";
+            solveString += "Після розв'язку отримуємо опорний план: <br>";
             int lastTable = tables.GetLength(0) - 1;
             int xCount = tables[lastTable].X.GetLength(1) - 2;
             int simplexTableLength = tables[lastTable].X.GetLength(0);
@@ -273,7 +273,7 @@ namespace CourseProject
             else
                 solveString += "x* <= 0 <br>";
 
-            solveString += "</b>Proverim vipolnenie uslovii Ax* = b <br>";
+            solveString += "</b>Перевіримо виконання умов Ax* = b <br>";
 
             decimal[] gamma = new decimal[simplexTableLength];
             for (int row = 0; row < simplexTableLength; row++)
@@ -285,12 +285,12 @@ namespace CourseProject
                     solveString += tables[0].X[row, currentX]+ " * "+ xResults[currentX - 2] + " + ";
                 }
                 solveString += " = " + gamma[row];
-                solveString += "<br><b> Gamma" + (row+1) + "= " + tables[0].X[row,1] +" - "+ gamma[row] + " = "+ (tables[0].X[row, 1] - gamma[row]) + "</b><br>";
+                solveString += "<br><b>&gamma; " + (row+1) + "= " + tables[0].X[row,1] +" - "+ gamma[row] + " = "+ (tables[0].X[row, 1] - gamma[row]) + "</b><br>";
 
             }
 
             solveString += "</body>\r\n</html>";
-            using (StreamWriter sw = new StreamWriter("admissibility.html", false, Encoding.Default)) //false вказує, що файл буде перезаписано. Далі використовувати true!
+            using (StreamWriter sw = new StreamWriter("admissibility.html", false, Encoding.Default)) //false вказує, що файл буде перезаписано.
             {
                 sw.WriteLine(solveString);
             }

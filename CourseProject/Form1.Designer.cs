@@ -38,8 +38,12 @@
             this.buildMatrix = new System.Windows.Forms.Button();
             this.Solve = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadMatrix = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveMatrix = new System.Windows.Forms.ToolStripMenuItem();
             this.getDetailSolveButton = new System.Windows.Forms.ToolStripMenuItem();
             this.дослідженняСтійкостіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.допустимостіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оптимавльностіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ефективностіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.стійкостіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,7 +56,6 @@
             this.MaxMinBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.допустимостіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -151,6 +154,7 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.файлToolStripMenuItem,
             this.getDetailSolveButton,
             this.дослідженняСтійкостіToolStripMenuItem,
             this.допомогаToolStripMenuItem,
@@ -161,6 +165,29 @@
             this.menuStrip1.Size = new System.Drawing.Size(1018, 24);
             this.menuStrip1.TabIndex = 14;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // файлToolStripMenuItem
+            // 
+            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadMatrix,
+            this.saveMatrix});
+            this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
+            this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.файлToolStripMenuItem.Text = "Файл";
+            // 
+            // loadMatrix
+            // 
+            this.loadMatrix.Name = "loadMatrix";
+            this.loadMatrix.Size = new System.Drawing.Size(245, 22);
+            this.loadMatrix.Text = "Завантажити матрицю з файлу";
+            this.loadMatrix.Click += new System.EventHandler(this.loadMatrix_Click);
+            // 
+            // saveMatrix
+            // 
+            this.saveMatrix.Name = "saveMatrix";
+            this.saveMatrix.Size = new System.Drawing.Size(245, 22);
+            this.saveMatrix.Text = "Зберегти матрицю у файл";
+            this.saveMatrix.Click += new System.EventHandler(this.saveMatrix_Click);
             // 
             // getDetailSolveButton
             // 
@@ -180,6 +207,13 @@
             this.дослідженняСтійкостіToolStripMenuItem.Name = "дослідженняСтійкостіToolStripMenuItem";
             this.дослідженняСтійкостіToolStripMenuItem.Size = new System.Drawing.Size(84, 20);
             this.дослідженняСтійкостіToolStripMenuItem.Text = "Перевірка...";
+            // 
+            // допустимостіToolStripMenuItem
+            // 
+            this.допустимостіToolStripMenuItem.Name = "допустимостіToolStripMenuItem";
+            this.допустимостіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.допустимостіToolStripMenuItem.Text = "Допустимості";
+            this.допустимостіToolStripMenuItem.Click += new System.EventHandler(this.admissibilityCheck_Click);
             // 
             // оптимавльностіToolStripMenuItem
             // 
@@ -281,13 +315,6 @@
             this.label2.TabIndex = 18;
             this.label2.Text = "Змінних/обмежень";
             // 
-            // допустимостіToolStripMenuItem
-            // 
-            this.допустимостіToolStripMenuItem.Name = "допустимостіToolStripMenuItem";
-            this.допустимостіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.допустимостіToolStripMenuItem.Text = "Допустимості";
-            this.допустимостіToolStripMenuItem.Click += new System.EventHandler(this.admissibilityCheck_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -347,6 +374,9 @@
         private System.Windows.Forms.ToolStripMenuItem стійкостіToolStripMenuItem;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripMenuItem допустимостіToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadMatrix;
+        private System.Windows.Forms.ToolStripMenuItem saveMatrix;
     }
 }
 

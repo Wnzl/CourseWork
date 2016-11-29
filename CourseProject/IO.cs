@@ -295,5 +295,60 @@ namespace CourseProject
                 sw.WriteLine(solveString);
             }
         }
-    }
+
+        public static void saveMatrix(object sender, EventArgs e, DataGridView dataGridView1, DataGridView dataGridView2, bool MaxMin)
+        {
+            try
+            {
+                //Дізнаємося кількість рядків/колонок
+                int columnsCFirst = dataGridView1.ColumnCount;
+                int columnsAFirst = dataGridView2.ColumnCount;
+                int rowsAFirst = dataGridView2.RowCount;
+
+                //Перевіряємо, чи є рядки/колонки
+                if (columnsCFirst < 2 || columnsAFirst < 2)
+                {
+                    MessageBox.Show("Таблиці не існують!\n Створіть таблиці та заповність їх.", "Помилка збереження");
+                }
+                else {
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                saveFileDialog1.Filter = "Text files (*.txt)|*.txt";
+                saveFileDialog1.Title = "Оберіть файл, куди зберегти";
+
+                    if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+
+                        string saveString = "";
+
+                        for (int i = 0; i < columnsCFirst; i++)
+                        {
+                            saveString += dataGridView1.Rows[0].Cells[i].Value;
+                            if (i < columnsCFirst - 1) saveString += " ";
+                        }
+                        //Додамо значення MaxMin
+                        saveString += " " + Convert.ToInt32(MaxMin) + "\n";
+
+                        for (int row = 0; row < rowsAFirst; row++)
+                        {
+                            for (int col = 0; col < columnsAFirst; col++)
+                            {
+                                saveString += dataGridView2.Rows[row].Cells[col].Value;
+                                if (col < columnsAFirst - 1) saveString += " ";
+                            }
+                            if (row < rowsAFirst - 1) saveString += "\n";
+                        }
+                        using (StreamWriter sw = new StreamWriter(saveFileDialog1.FileName, false, Encoding.Default)) //false вказує, що файл буде перезаписано.
+                        {
+                            sw.WriteLine(saveString);
+                        }
+                        MessageBox.Show("Матрицю успішно збережено у файл "+ saveFileDialog1.FileName, "Збережено");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Сталася помилка при збереженні матриці у файл", "Помилка при збереженні");
+            }
+        }
+     }
 }

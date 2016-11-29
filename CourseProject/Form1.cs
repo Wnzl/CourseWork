@@ -169,10 +169,29 @@ namespace CourseProject
             form.Show();
         }
 
+        /// <summary>
+        /// Виклик вікна з перевіркою допустимості
+        /// </summary>
         private void admissibilityCheck_Click(object sender, EventArgs e)
         {
             admissibilityCheck form = new admissibilityCheck();
             form.Show();
+        }
+
+        /// <summary>
+        /// Виклик функції збереження матриці у txt-файл
+        /// </summary>
+        private void saveMatrix_Click(object sender, EventArgs e)
+        {
+            IO.saveMatrix(sender, e, dataGridView1, dataGridView2, IO.getMaxMin(sender, e, MaxMinBox));
+        }
+
+        /// <summary>
+        /// Виклик функції завантаження матриці з txt-файлу
+        /// </summary>
+        private void loadMatrix_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -47,7 +47,8 @@
             this.ClientSize = new System.Drawing.Size(497, 399);
             this.Controls.Add(this.webBrowser1);
             this.Name = "admissibilityCheck";
-            this.Text = "admissibilityCheck";
+            this.ShowIcon = false;
+            this.Text = "Перевірка допустимості";
             this.ResumeLayout(false);
 
         }

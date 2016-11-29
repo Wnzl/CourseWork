@@ -49,9 +49,10 @@
             this.AnswerBox = new System.Windows.Forms.TextBox();
             this.getDetailSolve = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.label1 = new System.Windows.Forms.Label();
             this.MaxMinBox = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.допустимостіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -172,6 +173,7 @@
             // дослідженняСтійкостіToolStripMenuItem
             // 
             this.дослідженняСтійкостіToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.допустимостіToolStripMenuItem,
             this.оптимавльностіToolStripMenuItem,
             this.ефективностіToolStripMenuItem,
             this.стійкостіToolStripMenuItem});
@@ -184,7 +186,6 @@
             this.оптимавльностіToolStripMenuItem.Name = "оптимавльностіToolStripMenuItem";
             this.оптимавльностіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.оптимавльностіToolStripMenuItem.Text = "Оптимальності";
-            this.оптимавльностіToolStripMenuItem.Click += new System.EventHandler(this.admissibilityCheck_Click);
             // 
             // ефективностіToolStripMenuItem
             // 
@@ -246,17 +247,9 @@
             this.toolTip1.SetToolTip(this.getDetailSolve, "Виводить детальний покроковий розв\'язок задачі");
             this.getDetailSolve.UseVisualStyleBackColor = true;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(752, 53);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(18, 13);
-            this.label1.TabIndex = 16;
-            this.label1.Text = "→";
-            // 
             // MaxMinBox
             // 
+            this.MaxMinBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.MaxMinBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.MaxMinBox.FormattingEnabled = true;
             this.MaxMinBox.Items.AddRange(new object[] {
@@ -268,14 +261,32 @@
             this.MaxMinBox.TabIndex = 17;
             this.toolTip1.SetToolTip(this.MaxMinBox, "Куди прямує функція");
             // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(752, 53);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(18, 13);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "→";
+            // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(840, 30);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(104, 13);
             this.label2.TabIndex = 18;
             this.label2.Text = "Змінних/обмежень";
+            // 
+            // допустимостіToolStripMenuItem
+            // 
+            this.допустимостіToolStripMenuItem.Name = "допустимостіToolStripMenuItem";
+            this.допустимостіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.допустимостіToolStripMenuItem.Text = "Допустимості";
+            this.допустимостіToolStripMenuItem.Click += new System.EventHandler(this.admissibilityCheck_Click);
             // 
             // Form1
             // 
@@ -301,7 +312,6 @@
             this.Name = "Form1";
             this.ShowIcon = false;
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.menuStrip1.ResumeLayout(false);
@@ -336,6 +346,7 @@
         private System.Windows.Forms.ToolStripMenuItem ефективностіToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem стійкостіToolStripMenuItem;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ToolStripMenuItem допустимостіToolStripMenuItem;
     }
 }
 

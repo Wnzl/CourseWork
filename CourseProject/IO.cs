@@ -240,7 +240,7 @@ namespace CourseProject
 
         public static void drowAdmissibility(SimplexTable[] tables)
         {
-            string solveString = "<!DOCTYPE html>\r\n<html lang='uk'>\r\n<head>\r\n<title>Admissibility check</title>\r\n<style>\r\ndiv{font-size: 14pt; padding: 10px 0px;}\r\n</style>\r\n</head>\r\n<body>";
+            string solveString = "<!DOCTYPE html>\r\n<html lang='uk'>\r\n<head>\r\n<title>Перевірка допустимості</title>\r\n<style>\r\ndiv{font-size: 14pt; padding: 10px 0px;}\r\n</style>\r\n</head>\r\n<body>";
             solveString += "Після розв'язку отримуємо опорний план: <br>";
             int lastTable = tables.GetLength(0) - 1;
             int xCount = tables[lastTable].X.GetLength(1) - 2;

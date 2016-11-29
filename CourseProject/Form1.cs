@@ -18,7 +18,8 @@ namespace CourseProject
         }
 
         private void insertValues_Click(object sender, EventArgs e) {
-            /*decimal[,] AFirst = new decimal[,] { {1300, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+            resetButtons(sender, e);
+            decimal[,] AFirst = new decimal[,] { {1300, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                                                       {9100, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13},
                                                       {12400, 11, 5, 9, 21, 1, 19, 1, 31, 1, 0, 0, 0, 29},
                                                       {11240, 0, 7, 11, 9, 21, 1, 19, 31, 11, 29, 0, 0, 3},
@@ -31,28 +32,14 @@ namespace CourseProject
                                                       {12408, 7, 0, 0, 5, 1, 9, 11, 1, 19, 21, 29, 0, 31},
                                                       {12410, 11, 0, 0, 0, 9, 1, 19, 1, 21, 1, 29, 31, 10},
                    };
-            decimal[] CFirst = new decimal[] { 315, 489, 663, 837, 1011, 1185, 1359, 1533, 1707, 1881, 2055, 2229, 2403 };*/
-            
-            decimal[,] AFirst = new decimal[,] { {41000, 1, 19, 2, 18, 3, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 5, 15},
-            {51000, 0, 2, 18, 1, 19, 3, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 16, 5, 15},
-            {21000, 0, 0, 18, 2, 1, 19, 3, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 4, 15, 5},
-            {41000, 0, 0, 0, 5, 15, 4, 16, 3, 17, 2, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 19},
-            {51008, 0, 0, 0, 0, 3, 17, 2, 18, 4, 16, 1, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 0, 5},
-            {71000, 0, 0, 0, 0, 0, 4, 16, 3, 17, 2, 18, 1, 19, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 15},
-            {81000, 0, 0, 0, 0, 0, 0, 1, 19, 2, 18, 3, 17, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 15, 5},
-            {91008, 0, 0, 0, 0, 0, 0, 0, 15, 5, 2, 18, 3, 17, 0, 0, 0, 0, 0, 0, 0, 19, 0, 0, 1, 16, 4},
-            {51004, 0, 0, 0, 0, 0, 0, 0, 0, 18, 2, 19, 1, 0, 0, 0, 0, 0, 0, 0, 0, 5, 15, 4, 16, 3, 17},
-            {21005, 1, 19, 2, 18, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17, 4, 16, 15, 5},
-            {2260, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-            {33510, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}};
-            decimal[] CFirst = new decimal[] { 476, 798, 1120, 1442, 1764, 2086, 2408, 2730, 3052, 3374, 3696, 4018, 4340, 4662, 4984, 5306, 5628, 5950, 6272, 6594, 6916, 7238, 7560, 7882, 8204, 8526 };
+            decimal[] CFirst = new decimal[] { 315, 489, 663, 837, 1011, 1185, 1359, 1533, 1707, 1881, 2055, 2229, 2403 };
             
             //-----Заповнення таблиці даними з масиву-----
             //Отримання розмірності
             int nCols = CFirst.GetLength(0);
             int nRows = AFirst.GetLength(0);
             //Будуємо таблиці
-            IO.buildMatrix(sender, e, dataGridView1, dataGridView2, nCols, nRows);
+            IO.buildMatrix(dataGridView1, dataGridView2, nCols, nRows);
             //Заповнюємо цільову функцію
             for (int i = 0; i < nCols; i++)
                 dataGridView1.Rows[0].Cells[i].Value = CFirst[i].ToString();
@@ -68,11 +55,6 @@ namespace CourseProject
                     //Задаємо A
                     dataGridView2.Rows[i].Cells[j].Value = AFirst[i, matrJ].ToString();
             }
-            // Табуляграма неактивна поки не розв'язали задачу
-            getDetailSolveButton.Enabled = false;
-
-            //Очистимо поле відповіді
-            AnswerBox.Clear();
         }
 
         /// <summary>
@@ -80,6 +62,7 @@ namespace CourseProject
         /// </summary>
         private void Solve_Click(object sender, EventArgs e)
         {
+            enableButtons(sender, e);
             try
             {
                 getDetailSolveButton.Enabled = true;
@@ -93,7 +76,11 @@ namespace CourseProject
                 if (getDetailSolve.Checked)
                     getDetailSolve_Click(sender, e);
             }
-            catch (Exception ex) { MessageBox.Show("Виникла помилка при розв'язанні задачі. Перевірте введені значення", "Помилка при розв'язанні задачі"); }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Виникла помилка при розв'язанні задачі. Перевірте введені значення", "Помилка при розв'язанні задачі");
+                resetButtons(sender, e);
+            }
             //для виведення системної помилки: catch (Exception ex) { MessageBox.Show("Виникла помилка при розв'язанні задачі. Перевірте введені значення\r\n\r\nДеталі:\r\n" + ex, "Помилка при розв'язанні задачі"); }
         }
 
@@ -102,9 +89,7 @@ namespace CourseProject
         /// </summary>
         private void buildMatrix_Click(object sender, EventArgs e)
         {
-            //Очистимо поле відповіді
-            AnswerBox.Clear();
-
+            resetButtons(sender, e);
             //Кількість колонок і рядків
             try
             {
@@ -112,7 +97,7 @@ namespace CourseProject
                 int rowsNum = Convert.ToInt16(numRows.Text);
                 if (colsNum < 2 || rowsNum < 2)
                     throw new System.ArgumentException("Недійсні значення. Мінімальний розмір 2х2");
-                IO.buildMatrix(sender, e, dataGridView1, dataGridView2, colsNum, rowsNum);
+                IO.buildMatrix(dataGridView1, dataGridView2, colsNum, rowsNum);
                 // Табуляграма неактивна поки не розв'язали задачу
                 getDetailSolveButton.Enabled = false;
             }
@@ -183,7 +168,7 @@ namespace CourseProject
         /// </summary>
         private void saveMatrix_Click(object sender, EventArgs e)
         {
-            IO.saveMatrix(sender, e, dataGridView1, dataGridView2, IO.getMaxMin(sender, e, MaxMinBox));
+            IO.saveMatrix(dataGridView1, dataGridView2, IO.getMaxMin(sender, e, MaxMinBox));
         }
 
         /// <summary>
@@ -191,7 +176,41 @@ namespace CourseProject
         /// </summary>
         private void loadMatrix_Click(object sender, EventArgs e)
         {
+            resetButtons(sender, e);
+            IO.loadMatrix(dataGridView1, dataGridView2, MaxMinBox);
+        }
+        
+        /// <summary>
+        /// Кнопки неактивні до розв'язку задачі, очищення поля відповіді
+        /// </summary>
+        private void resetButtons(object sender, EventArgs e)
+        {
+            //Табуляграма неактивна поки не розв'язали задачу
+            getDetailSolveButton.Enabled = false;
+            //Перевірка і збереження відповіді теж
+            checkingButton.Enabled = false;
+            saveResult.Enabled = false;
+            //Очистимо поле відповіді
+            AnswerBox.Clear();
+        }
 
+        /// <summary>
+        /// Кнопки активні після розв'язку задачі
+        /// </summary>
+        private void enableButtons(object sender, EventArgs e)
+        {
+            //Табуляграма активна після розв'язку задачі
+            getDetailSolveButton.Enabled = true;
+            //Перевірка і збереження відповіді теж
+            checkingButton.Enabled = true;
+            saveResult.Enabled = true;
+        }
+        /// <summary>
+        /// Виклик функції збереження відповіді в txt-файл
+        /// </summary>
+        private void saveResult_Click(object sender, EventArgs e)
+        {
+            IO.saveResult(AnswerBox);
         }
     }
 }

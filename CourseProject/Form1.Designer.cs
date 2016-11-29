@@ -42,7 +42,7 @@
             this.loadMatrix = new System.Windows.Forms.ToolStripMenuItem();
             this.saveMatrix = new System.Windows.Forms.ToolStripMenuItem();
             this.getDetailSolveButton = new System.Windows.Forms.ToolStripMenuItem();
-            this.дослідженняСтійкостіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkingButton = new System.Windows.Forms.ToolStripMenuItem();
             this.допустимостіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оптимавльностіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ефективностіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,6 +56,7 @@
             this.MaxMinBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.saveResult = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -156,7 +157,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.файлToolStripMenuItem,
             this.getDetailSolveButton,
-            this.дослідженняСтійкостіToolStripMenuItem,
+            this.checkingButton,
             this.допомогаToolStripMenuItem,
             this.проПрограмуToolStripMenuItem,
             this.вихідToolStripMenuItem});
@@ -170,7 +171,8 @@
             // 
             this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadMatrix,
-            this.saveMatrix});
+            this.saveMatrix,
+            this.saveResult});
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
             this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.файлToolStripMenuItem.Text = "Файл";
@@ -178,14 +180,14 @@
             // loadMatrix
             // 
             this.loadMatrix.Name = "loadMatrix";
-            this.loadMatrix.Size = new System.Drawing.Size(245, 22);
+            this.loadMatrix.Size = new System.Drawing.Size(250, 22);
             this.loadMatrix.Text = "Завантажити матрицю з файлу";
             this.loadMatrix.Click += new System.EventHandler(this.loadMatrix_Click);
             // 
             // saveMatrix
             // 
             this.saveMatrix.Name = "saveMatrix";
-            this.saveMatrix.Size = new System.Drawing.Size(245, 22);
+            this.saveMatrix.Size = new System.Drawing.Size(250, 22);
             this.saveMatrix.Text = "Зберегти матрицю у файл";
             this.saveMatrix.Click += new System.EventHandler(this.saveMatrix_Click);
             // 
@@ -197,16 +199,17 @@
             this.getDetailSolveButton.Text = "Табуляграма";
             this.getDetailSolveButton.Click += new System.EventHandler(this.getDetailSolve_Click);
             // 
-            // дослідженняСтійкостіToolStripMenuItem
+            // checkingButton
             // 
-            this.дослідженняСтійкостіToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.checkingButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.допустимостіToolStripMenuItem,
             this.оптимавльностіToolStripMenuItem,
             this.ефективностіToolStripMenuItem,
             this.стійкостіToolStripMenuItem});
-            this.дослідженняСтійкостіToolStripMenuItem.Name = "дослідженняСтійкостіToolStripMenuItem";
-            this.дослідженняСтійкостіToolStripMenuItem.Size = new System.Drawing.Size(84, 20);
-            this.дослідженняСтійкостіToolStripMenuItem.Text = "Перевірка...";
+            this.checkingButton.Enabled = false;
+            this.checkingButton.Name = "checkingButton";
+            this.checkingButton.Size = new System.Drawing.Size(84, 20);
+            this.checkingButton.Text = "Перевірка...";
             // 
             // допустимостіToolStripMenuItem
             // 
@@ -315,6 +318,14 @@
             this.label2.TabIndex = 18;
             this.label2.Text = "Змінних/обмежень";
             // 
+            // saveResult
+            // 
+            this.saveResult.Enabled = false;
+            this.saveResult.Name = "saveResult";
+            this.saveResult.Size = new System.Drawing.Size(250, 22);
+            this.saveResult.Text = "Зберегти результати обчислень";
+            this.saveResult.Click += new System.EventHandler(this.saveResult_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -338,7 +349,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.ShowIcon = false;
-            this.Text = "Form1";
+            this.Text = "Курсова";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.menuStrip1.ResumeLayout(false);
@@ -365,7 +376,7 @@
         private System.Windows.Forms.CheckBox getDetailSolve;
         private System.Windows.Forms.ToolStripMenuItem допомогаToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem проПрограмуToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem дослідженняСтійкостіToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem checkingButton;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox MaxMinBox;
@@ -377,6 +388,7 @@
         private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadMatrix;
         private System.Windows.Forms.ToolStripMenuItem saveMatrix;
+        private System.Windows.Forms.ToolStripMenuItem saveResult;
     }
 }
 

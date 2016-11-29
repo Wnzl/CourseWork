@@ -14,7 +14,7 @@ namespace CourseProject
         /// Очищення вказаного об'єкту dataGridView
         /// </summary>
         /// <param name="dataGridView">dataGridView для очищення</param>
-        private static void clearGrid(object sender, EventArgs e, DataGridView dataGridView)
+        private static void clearGrid(DataGridView dataGridView)
         {
             dataGridView.Rows.Clear();
             dataGridView.Columns.Clear();
@@ -24,11 +24,11 @@ namespace CourseProject
         /// <summary>
         /// Розмітка таблиць для введення даних
         /// </summary>
-        public static void buildMatrix(object sender, EventArgs e, DataGridView dataGridView1, DataGridView dataGridView2, int colsNum, int rowsNum)
+        public static void buildMatrix(DataGridView dataGridView1, DataGridView dataGridView2, int colsNum, int rowsNum)
         {
             //Очистимо Grid
-            clearGrid(sender, e, dataGridView1);
-            clearGrid(sender, e, dataGridView2);
+            clearGrid(dataGridView1);
+            clearGrid(dataGridView2);
             
             //Створимо таблицю для введення вектора цільової функції
             for (int i = 0; i < colsNum; i++)
@@ -107,7 +107,7 @@ namespace CourseProject
         }
 
         /// <summary>
-        /// Отримання значення куди прямує функція MIN/MAX
+        /// Отримання значення куди прямує функція MIN/MAX. TRUE при значенні Max
         /// </summary>
         public static bool getMaxMin(object sender, EventArgs e, ComboBox MaxMinBox)
         {
@@ -121,7 +121,7 @@ namespace CourseProject
             return true;
         }
         /// <summary>
-        /// Виведення результату в рядок
+        /// Виведення результату в TextBox
         /// </summary>
         public static string writeSolve(SimplexTable simplexTable)
         {
@@ -151,6 +151,9 @@ namespace CourseProject
             return answer;
         }
 
+        /// <summary>
+        /// Виведення детального розв'язку в html-файл
+        /// </summary>
         public static void drowSolve(SimplexTable[] tables)
         {
             string solveString = "<!DOCTYPE html>\r\n<html lang='uk'>\r\n<head>\r\n<title>Детальний розв'язок</title>\r\n<style>\r\ndiv{font-size: 14pt; padding: 10px 0px;}\r\n</style>\r\n</head>\r\n<body>";
@@ -238,6 +241,9 @@ namespace CourseProject
             }
         }
 
+        /// <summary>
+        /// Виведення перевірки допустимості в html-файл
+        /// </summary>
         public static void drowAdmissibility(SimplexTable[] tables)
         {
             string solveString = "<!DOCTYPE html>\r\n<html lang='uk'>\r\n<head>\r\n<title>Перевірка допустимості</title>\r\n<style>\r\ndiv{font-size: 14pt; padding: 10px 0px;}\r\n</style>\r\n</head>\r\n<body>";
@@ -296,7 +302,10 @@ namespace CourseProject
             }
         }
 
-        public static void saveMatrix(object sender, EventArgs e, DataGridView dataGridView1, DataGridView dataGridView2, bool MaxMin)
+        /// <summary>
+        /// Збереження даних з таблиць в txt-файл
+        /// </summary>
+        public static void saveMatrix(DataGridView dataGridView1, DataGridView dataGridView2, bool MaxMin)
         {
             try
             {
@@ -304,6 +313,9 @@ namespace CourseProject
                 int columnsCFirst = dataGridView1.ColumnCount;
                 int columnsAFirst = dataGridView2.ColumnCount;
                 int rowsAFirst = dataGridView2.RowCount;
+                int columnsCFirstMinusOne = columnsCFirst - 1;
+                int columnsAFirstMinusOne = columnsAFirst - 1;
+                int rowsAFirstMinusOne = rowsAFirst - 1;
 
                 //Перевіряємо, чи є рядки/колонки
                 if (columnsCFirst < 2 || columnsAFirst < 2)
@@ -333,9 +345,9 @@ namespace CourseProject
                             for (int col = 0; col < columnsAFirst; col++)
                             {
                                 saveString += dataGridView2.Rows[row].Cells[col].Value;
-                                if (col < columnsAFirst - 1) saveString += " ";
+                                if (col < columnsAFirstMinusOne) saveString += " ";
                             }
-                            if (row < rowsAFirst - 1) saveString += "\n";
+                            if (row < rowsAFirstMinusOne) saveString += "\n";
                         }
                         using (StreamWriter sw = new StreamWriter(saveFileDialog1.FileName, false, Encoding.Default)) //false вказує, що файл буде перезаписано.
                         {
@@ -350,5 +362,86 @@ namespace CourseProject
                 MessageBox.Show("Сталася помилка при збереженні матриці у файл", "Помилка при збереженні");
             }
         }
-     }
+
+        /// <summary>
+        /// Збереження даних в таблиці з txt-файлу
+        /// </summary>
+        public static void loadMatrix(DataGridView dataGridView1, DataGridView dataGridView2, ComboBox MaxMin)
+        {
+            try
+            {
+                OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                openFileDialog1.Filter = "Text files (*.txt)|*.txt";
+                openFileDialog1.Title = "Оберіть файл матриці";
+
+                if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    //Зчитування даних у масиви
+                    string[] fullMatrix = System.IO.File.ReadAllLines(openFileDialog1.FileName);
+                    string[] temporaryMatrix = fullMatrix[0].Split(' ');
+                    //Визначення розмірності таблиць
+                    int cols = temporaryMatrix.Length;
+                    int rows = fullMatrix.Length - 1; //Розмір Ax=b без урахування Cx=L
+                    int colsC = cols - 1;
+
+                    //Будуємо таблиці
+                    IO.buildMatrix(dataGridView1, dataGridView2, cols - 1, rows);
+
+                    //Прямування MaxMin
+                    if (temporaryMatrix[cols - 1] == "1") MaxMin.SelectedIndex = 0;
+                    else MaxMin.SelectedIndex = 1;
+
+                    //Заповнюємо таблицю цільової функції
+                    for (int col = 0; col < colsC; col++)
+                    {
+                        dataGridView1.Rows[0].Cells[col].Value = temporaryMatrix[col];
+                    }
+
+                    //Заповнюємо таблицю обмежень
+                    for (int row = 0, rowFullMatrix = 1; row < rows; row++, rowFullMatrix++)
+                    {
+                        temporaryMatrix = fullMatrix[rowFullMatrix].Split(' ');
+                        for (int col = 0; col < cols; col++)
+                        {
+                            dataGridView2.Rows[row].Cells[col].Value = temporaryMatrix[col];
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Сталася помилка при завантаженні даних. Можливо, файл матриці записаний невірно.", "Помилка при завантаженні даних");
+            }
+        }
+
+        public static void saveResult(TextBox AnswerBox)
+        {
+            try
+            {
+                if(AnswerBox.Text == "")
+                {
+                    throw new System.ArgumentException("Поле відповіді пусте. Збереженян неможилве", "Помилка збереженя відповіді");
+                }
+                    SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                    saveFileDialog1.Filter = "Text files (*.txt)|*.txt";
+                    saveFileDialog1.Title = "Оберіть файл, куди зберегти";
+
+                    if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+
+                        string saveString = AnswerBox.Text;
+                        
+                        using (StreamWriter sw = new StreamWriter(saveFileDialog1.FileName, false, Encoding.Default)) //false вказує, що файл буде перезаписано.
+                        {
+                            sw.WriteLine(saveString);
+                        }
+                        MessageBox.Show("Результати обчислень успішно збережені у файл " + saveFileDialog1.FileName, "Збережено");
+                    }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Сталася помилка при збереженні результатів у файл", "Помилка при збереженні");
+            }
+        }
+    }
 }

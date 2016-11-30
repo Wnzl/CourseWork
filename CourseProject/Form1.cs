@@ -219,12 +219,18 @@ namespace CourseProject
             IO.saveResult(AnswerBox);
         }
 
+        /// <summary>
+        /// Виведення довідки
+        /// </summary>
         private void HelpButton_Click(object sender, EventArgs e)
         {
             Help form = new Help();
             form.Show();
         }
 
+        /// <summary>
+        /// Виведення графіка змін цільової функції по ітераціям
+        /// </summary>
         private void TargetFunctionGraphButton_Click(object sender, EventArgs e)
         {
             TargetFunctionGraph form = new TargetFunctionGraph();

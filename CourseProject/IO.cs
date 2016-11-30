@@ -414,6 +414,9 @@ namespace CourseProject
             }
         }
 
+        /// <summary>
+        /// Збереження результатів розрахунків у txt-файл
+        /// </summary>
         public static void saveResult(TextBox AnswerBox)
         {
             try
@@ -444,17 +447,24 @@ namespace CourseProject
             }
         }
 
-        public static decimal[] getTargetFunctionPoints(SimplexTable[] results)
+        /// <summary>
+        /// Запис значень цільової функції з кожної ітерації у масив
+        /// </summary>
+        public static double[] getTargetFunctionPoints(SimplexTable[] results)
         {
             int pointsLength = results.Length;
-            decimal[] pointsArray = new decimal[pointsLength];
+            double[] pointsArray = new double[pointsLength];
             for(int currentTable = 0; currentTable < pointsLength; currentTable++)
-                pointsArray[currentTable] = results[currentTable].L;
+                pointsArray[currentTable] = Convert.ToDouble(results[currentTable].L);
             return pointsArray;
         }
+
+        /// <summary>
+        /// Клас для передавання точок до графіка
+        /// </summary>
         public static class ListOfFunctionPoints
         {
-            public static decimal[] Points { get; set; }
+            public static double[] Points { get; set; }
         }
     }
 }

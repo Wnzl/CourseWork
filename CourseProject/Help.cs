@@ -15,7 +15,7 @@ namespace CourseProject
         public Help()
         {
             InitializeComponent();
-            string path = Application.StartupPath + @"\" + "help.html";
+            string path = Application.StartupPath + @"\resources\" + "help.html";
             webBrowser1.Navigate(path);
         }
     }

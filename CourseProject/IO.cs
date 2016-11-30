@@ -443,5 +443,18 @@ namespace CourseProject
                 MessageBox.Show("Сталася помилка при збереженні результатів у файл", "Помилка при збереженні");
             }
         }
+
+        public static decimal[] getTargetFunctionPoints(SimplexTable[] results)
+        {
+            int pointsLength = results.Length;
+            decimal[] pointsArray = new decimal[pointsLength];
+            for(int currentTable = 0; currentTable < pointsLength; currentTable++)
+                pointsArray[currentTable] = results[currentTable].L;
+            return pointsArray;
+        }
+        public static class ListOfFunctionPoints
+        {
+            public static decimal[] Points { get; set; }
+        }
     }
 }

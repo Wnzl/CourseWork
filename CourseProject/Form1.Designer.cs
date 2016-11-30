@@ -58,6 +58,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.TargetFunctionGraphButton = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -214,7 +215,8 @@
             this.допустимостіToolStripMenuItem,
             this.оптимавльностіToolStripMenuItem,
             this.ефективностіToolStripMenuItem,
-            this.стійкостіToolStripMenuItem});
+            this.стійкостіToolStripMenuItem,
+            this.TargetFunctionGraphButton});
             this.checkingButton.Enabled = false;
             this.checkingButton.Name = "checkingButton";
             this.checkingButton.Size = new System.Drawing.Size(84, 20);
@@ -223,26 +225,26 @@
             // допустимостіToolStripMenuItem
             // 
             this.допустимостіToolStripMenuItem.Name = "допустимостіToolStripMenuItem";
-            this.допустимостіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.допустимостіToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.допустимостіToolStripMenuItem.Text = "Допустимості";
             this.допустимостіToolStripMenuItem.Click += new System.EventHandler(this.admissibilityCheck_Click);
             // 
             // оптимавльностіToolStripMenuItem
             // 
             this.оптимавльностіToolStripMenuItem.Name = "оптимавльностіToolStripMenuItem";
-            this.оптимавльностіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.оптимавльностіToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.оптимавльностіToolStripMenuItem.Text = "Оптимальності";
             // 
             // ефективностіToolStripMenuItem
             // 
             this.ефективностіToolStripMenuItem.Name = "ефективностіToolStripMenuItem";
-            this.ефективностіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.ефективностіToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.ефективностіToolStripMenuItem.Text = "Ефективності";
             // 
             // стійкостіToolStripMenuItem
             // 
             this.стійкостіToolStripMenuItem.Name = "стійкостіToolStripMenuItem";
-            this.стійкостіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.стійкостіToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.стійкостіToolStripMenuItem.Text = "Стійкості";
             // 
             // HelpButton
@@ -336,6 +338,13 @@
             this.label3.Size = new System.Drawing.Size(0, 13);
             this.label3.TabIndex = 19;
             // 
+            // TargetFunctionGraphButton
+            // 
+            this.TargetFunctionGraphButton.Name = "TargetFunctionGraphButton";
+            this.TargetFunctionGraphButton.Size = new System.Drawing.Size(238, 22);
+            this.TargetFunctionGraphButton.Text = "Графік зміни цільової функції";
+            this.TargetFunctionGraphButton.Click += new System.EventHandler(this.TargetFunctionGraphButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -401,6 +410,7 @@
         private System.Windows.Forms.ToolStripMenuItem saveMatrix;
         private System.Windows.Forms.ToolStripMenuItem saveResult;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolStripMenuItem TargetFunctionGraphButton;
     }
 }
 

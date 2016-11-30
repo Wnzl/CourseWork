@@ -72,10 +72,14 @@ namespace CourseProject
                 AnswerBox.Text = IO.writeSolve(results[last]);
 
                 IO.drowSolve(results);
-                IO.drowAdmissibility(results); 
+                IO.drowAdmissibility(results);
+                IO.ListOfFunctionPoints.Points = IO.getTargetFunctionPoints(results);
+
                 //Якщо 
                 if (getDetailSolve.Checked)
+                {
                     getDetailSolve_Click(sender, e);
+                }
                 label3.Text = "";
             }
             catch (Exception ex)
@@ -218,6 +222,12 @@ namespace CourseProject
         private void HelpButton_Click(object sender, EventArgs e)
         {
             Help form = new Help();
+            form.Show();
+        }
+
+        private void TargetFunctionGraphButton_Click(object sender, EventArgs e)
+        {
+            TargetFunctionGraph form = new TargetFunctionGraph();
             form.Show();
         }
     }

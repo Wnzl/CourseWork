@@ -43,6 +43,9 @@
             this.saveMatrix = new System.Windows.Forms.ToolStripMenuItem();
             this.saveResult = new System.Windows.Forms.ToolStripMenuItem();
             this.getDetailSolveButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.GraphsButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.TargetFunctionGraphButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.областьДопустимостіОптимальногоПлануToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkingButton = new System.Windows.Forms.ToolStripMenuItem();
             this.допустимостіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оптимавльностіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,8 +60,6 @@
             this.MaxMinBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.TargetFunctionGraphButton = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -106,7 +107,7 @@
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.Location = new System.Drawing.Point(6, 94);
             this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(829, 493);
+            this.dataGridView2.Size = new System.Drawing.Size(824, 493);
             this.dataGridView2.TabIndex = 8;
             this.toolTip1.SetToolTip(this.dataGridView2, "Введіть матрицю обмежень");
             // 
@@ -159,6 +160,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.файлToolStripMenuItem,
             this.getDetailSolveButton,
+            this.GraphsButton,
             this.checkingButton,
             this.HelpButton,
             this.проПрограмуToolStripMenuItem,
@@ -209,14 +211,36 @@
             this.getDetailSolveButton.Text = "Табуляграма";
             this.getDetailSolveButton.Click += new System.EventHandler(this.getDetailSolve_Click);
             // 
+            // GraphsButton
+            // 
+            this.GraphsButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.TargetFunctionGraphButton,
+            this.областьДопустимостіОптимальногоПлануToolStripMenuItem});
+            this.GraphsButton.Enabled = false;
+            this.GraphsButton.Name = "GraphsButton";
+            this.GraphsButton.Size = new System.Drawing.Size(63, 20);
+            this.GraphsButton.Text = "Графіки";
+            // 
+            // TargetFunctionGraphButton
+            // 
+            this.TargetFunctionGraphButton.Name = "TargetFunctionGraphButton";
+            this.TargetFunctionGraphButton.Size = new System.Drawing.Size(316, 22);
+            this.TargetFunctionGraphButton.Text = "Зміна цільової функції";
+            this.TargetFunctionGraphButton.Click += new System.EventHandler(this.TargetFunctionGraphButton_Click);
+            // 
+            // областьДопустимостіОптимальногоПлануToolStripMenuItem
+            // 
+            this.областьДопустимостіОптимальногоПлануToolStripMenuItem.Name = "областьДопустимостіОптимальногоПлануToolStripMenuItem";
+            this.областьДопустимостіОптимальногоПлануToolStripMenuItem.Size = new System.Drawing.Size(316, 22);
+            this.областьДопустимостіОптимальногоПлануToolStripMenuItem.Text = "Область допустимості оптимального плану";
+            // 
             // checkingButton
             // 
             this.checkingButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.допустимостіToolStripMenuItem,
             this.оптимавльностіToolStripMenuItem,
             this.ефективностіToolStripMenuItem,
-            this.стійкостіToolStripMenuItem,
-            this.TargetFunctionGraphButton});
+            this.стійкостіToolStripMenuItem});
             this.checkingButton.Enabled = false;
             this.checkingButton.Name = "checkingButton";
             this.checkingButton.Size = new System.Drawing.Size(84, 20);
@@ -225,26 +249,26 @@
             // допустимостіToolStripMenuItem
             // 
             this.допустимостіToolStripMenuItem.Name = "допустимостіToolStripMenuItem";
-            this.допустимостіToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.допустимостіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.допустимостіToolStripMenuItem.Text = "Допустимості";
             this.допустимостіToolStripMenuItem.Click += new System.EventHandler(this.admissibilityCheck_Click);
             // 
             // оптимавльностіToolStripMenuItem
             // 
             this.оптимавльностіToolStripMenuItem.Name = "оптимавльностіToolStripMenuItem";
-            this.оптимавльностіToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.оптимавльностіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.оптимавльностіToolStripMenuItem.Text = "Оптимальності";
             // 
             // ефективностіToolStripMenuItem
             // 
             this.ефективностіToolStripMenuItem.Name = "ефективностіToolStripMenuItem";
-            this.ефективностіToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.ефективностіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.ефективностіToolStripMenuItem.Text = "Ефективності";
             // 
             // стійкостіToolStripMenuItem
             // 
             this.стійкостіToolStripMenuItem.Name = "стійкостіToolStripMenuItem";
-            this.стійкостіToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.стійкостіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.стійкостіToolStripMenuItem.Text = "Стійкості";
             // 
             // HelpButton
@@ -330,27 +354,11 @@
             this.label2.TabIndex = 18;
             this.label2.Text = "Змінних/обмежень";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(755, 29);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(0, 13);
-            this.label3.TabIndex = 19;
-            // 
-            // TargetFunctionGraphButton
-            // 
-            this.TargetFunctionGraphButton.Name = "TargetFunctionGraphButton";
-            this.TargetFunctionGraphButton.Size = new System.Drawing.Size(238, 22);
-            this.TargetFunctionGraphButton.Text = "Графік зміни цільової функції";
-            this.TargetFunctionGraphButton.Click += new System.EventHandler(this.TargetFunctionGraphButton_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1018, 599);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.MaxMinBox);
             this.Controls.Add(this.label1);
@@ -409,8 +417,9 @@
         private System.Windows.Forms.ToolStripMenuItem loadMatrix;
         private System.Windows.Forms.ToolStripMenuItem saveMatrix;
         private System.Windows.Forms.ToolStripMenuItem saveResult;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolStripMenuItem GraphsButton;
         private System.Windows.Forms.ToolStripMenuItem TargetFunctionGraphButton;
+        private System.Windows.Forms.ToolStripMenuItem областьДопустимостіОптимальногоПлануToolStripMenuItem;
     }
 }
 

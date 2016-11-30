@@ -65,7 +65,6 @@ namespace CourseProject
             enableButtons(sender, e);
             try
             {
-                label3.Text = "Loading";
                 getDetailSolveButton.Enabled = true;
                 SimplexTable[] results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e));
                 int last = results.Length - 1;
@@ -80,7 +79,6 @@ namespace CourseProject
                 {
                     getDetailSolve_Click(sender, e);
                 }
-                label3.Text = "";
             }
             catch (Exception ex)
             {
@@ -196,6 +194,7 @@ namespace CourseProject
             //Перевірка і збереження відповіді теж
             checkingButton.Enabled = false;
             saveResult.Enabled = false;
+            GraphsButton.Enabled = false;
             //Очистимо поле відповіді
             AnswerBox.Clear();
         }
@@ -210,6 +209,7 @@ namespace CourseProject
             //Перевірка і збереження відповіді теж
             checkingButton.Enabled = true;
             saveResult.Enabled = true;
+            GraphsButton.Enabled = true;
         }
         /// <summary>
         /// Виклик функції збереження відповіді в txt-файл

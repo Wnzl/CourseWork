@@ -20,7 +20,7 @@ namespace CourseProject
             GraphPane myPane = zedGraphControl1.GraphPane;
             zedGraphControl1.IsShowHScrollBar = true;
             zedGraphControl1.IsShowVScrollBar = true;
-            //zedGraphControl1.IsAutoScrollRange = true;
+            zedGraphControl1.IsAutoScrollRange = true;
             myPane.CurveList.Clear();
             // Set the Titles
             myPane.Title.Text = "Графік змін цільової функції";
@@ -40,9 +40,46 @@ namespace CourseProject
 
             // Generate a red curve
             LineItem myCurve = myPane.AddCurve("", targetFunctionPointsList, Color.Red, SymbolType.None);
+            //Щоб не показувало значення як число, "масштабоване" в степені
+            myPane.YAxis.Scale.MagAuto = false;
 
-            // Tell ZedGraph to refigure the
-            // axes since the data have changed
+            //-----Додаємо сітку для графіка-----
+            
+            // Включаем отображение сетки напротив крупных рисок по оси X
+            myPane.XAxis.MajorGrid.IsVisible = true;
+
+            // Задаем вид пунктирной линии для крупных рисок по оси X:
+            // Длина штрихов равна 10 пикселям, ... 
+            myPane.XAxis.MajorGrid.DashOn = 10;
+
+            // затем 5 пикселей - пропуск
+            myPane.XAxis.MajorGrid.DashOff = 5;
+
+
+            // Включаем отображение сетки напротив крупных рисок по оси Y
+            myPane.YAxis.MajorGrid.IsVisible = true;
+
+            // Аналогично задаем вид пунктирной линии для крупных рисок по оси Y
+            myPane.YAxis.MajorGrid.DashOn = 10;
+            myPane.YAxis.MajorGrid.DashOff = 5;
+
+
+            // Включаем отображение сетки напротив мелких рисок по оси X
+            myPane.YAxis.MinorGrid.IsVisible = true;
+
+            // Задаем вид пунктирной линии для крупных рисок по оси Y: 
+            // Длина штрихов равна одному пикселю, ... 
+            myPane.YAxis.MinorGrid.DashOn = 1;
+
+            // затем 2 пикселя - пропуск
+            myPane.YAxis.MinorGrid.DashOff = 2;
+
+            // Включаем отображение сетки напротив мелких рисок по оси Y
+            myPane.XAxis.MinorGrid.IsVisible = true;
+
+            // Аналогично задаем вид пунктирной линии для крупных рисок по оси Y
+            myPane.XAxis.MinorGrid.DashOn = 1;
+            myPane.XAxis.MinorGrid.DashOff = 2;
             zedGraphControl1.AxisChange();
             zedGraphControl1.Invalidate();
         }

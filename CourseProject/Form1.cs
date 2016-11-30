@@ -65,6 +65,7 @@ namespace CourseProject
             enableButtons(sender, e);
             try
             {
+                label3.Text = "Loading";
                 getDetailSolveButton.Enabled = true;
                 SimplexTable[] results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e));
                 int last = results.Length - 1;
@@ -75,6 +76,7 @@ namespace CourseProject
                 //Якщо 
                 if (getDetailSolve.Checked)
                     getDetailSolve_Click(sender, e);
+                label3.Text = "";
             }
             catch (Exception ex)
             {
@@ -211,6 +213,12 @@ namespace CourseProject
         private void saveResult_Click(object sender, EventArgs e)
         {
             IO.saveResult(AnswerBox);
+        }
+
+        private void HelpButton_Click(object sender, EventArgs e)
+        {
+            Help form = new Help();
+            form.Show();
         }
     }
 }

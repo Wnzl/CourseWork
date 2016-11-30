@@ -41,13 +41,14 @@
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadMatrix = new System.Windows.Forms.ToolStripMenuItem();
             this.saveMatrix = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveResult = new System.Windows.Forms.ToolStripMenuItem();
             this.getDetailSolveButton = new System.Windows.Forms.ToolStripMenuItem();
             this.checkingButton = new System.Windows.Forms.ToolStripMenuItem();
             this.допустимостіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оптимавльностіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ефективностіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.стійкостіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.допомогаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.HelpButton = new System.Windows.Forms.ToolStripMenuItem();
             this.проПрограмуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.вихідToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AnswerBox = new System.Windows.Forms.TextBox();
@@ -56,7 +57,7 @@
             this.MaxMinBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.saveResult = new System.Windows.Forms.ToolStripMenuItem();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -158,7 +159,7 @@
             this.файлToolStripMenuItem,
             this.getDetailSolveButton,
             this.checkingButton,
-            this.допомогаToolStripMenuItem,
+            this.HelpButton,
             this.проПрограмуToolStripMenuItem,
             this.вихідToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -190,6 +191,14 @@
             this.saveMatrix.Size = new System.Drawing.Size(250, 22);
             this.saveMatrix.Text = "Зберегти матрицю у файл";
             this.saveMatrix.Click += new System.EventHandler(this.saveMatrix_Click);
+            // 
+            // saveResult
+            // 
+            this.saveResult.Enabled = false;
+            this.saveResult.Name = "saveResult";
+            this.saveResult.Size = new System.Drawing.Size(250, 22);
+            this.saveResult.Text = "Зберегти результати обчислень";
+            this.saveResult.Click += new System.EventHandler(this.saveResult_Click);
             // 
             // getDetailSolveButton
             // 
@@ -236,11 +245,12 @@
             this.стійкостіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.стійкостіToolStripMenuItem.Text = "Стійкості";
             // 
-            // допомогаToolStripMenuItem
+            // HelpButton
             // 
-            this.допомогаToolStripMenuItem.Name = "допомогаToolStripMenuItem";
-            this.допомогаToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.допомогаToolStripMenuItem.Text = "Довідка";
+            this.HelpButton.Name = "HelpButton";
+            this.HelpButton.Size = new System.Drawing.Size(61, 20);
+            this.HelpButton.Text = "Довідка";
+            this.HelpButton.Click += new System.EventHandler(this.HelpButton_Click);
             // 
             // проПрограмуToolStripMenuItem
             // 
@@ -318,19 +328,20 @@
             this.label2.TabIndex = 18;
             this.label2.Text = "Змінних/обмежень";
             // 
-            // saveResult
+            // label3
             // 
-            this.saveResult.Enabled = false;
-            this.saveResult.Name = "saveResult";
-            this.saveResult.Size = new System.Drawing.Size(250, 22);
-            this.saveResult.Text = "Зберегти результати обчислень";
-            this.saveResult.Click += new System.EventHandler(this.saveResult_Click);
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(755, 29);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(0, 13);
+            this.label3.TabIndex = 19;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1018, 599);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.MaxMinBox);
             this.Controls.Add(this.label1);
@@ -374,7 +385,7 @@
         private System.Windows.Forms.TextBox AnswerBox;
         private System.Windows.Forms.ToolStripMenuItem getDetailSolveButton;
         private System.Windows.Forms.CheckBox getDetailSolve;
-        private System.Windows.Forms.ToolStripMenuItem допомогаToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem HelpButton;
         private System.Windows.Forms.ToolStripMenuItem проПрограмуToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkingButton;
         private System.Windows.Forms.ToolTip toolTip1;
@@ -389,6 +400,7 @@
         private System.Windows.Forms.ToolStripMenuItem loadMatrix;
         private System.Windows.Forms.ToolStripMenuItem saveMatrix;
         private System.Windows.Forms.ToolStripMenuItem saveResult;
+        private System.Windows.Forms.Label label3;
     }
 }
 

@@ -100,9 +100,9 @@
             this.label7.Location = new System.Drawing.Point(6, 82);
             this.label7.Name = "label7";
             this.label7.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.label7.Size = new System.Drawing.Size(126, 22);
+            this.label7.Size = new System.Drawing.Size(113, 22);
             this.label7.TabIndex = 1;
-            this.label7.Text = "Тритенко Дарина";
+            this.label7.Text = "Тритенко Дар\'я";
             // 
             // groupBox1
             // 

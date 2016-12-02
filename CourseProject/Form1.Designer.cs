@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.insertValues = new System.Windows.Forms.Button();
             this.out1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
@@ -60,23 +59,13 @@
             this.MaxMinBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.заповнитиТестовіЗначенняToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AnswerRoundBox = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // insertValues
-            // 
-            this.insertValues.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.insertValues.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.insertValues.Location = new System.Drawing.Point(836, 82);
-            this.insertValues.Name = "insertValues";
-            this.insertValues.Size = new System.Drawing.Size(181, 23);
-            this.insertValues.TabIndex = 0;
-            this.insertValues.Text = "Заповнити: тестові значення";
-            this.toolTip1.SetToolTip(this.insertValues, "Заповнити тестовими значеннями");
-            this.insertValues.UseVisualStyleBackColor = true;
-            this.insertValues.Click += new System.EventHandler(this.insertValues_Click);
             // 
             // out1
             // 
@@ -146,7 +135,7 @@
             // Solve
             // 
             this.Solve.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Solve.Location = new System.Drawing.Point(836, 111);
+            this.Solve.Location = new System.Drawing.Point(836, 102);
             this.Solve.Name = "Solve";
             this.Solve.Size = new System.Drawing.Size(181, 23);
             this.Solve.TabIndex = 13;
@@ -174,6 +163,7 @@
             // файлToolStripMenuItem
             // 
             this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.заповнитиТестовіЗначенняToolStripMenuItem,
             this.loadMatrix,
             this.saveMatrix,
             this.saveResult});
@@ -294,15 +284,16 @@
             // 
             // AnswerBox
             // 
-            this.AnswerBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.AnswerBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.AnswerBox.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.AnswerBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.AnswerBox.Location = new System.Drawing.Point(836, 163);
+            this.AnswerBox.Location = new System.Drawing.Point(836, 151);
             this.AnswerBox.Multiline = true;
             this.AnswerBox.Name = "AnswerBox";
             this.AnswerBox.ReadOnly = true;
             this.AnswerBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.AnswerBox.Size = new System.Drawing.Size(181, 424);
+            this.AnswerBox.Size = new System.Drawing.Size(181, 436);
             this.AnswerBox.TabIndex = 15;
             this.toolTip1.SetToolTip(this.AnswerBox, "Так, тут має бути відповідь");
             // 
@@ -312,7 +303,7 @@
             this.getDetailSolve.AutoSize = true;
             this.getDetailSolve.Checked = true;
             this.getDetailSolve.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.getDetailSolve.Location = new System.Drawing.Point(840, 140);
+            this.getDetailSolve.Location = new System.Drawing.Point(840, 128);
             this.getDetailSolve.Name = "getDetailSolve";
             this.getDetailSolve.Size = new System.Drawing.Size(177, 17);
             this.getDetailSolve.TabIndex = 9;
@@ -354,11 +345,40 @@
             this.label2.TabIndex = 18;
             this.label2.Text = "Змінних/обмежень";
             // 
+            // заповнитиТестовіЗначенняToolStripMenuItem
+            // 
+            this.заповнитиТестовіЗначенняToolStripMenuItem.Name = "заповнитиТестовіЗначенняToolStripMenuItem";
+            this.заповнитиТестовіЗначенняToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.заповнитиТестовіЗначенняToolStripMenuItem.Text = "Заповнити тестові значення";
+            this.заповнитиТестовіЗначенняToolStripMenuItem.Click += new System.EventHandler(this.insertValues_Click);
+            // 
+            // AnswerRoundBox
+            // 
+            this.AnswerRoundBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.AnswerRoundBox.Location = new System.Drawing.Point(965, 79);
+            this.AnswerRoundBox.Name = "AnswerRoundBox";
+            this.AnswerRoundBox.Size = new System.Drawing.Size(19, 20);
+            this.AnswerRoundBox.TabIndex = 19;
+            this.AnswerRoundBox.Text = "8";
+            this.toolTip1.SetToolTip(this.AnswerRoundBox, "Точність при відображенні розв\'язку. Від 1 до 28 знаків після коми");
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.Location = new System.Drawing.Point(863, 82);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(96, 17);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Точність виводу:";
+            this.toolTip1.SetToolTip(this.label3, "Точність при відображенні розв\'язку. Від 1 до 28 знаків після коми");
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1018, 599);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.AnswerRoundBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.MaxMinBox);
             this.Controls.Add(this.label1);
@@ -371,7 +391,6 @@
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.out1);
-            this.Controls.Add(this.insertValues);
             this.Controls.Add(this.menuStrip1);
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
@@ -388,8 +407,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button insertValues;
         private System.Windows.Forms.Label out1;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.TextBox numCols;
@@ -420,6 +437,9 @@
         private System.Windows.Forms.ToolStripMenuItem GraphsButton;
         private System.Windows.Forms.ToolStripMenuItem TargetFunctionGraphButton;
         private System.Windows.Forms.ToolStripMenuItem областьДопустимостіОптимальногоПлануToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem заповнитиТестовіЗначенняToolStripMenuItem;
+        private System.Windows.Forms.TextBox AnswerRoundBox;
+        private System.Windows.Forms.Label label3;
     }
 }
 

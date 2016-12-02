@@ -46,7 +46,7 @@ namespace CourseProject
                 int colIndex = i + 1;
                 string colName = "a" + colIndex.ToString();
                 dataGridView2.Columns.Add(new DataGridViewTextBoxColumn()
-                { Name = colName, HeaderText = colName, Width = 38 });
+                { Name = colName, HeaderText = colName, Width = 35 });
             }
             //Колонка для b
             dataGridView2.Columns.Add(new DataGridViewTextBoxColumn()
@@ -123,7 +123,7 @@ namespace CourseProject
         /// <summary>
         /// Виведення результату в TextBox
         /// </summary>
-        public static string writeSolve(SimplexTable simplexTable)
+        public static string writeSolve(SimplexTable simplexTable, int roundValue)
         {
             int xCount = simplexTable.X.GetLength(1) - 2;
             int simplexTableLength = simplexTable.X.GetLength(0);
@@ -134,7 +134,7 @@ namespace CourseProject
                 {
                     if (simplexTable.X[i, 0] == index)
                     {
-                        answer += "x" + index + " = " + simplexTable.X[i, 1] + "\r\n";
+                        answer += "x" + index + " = " + Math.Round(simplexTable.X[i, 1], roundValue) + "\r\n";
                         break;
                     }
                     else if (i == simplexTableLength - 1)
@@ -147,14 +147,14 @@ namespace CourseProject
                 {
                     answer += "A" + Fs.ToString() + " ";
                 }
-            answer += "}\r\nL = " + simplexTable.L.ToString() + "\r\n";
+            answer += "}\r\nL = " + Math.Round(simplexTable.L, roundValue).ToString() + "\r\n";
             return answer;
         }
 
         /// <summary>
         /// Виведення детального розв'язку в html-файл
         /// </summary>
-        public static void drowSolve(SimplexTable[] tables)
+        public static void drowSolve(SimplexTable[] tables, int roundValue)
         {
             string solveString = "<!DOCTYPE html>\r\n<html lang='uk'>\r\n<head>\r\n<title>Детальний розв'язок</title>\r\n<style>\r\ndiv{font-size: 14pt; padding: 10px 0px;}\r\n</style>\r\n</head>\r\n<body>";
             //Вивід початку таблиці
@@ -188,12 +188,12 @@ namespace CourseProject
                     solveString += "<tr><td>" + (index + 1) + "</td><td>" + table.Cs[index] + "</td><td>" + table.fs[index] + "</td>";
                     //Цикл для значень Х
                     for (int i = 1; i < table.X.GetLength(1); i++)
-                        solveString += "<td>" + table.X[index, i] + "</td>";
+                        solveString += "<td>" + Math.Round(table.X[index, i], roundValue) + "</td>";
                     //Вывод теты
                     if (table.situation == 3)
                     { //Проверяем не является ли табилца последней (в последней не считаем тету)
                         if (table.teta[index] != 99999999999999)
-                            solveString += "<td>" + table.teta[index] + "</td>";
+                            solveString += "<td>" + Math.Round(table.teta[index], roundValue) + "</td>";
                         else
                             solveString += "<td>---</td>";
                         solveString += "</tr>";
@@ -203,7 +203,7 @@ namespace CourseProject
                 solveString += "<tr><td>" + (index + 1) + "</td><td></td><td>&Delta;</td>";
                 for (int i = 0; i < table.delta.GetLength(0); i++)
                 {
-                    solveString += "<td>" + table.delta[i] + "</td>";
+                    solveString += "<td>" + Math.Round(table.delta[i], roundValue) + "</td>";
                 }
                 solveString += "</tr>";
                 //Сравниваем дельту с "тестовыми данным", если совпадает значит все ок
@@ -212,7 +212,7 @@ namespace CourseProject
                     solveString += "<tr><td>" + (index + 1) + "'</td><td></td><td></td>";
                     for (int i = 0; i < previousTable.checkRow.GetLength(0); i++)
                     {
-                        solveString += "<td>" + previousTable.checkRow[i] + "</td>";
+                        solveString += "<td>" + Math.Round(previousTable.checkRow[i], roundValue) + "</td>";
                     }
                 }
                 solveString += "</tr></table>";
@@ -244,7 +244,7 @@ namespace CourseProject
         /// <summary>
         /// Виведення перевірки допустимості в html-файл
         /// </summary>
-        public static void drowAdmissibility(SimplexTable[] tables)
+        public static void drowAdmissibility(SimplexTable[] tables, int roundValue)
         {
             string solveString = "<!DOCTYPE html>\r\n<html lang='uk'>\r\n<head>\r\n<title>Перевірка допустимості</title>\r\n<style>\r\ndiv{font-size: 14pt; padding: 10px 0px;}\r\n</style>\r\n</head>\r\n<body>";
             solveString += "Після розв'язку отримуємо опорний план: <br>";
@@ -262,7 +262,7 @@ namespace CourseProject
                     {
                         if (tables[lastTable].X[i, 0] < 0)
                             xIsPositive = false;
-                        solveString += tables[lastTable].X[i, 1] + "; ";
+                        solveString += Math.Round(tables[lastTable].X[i, 1], roundValue) + "; ";
                         xResults[index-1] = tables[lastTable].X[i, 1];
                         break;
                     }
@@ -288,10 +288,10 @@ namespace CourseProject
                 for(int currentX = 2; currentX < xCount; currentX++)
                 {
                     gamma[row] += tables[0].X[row, currentX] * xResults[currentX - 2];
-                    solveString += tables[0].X[row, currentX]+ " * "+ xResults[currentX - 2] + " + ";
+                    solveString += Math.Round(tables[0].X[row, currentX], roundValue) + " * "+ Math.Round(xResults[currentX - 2], roundValue) + " + ";
                 }
-                solveString += " = " + gamma[row];
-                solveString += "<br><b>&gamma; " + (row+1) + "= " + tables[0].X[row,1] +" - "+ gamma[row] + " = "+ (tables[0].X[row, 1] - gamma[row]) + "</b><br>";
+                solveString += " = " + Math.Round(gamma[row], roundValue);
+                solveString += "<br><b>&gamma; " + (row+1) + "= " + Math.Round(tables[0].X[row,1], roundValue) +" - "+ Math.Round(gamma[row], roundValue) + " = "+ Math.Round((tables[0].X[row, 1] - gamma[row]), roundValue) + "</b><br>";
 
             }
 
@@ -357,7 +357,7 @@ namespace CourseProject
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Сталася помилка при збереженні матриці у файл", "Помилка при збереженні");
             }
@@ -408,7 +408,7 @@ namespace CourseProject
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Сталася помилка при завантаженні даних. Можливо, файл матриці записаний невірно.", "Помилка при завантаженні даних");
             }
@@ -441,7 +441,7 @@ namespace CourseProject
                         MessageBox.Show("Результати обчислень успішно збережені у файл " + saveFileDialog1.FileName, "Збережено");
                     }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Сталася помилка при збереженні результатів у файл", "Помилка при збереженні");
             }
@@ -465,6 +465,26 @@ namespace CourseProject
         public static class ListOfFunctionPoints
         {
             public static double[] Points { get; set; }
+        }
+        public static int getAnswerRoundValue(TextBox AnswerRoundBox)
+        {
+            try
+            {
+                int answerRoundValue = Convert.ToInt32((AnswerRoundBox.Text));
+                if (answerRoundValue < 1 || answerRoundValue > 28)
+                {
+                    MessageBox.Show("Введіть значення від 1 до 28.\nЗначення скинуто до 8", "Помилка вибору значення заокруглення");
+                    AnswerRoundBox.Text = "8";
+                    return 8;
+                }
+                return answerRoundValue;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Перевірте введені значення.\nЗначення скинуто до 8", "Помилка вибору значення заокруглення");
+                AnswerRoundBox.Text = "8";
+                return 8;
+            }
         }
     }
 }

@@ -33,7 +33,7 @@ namespace CourseProject
                                                       {12410, 11, 0, 0, 0, 9, 1, 19, 1, 21, 1, 29, 31, 10},
                    };
             decimal[] CFirst = new decimal[] { 315, 489, 663, 837, 1011, 1185, 1359, 1533, 1707, 1881, 2055, 2229, 2403 };
-            
+            MaxMinBox.SelectedIndex = 0;
             //-----Заповнення таблиці даними з масиву-----
             //Отримання розмірності
             int nCols = CFirst.GetLength(0);
@@ -68,19 +68,22 @@ namespace CourseProject
                 getDetailSolveButton.Enabled = true;
                 SimplexTable[] results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e));
                 int last = results.Length - 1;
-                AnswerBox.Text = IO.writeSolve(results[last]);
+                //Отримуємо значення заокруглення
+                int roundValue = IO.getAnswerRoundValue(AnswerRoundBox);
+                //Виводимо результати
+                AnswerBox.Text = IO.writeSolve(results[last], roundValue);
 
-                IO.drowSolve(results);
-                IO.drowAdmissibility(results);
+                IO.drowSolve(results, roundValue);
+                IO.drowAdmissibility(results, roundValue);
                 IO.ListOfFunctionPoints.Points = IO.getTargetFunctionPoints(results);
 
-                //Якщо 
+                //Вивести табуляграму, якщо стоїть прапорець
                 if (getDetailSolve.Checked)
                 {
                     getDetailSolve_Click(sender, e);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Виникла помилка при розв'язанні задачі. Перевірте введені значення", "Помилка при розв'язанні задачі");
                 resetButtons(sender, e);
@@ -105,7 +108,7 @@ namespace CourseProject
                 // Табуляграма неактивна поки не розв'язали задачу
                 getDetailSolveButton.Enabled = false;
             }
-            catch (Exception ex) { MessageBox.Show("Не вдалося побудувати матрицю, перевірте введені значення\r\n\r\nДеталі:\r\n" + ex, "Помилка при побудові матриці"); }
+            catch (Exception) { MessageBox.Show("Не вдалося побудувати матрицю, перевірте введені значення.\n(Мінімальний розмір 2х2)", "Помилка при побудові матриці"); }
             //для виведення системної помилки: catch (Exception ex) { MessageBox.Show("Не вдалося побудувати матрицю, перевірте введені значення\r\n\r\nДеталі:\r\n" + ex, "Помилка при побудові матриці"); }
         }
         /// <summary>

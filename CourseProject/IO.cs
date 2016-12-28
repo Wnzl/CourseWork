@@ -486,5 +486,27 @@ namespace CourseProject
                 return 8;
             }
         }
+        public static int checkingMatrix(DataGridView dataGridView1, DataGridView dataGridView2)
+        {
+            int colsNum = dataGridView1.ColumnCount;
+            int rowsNum = dataGridView2.RowCount;
+            for (int row = 0; row < colsNum; row++)
+            {
+                if (dataGridView1.Rows[0].Cells[row].Value == null)
+                {
+                    MessageBox.Show("Здається, ви забули вказати одне зі значень цільової функції.", "Помилка вводу!");
+                    return -1;
+                }
+            }
+            for (int row = 0; row < rowsNum; row++)
+            {
+                if (dataGridView2.Rows[row].Cells[colsNum].Value == null)
+                {
+                    MessageBox.Show("Здається, ви забули вказати одне з обмежень.", "Помилка вводу!");
+                    return -1;
+                }
+            }
+            return 0;
+        }
     }
 }

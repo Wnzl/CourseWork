@@ -62,33 +62,36 @@ namespace CourseProject
         /// </summary>
         private void Solve_Click(object sender, EventArgs e)
         {
-            enableButtons(sender, e);
-            try
+            if (IO.checkingMatrix(dataGridView1, dataGridView2) == 0)
             {
-                getDetailSolveButton.Enabled = true;
-                SimplexTable[] results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e));
-                int last = results.Length - 1;
-                //Отримуємо значення заокруглення
-                int roundValue = IO.getAnswerRoundValue(AnswerRoundBox);
-                //Виводимо результати
-                AnswerBox.Text = IO.writeSolve(results[last], roundValue);
-
-                IO.drowSolve(results, roundValue);
-                IO.drowAdmissibility(results, roundValue);
-                IO.ListOfFunctionPoints.Points = IO.getTargetFunctionPoints(results);
-
-                //Вивести табуляграму, якщо стоїть прапорець
-                if (getDetailSolve.Checked)
+                enableButtons(sender, e);
+                try
                 {
-                    getDetailSolve_Click(sender, e);
+                    getDetailSolveButton.Enabled = true;
+                    SimplexTable[] results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e));
+                    int last = results.Length - 1;
+                    //Отримуємо значення заокруглення
+                    int roundValue = IO.getAnswerRoundValue(AnswerRoundBox);
+                    //Виводимо результати
+                    AnswerBox.Text = IO.writeSolve(results[last], roundValue);
+
+                    IO.drowSolve(results, roundValue);
+                    IO.drowAdmissibility(results, roundValue);
+                    IO.ListOfFunctionPoints.Points = IO.getTargetFunctionPoints(results);
+
+                    //Вивести табуляграму, якщо стоїть прапорець
+                    if (getDetailSolve.Checked)
+                    {
+                        getDetailSolve_Click(sender, e);
+                    }
                 }
+                catch (Exception)
+                {
+                    MessageBox.Show("Виникла помилка при розв'язанні задачі. Перевірте введені значення", "Помилка при розв'язанні задачі");
+                    resetButtons(sender, e);
+                }
+                //для виведення системної помилки: catch (Exception ex) { MessageBox.Show("Виникла помилка при розв'язанні задачі. Перевірте введені значення\r\n\r\nДеталі:\r\n" + ex, "Помилка при розв'язанні задачі"); }
             }
-            catch (Exception)
-            {
-                MessageBox.Show("Виникла помилка при розв'язанні задачі. Перевірте введені значення", "Помилка при розв'язанні задачі");
-                resetButtons(sender, e);
-            }
-            //для виведення системної помилки: catch (Exception ex) { MessageBox.Show("Виникла помилка при розв'язанні задачі. Перевірте введені значення\r\n\r\nДеталі:\r\n" + ex, "Помилка при розв'язанні задачі"); }
         }
 
         /// <summary>

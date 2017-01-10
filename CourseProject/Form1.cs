@@ -17,6 +17,9 @@ namespace CourseProject
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Заполнение полей нашими значениями по клику
+        /// </summary>
         private void insertValues_Click(object sender, EventArgs e) {
             resetButtons(sender, e);
             decimal[,] AFirst = new decimal[,] { {1300, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -68,7 +71,8 @@ namespace CourseProject
                 try
                 {
                     getDetailSolveButton.Enabled = true;
-                    SimplexTable[] results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e));
+                    //третий параметр - направление целевой функции, его нужно изменить на значение с бокса
+                    SimplexTable[] results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e), true); 
                     int last = results.Length - 1;
                     //Отримуємо значення заокруглення
                     int roundValue = IO.getAnswerRoundValue(AnswerRoundBox);
@@ -77,6 +81,7 @@ namespace CourseProject
 
                     IO.drowSolve(results, roundValue);
                     IO.drowAdmissibility(results, roundValue);
+                    
                     IO.ListOfFunctionPoints.Points = IO.getTargetFunctionPoints(results);
 
                     //Вивести табуляграму, якщо стоїть прапорець
@@ -114,6 +119,7 @@ namespace CourseProject
             catch (Exception) { MessageBox.Show("Не вдалося побудувати матрицю, перевірте введені значення.\n(Мінімальний розмір 2х2)", "Помилка при побудові матриці"); }
             //для виведення системної помилки: catch (Exception ex) { MessageBox.Show("Не вдалося побудувати матрицю, перевірте введені значення\r\n\r\nДеталі:\r\n" + ex, "Помилка при побудові матриці"); }
         }
+
         /// <summary>
         /// Отримання вектора цільової функції (масив)
         /// </summary>
@@ -240,6 +246,22 @@ namespace CourseProject
         private void TargetFunctionGraphButton_Click(object sender, EventArgs e)
         {
             TargetFunctionGraph form = new TargetFunctionGraph();
+            form.Show();
+        }
+
+        /// <summary>
+        /// Вызов окна с проверкой оптимальности
+        /// </summary>
+        private void оптимавльностіToolStripMenuItem_Click(object sender, EventArgs e) {
+            optimalityCheck form = new optimalityCheck();
+            form.Show();
+        }
+
+        /// <summary>
+        /// Вызов окна с проверкой опорности (!)
+        /// </summary>
+        private void ефективностіToolStripMenuItem_Click(object sender, EventArgs e) {
+            referenceCheck form = new referenceCheck();
             form.Show();
         }
     }

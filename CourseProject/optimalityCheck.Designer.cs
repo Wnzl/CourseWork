@@ -1,7 +1,5 @@
-﻿namespace CourseProject
-{
-    partial class admissibilityCheck
-    {
+﻿namespace CourseProject {
+    partial class optimalityCheck {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -11,10 +9,8 @@
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
+        protected override void Dispose(bool disposing) {
+            if (disposing && (components != null)) {
                 components.Dispose();
             }
             base.Dispose(disposing);
@@ -26,8 +22,7 @@
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
-        {
+        private void InitializeComponent() {
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.SuspendLayout();
             // 
@@ -40,16 +35,15 @@
             this.webBrowser1.Size = new System.Drawing.Size(497, 399);
             this.webBrowser1.TabIndex = 0;
             // 
-            // admissibilityCheck
+            // optimalityCheck
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(497, 399);
             this.Controls.Add(this.webBrowser1);
-            this.Name = "admissibilityCheck";
+            this.Name = "optimalityCheck";
             this.ShowIcon = false;
-            this.Text = "Перевірка допустимості";
-            this.Load += new System.EventHandler(this.admissibilityCheck_Load);
+            this.Text = "Перевiрка оптимальностi";
             this.ResumeLayout(false);
 
         }

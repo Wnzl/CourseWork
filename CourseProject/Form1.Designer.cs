@@ -255,12 +255,14 @@
             this.оптимавльностіToolStripMenuItem.Name = "оптимавльностіToolStripMenuItem";
             this.оптимавльностіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.оптимавльностіToolStripMenuItem.Text = "Оптимальності";
+            this.оптимавльностіToolStripMenuItem.Click += new System.EventHandler(this.оптимавльностіToolStripMenuItem_Click);
             // 
             // ефективностіToolStripMenuItem
             // 
             this.ефективностіToolStripMenuItem.Name = "ефективностіToolStripMenuItem";
             this.ефективностіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.ефективностіToolStripMenuItem.Text = "Ефективності";
+            this.ефективностіToolStripMenuItem.Click += new System.EventHandler(this.ефективностіToolStripMenuItem_Click);
             // 
             // стійкостіToolStripMenuItem
             // 

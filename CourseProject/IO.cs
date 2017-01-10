@@ -120,6 +120,7 @@ namespace CourseProject
             }
             return true;
         }
+
         /// <summary>
         /// Виведення результату в TextBox
         /// </summary>
@@ -466,6 +467,7 @@ namespace CourseProject
         {
             public static double[] Points { get; set; }
         }
+
         public static int getAnswerRoundValue(TextBox AnswerRoundBox)
         {
             try
@@ -486,6 +488,7 @@ namespace CourseProject
                 return 8;
             }
         }
+
         public static int checkingMatrix(DataGridView dataGridView1, DataGridView dataGridView2)
         {
             int colsNum = dataGridView1.ColumnCount;

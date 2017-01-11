@@ -30,6 +30,16 @@ namespace CourseProject {
             }}
         //Опорный план
         public decimal[,] X { get; set; }
+        public decimal[,] A { get {
+                int row = X.GetLength(0);
+                int xCount = X.GetLength(1);
+                decimal[,] A = new decimal[row, xCount - 2];
+                for(int i = 0; i < row; i++) {
+                    for (int j = 0; j < xCount - 2; j++)
+                        A[i, j] = X[i, j + 2];
+                }
+                return A;
+            } }
         //Параметр для определения номера направляющей строки
         public decimal[] teta { get; set; }
         //Оценка разложений вектора условий по базису опорного плана

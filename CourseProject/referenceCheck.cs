@@ -8,19 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CourseProject
-{
-    public partial class admissibilityCheck : Form
-    {
-        public admissibilityCheck()
-        {
+namespace CourseProject {
+    public partial class referenceCheck : Form {
+        public referenceCheck() {
             InitializeComponent();
-            string path = Application.StartupPath + @"\" + "admissibility.html";
+            string path = Application.StartupPath + @"\" + "reference.html";
             webBrowser1.Navigate(path);
-        }
-
-        private void admissibilityCheck_Load(object sender, EventArgs e) {
-
         }
     }
 }

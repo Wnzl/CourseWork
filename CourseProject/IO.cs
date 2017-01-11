@@ -120,6 +120,7 @@ namespace CourseProject
             }
             return true;
         }
+
         /// <summary>
         /// Виведення результату в TextBox
         /// </summary>
@@ -466,7 +467,7 @@ namespace CourseProject
         {
             public static double[] Points { get; set; }
         }
-
+        
         /// <summary>
         /// Забирає значення з TextBox кількості знаків після коми
         /// </summary>
@@ -490,7 +491,7 @@ namespace CourseProject
                 return 8;
             }
         }
-
+        
         /// <summary>
         /// Перевірка цільової функції і обмежень на пусті значення
         /// </summary>

@@ -81,7 +81,9 @@ namespace CourseProject
 
                     IO.drowSolve(results, roundValue);
                     IO.drowAdmissibility(results, roundValue);
-                    
+                    IO.drowOptimality(results, roundValue);
+                    IO.drowReference(results, roundValue);
+
                     IO.ListOfFunctionPoints.Points = IO.getTargetFunctionPoints(results);
 
                     //Вивести табуляграму, якщо стоїть прапорець
@@ -180,6 +182,22 @@ namespace CourseProject
         }
 
         /// <summary>
+        /// Вызов окна с проверкой оптимальности
+        /// </summary>
+        private void оптимавльностіToolStripMenuItem_Click(object sender, EventArgs e) {
+            optimalityCheck form = new optimalityCheck();
+            form.Show();
+        }
+
+        /// <summary>
+        /// Вызов окна с проверкой опорности (!)
+        /// </summary>
+        private void ефективностіToolStripMenuItem_Click(object sender, EventArgs e) {
+            referenceCheck form = new referenceCheck();
+            form.Show();
+        }
+
+        /// <summary>
         /// Виклик функції збереження матриці у txt-файл
         /// </summary>
         private void saveMatrix_Click(object sender, EventArgs e)
@@ -246,22 +264,6 @@ namespace CourseProject
         private void TargetFunctionGraphButton_Click(object sender, EventArgs e)
         {
             TargetFunctionGraph form = new TargetFunctionGraph();
-            form.Show();
-        }
-
-        /// <summary>
-        /// Вызов окна с проверкой оптимальности
-        /// </summary>
-        private void оптимавльностіToolStripMenuItem_Click(object sender, EventArgs e) {
-            optimalityCheck form = new optimalityCheck();
-            form.Show();
-        }
-
-        /// <summary>
-        /// Вызов окна с проверкой опорности (!)
-        /// </summary>
-        private void ефективностіToolStripMenuItem_Click(object sender, EventArgs e) {
-            referenceCheck form = new referenceCheck();
             form.Show();
         }
     }

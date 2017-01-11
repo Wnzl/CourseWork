@@ -493,17 +493,8 @@ namespace CourseProject {
             int xCount = Cs.GetLength(0);
             decimal[,] Afs = formAfs(tablesMassive);
             decimal[,] inversed = inverseMatrix(Afs);
-            inverseCount(inversed);
-            decimal[] y = new decimal[xCount];
+            decimal[] y = getY(tablesMassive);
             int rows = inversed.GetLength(0);
-
-            for (int i = 0; i < xCount; i++) {
-                for (int j = 0; j < rows; j++) {
-                    y[i] += Cs[j] * inversed[j, i];
-
-                }
-                Console.WriteLine("y{0} = {1}", i, y[i]);
-            }
 
             decimal[,] CHECK = transposition(tablesMassive[0].A);
             decimal count = 0;
@@ -511,19 +502,23 @@ namespace CourseProject {
                 for (int j = 0; j < xCount; j++) {
                     count += y[j] * CHECK[i, j];
                 }
-                Console.WriteLine("Cs = {0} , count = {1}", tablesMassive[0].C[i], count);
+                //Сравнение коэффициентов целевой функции с получеными игреками умножеными на столбец ограничений
+                if(Math.Round(tablesMassive[0].C[i],7) != Math.Round(count,7)) {
+                    return false;
+                }
                 count = 0;
             }
 
+            //Сравнение L прямой задачи и L' обратной задачи
             decimal L = 0;
             for (int i = 0; i < xCount; i++) {
                 L += y[i] * tablesMassive[0].X[i, 1];
             }
-            Console.WriteLine(L);
+            if(Math.Round(L,7) != Math.Round(tablesMassive[lastTable].L,7)) {
+                return false;
+            }
             return true;
         }
-
-
 
         /// <summary>
         /// Метод формирования матрицы Afs для проверкм опорности
@@ -548,13 +543,12 @@ namespace CourseProject {
             return Afs;
         }
 
-
         /// <summary>
         /// Метод нахождения определителя матрицы методом Монтанте (Барейса)
         /// </summary>
         /// <param name="matrix">Исходная матрица</param>
         /// <returns>Определитель матрицы</returns>
-        private static decimal determinant(decimal[,] matrix) {
+        public static decimal determinant(decimal[,] matrix) {
             int xCount = matrix.GetLength(0);
             decimal prevI = matrix[0, 0];
             decimal temp = 0;
@@ -572,6 +566,11 @@ namespace CourseProject {
             return prevI;
         }
 
+        /// <summary>
+        /// Метод нахождения обратной матрицы методом Монтанте (Барейса)
+        /// </summary>
+        /// <param name="matrix">Исходная матрица</param>
+        /// <returns>Обратная матрица</returns>
         public static decimal[,] inverseMatrix(decimal[,] matrix) {
             int xCount = matrix.GetLength(0);
             decimal[,] inversed = new decimal[xCount, xCount * 2];
@@ -609,8 +608,11 @@ namespace CourseProject {
             return finalInversed;
         }
 
-
-        //удалить нафиг
+        /// <summary>
+        /// Метод получения значений игреков
+        /// </summary>
+        /// <param name="tablesMassive">Массив симплекс таблиц</param>
+        /// <returns>Вектор игреков</returns>
         public static decimal[] getY(SimplexTable[] tablesMassive) {
             int lastTable = tablesMassive.GetLength(0) - 1;
             decimal[] Cs = tablesMassive[lastTable].Cs;
@@ -623,26 +625,40 @@ namespace CourseProject {
             for (int i = 0; i < xCount; i++) {
                 for (int j = 0; j < rows; j++) {
                     y[i] += Cs[j] * inversed[j, i];
-
                 }
             }
-
             return y;
         }
 
-
-        public static void inverseCount(decimal[,] matrix) {
-            decimal[] b = new decimal[] { 1300, 9100, 12400, 11240, 12402, 41240, 12405, 21240, 12407, 51240, 12408, 12410 };
-            int xCount = b.GetLength(0);
-            decimal[] X = new decimal[xCount];
-            
-            for(int i = 0; i < xCount; i++) {
-                for(int j = 0; j < xCount; j++) 
-                    X[i] += matrix[i,j] * b[j];
+        /// <summary>
+        /// Метод нахождения значений L обратной задачи
+        /// </summary>
+        /// <param name="tablesMassive">Массив симплекс-таблиц</param>
+        /// <param name="y">Вектор игреков</param>
+        /// <returns>L' обратной задачи</returns>
+        public static decimal secondL(SimplexTable[] tablesMassive, decimal[] y) {
+            int lastTable = tablesMassive.GetLength(0) - 1;
+            int xCount = tablesMassive[lastTable].Cs.GetLength(0);
+            decimal L = 0;
+            for (int i = 0; i < xCount; i++) {
+                L += y[i] * tablesMassive[0].X[i, 1];
             }
-
-            foreach (decimal el in X)
-                Console.WriteLine(el + ", ");
+            return L;
         }
+
+
+          public static void inverseCount(decimal[,] matrix) {
+              decimal[] b = new decimal[] { 1300, 9100, 12400, 11240, 12402, 41240, 12405, 21240, 12407, 51240, 12408, 12410 };
+              int xCount = b.GetLength(0);
+              decimal[] X = new decimal[xCount];
+
+              for(int i = 0; i < xCount; i++) {
+                  for(int j = 0; j < xCount; j++) 
+                      X[i] += matrix[i,j] * b[j];
+              }
+
+              foreach (decimal el in X)
+                  Console.WriteLine(el + ", ");
+          }
     }
 }

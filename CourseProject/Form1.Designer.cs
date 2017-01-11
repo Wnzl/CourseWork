@@ -261,7 +261,7 @@
             // 
             this.ефективностіToolStripMenuItem.Name = "ефективностіToolStripMenuItem";
             this.ефективностіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.ефективностіToolStripMenuItem.Text = "Ефективності";
+            this.ефективностіToolStripMenuItem.Text = "Опорності";
             this.ефективностіToolStripMenuItem.Click += new System.EventHandler(this.ефективностіToolStripMenuItem_Click);
             // 
             // стійкостіToolStripMenuItem

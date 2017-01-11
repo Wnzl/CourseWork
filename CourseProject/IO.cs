@@ -280,24 +280,189 @@ namespace CourseProject
             else
                 solveString += "x* <= 0 <br>";
 
-            solveString += "</b>Перевіримо виконання умов Ax* = b <br>";
+            solveString += "</b><br><h2>Перевіримо виконання умов Ax* = b </h2></br>";
 
             decimal[] gamma = new decimal[simplexTableLength];
             for (int row = 0; row < simplexTableLength; row++)
             {
                 gamma[row] = 0;
-                for(int currentX = 2; currentX < xCount; currentX++)
+                for(int currentX = 2; currentX < xCount + 2; currentX++)
                 {
                     gamma[row] += tables[0].X[row, currentX] * xResults[currentX - 2];
                     solveString += Math.Round(tables[0].X[row, currentX], roundValue) + " * "+ Math.Round(xResults[currentX - 2], roundValue) + " + ";
                 }
                 solveString += " = " + Math.Round(gamma[row], roundValue);
                 solveString += "<br><b>&gamma; " + (row+1) + "= " + Math.Round(tables[0].X[row,1], roundValue) +" - "+ Math.Round(gamma[row], roundValue) + " = "+ Math.Round((tables[0].X[row, 1] - gamma[row]), roundValue) + "</b><br>";
-
             }
 
+            //Вывод проверки обратной задачи
+            solveString += "<br><h2>Виконаємо перевiрку зворотньої задачі</h2></br>";
+
+            solveString += "<br>Для отримання у* використаємо результатами рішення прямої задачі: </br>";
+            decimal[] y = SimplexMethod.getY(tables);
+            int yCount = y.GetLength(0);
+            solveString += "<br> y* = {";
+            for(int i = 0; i < yCount; i++) {
+                solveString += Math.Round(y[i],roundValue) + "; ";
+            }
+            solveString += "} </br>";
+
+            int columns = tables[0].xCount;
+            int rows = tables[0].X.GetLength(0);
+            decimal[] yGamma = new decimal[columns];
+            for (int column = 0; column < columns; column++) {
+                yGamma[column] = 0;
+                for (int row = 0; row < rows; row++) {
+                    yGamma[column] += tables[0].A[row, column] * y[row];
+                    solveString += Math.Round(tables[0].A[row, column], roundValue) + " * " + Math.Round(y[row], roundValue) + " + ";
+                }
+                solveString += " = " + Math.Round(yGamma[column], roundValue);
+                solveString += "<br><b>&gamma; " + (column + 1) + "= " + Math.Round(tables[0].C[column], roundValue) + " - " + Math.Round(yGamma[column], roundValue) + " = " + Math.Round((tables[0].C[column] - yGamma[column]), roundValue) + "</b><br>";
+                yGamma[column] = Math.Round((tables[0].C[column] - yGamma[column]), roundValue);
+            }
+            if(yGamma.Max() <= 0.0000001m) { 
+            solveString += "<br> Максимальна &gamma; = " + yGamma.Max() + " <= epsilon (0.0000001) </br>";
+            solveString += "<h1> Полученое решение допустимо! </h1><br/>";
+            }else {
+                solveString += "<br> Максимальна &gamma; = " + yGamma.Max() + " > epsilon (0.0000001) </br>";
+                solveString += "<h1> Полученое решение не допустимо! </h1><br/>";
+            }
             solveString += "</body>\r\n</html>";
             using (StreamWriter sw = new StreamWriter("admissibility.html", false, Encoding.Default)) //false вказує, що файл буде перезаписано.
+            {
+                sw.WriteLine(solveString);
+            }
+        }
+
+        /// <summary>
+        /// Виведення перевірки оптимальностi в html-файл
+        /// </summary>
+        public static void drowOptimality(SimplexTable[] tables, int roundValue) {
+            string solveString = "<!DOCTYPE html>\r\n<html lang='uk'>\r\n<head>\r\n<title>Перевірка оптимальностi</title>\r\n<style>\r\ndiv{font-size: 14pt; padding: 10px 0px;}\r\n</style>\r\n</head>\r\n<body>";
+            solveString += "<h2>В результаті роботи ПР були отримані такі значення: </h2><br>";
+            solveString += "Fs* = {";
+            int lastTable = tables.GetLength(0) - 1;
+            int xCount = tables[lastTable].X.GetLength(1) - 2;
+            int simplexTableLength = tables[lastTable].X.GetLength(0);
+            int rows = tables[0].X.GetLength(0);
+            for (int row = 0; row < rows; row++)
+                solveString += "A" + tables[lastTable].fs[row] + ", ";
+            solveString += "} <br>";
+
+            solveString += "x* = { ";
+            decimal[] xResults = new decimal[xCount];
+            for (int index = 1; index <= xCount; index++) {
+                for (int i = 0; i < simplexTableLength; i++) {
+                    if (tables[lastTable].X[i, 0] == index) {
+                        solveString += Math.Round(tables[lastTable].X[i, 1], roundValue) + "; ";
+                        xResults[index - 1] = tables[lastTable].X[i, 1];
+                        break;
+                    } else if (i == simplexTableLength - 1) {
+                        solveString += "0; ";
+                        xResults[index - 1] = 0;
+                    }
+                }
+            }
+            solveString += "} <br>";
+
+            decimal[] y = SimplexMethod.getY(tables);
+            int yCount = y.GetLength(0);
+            solveString += "<br> y* = {";
+            for (int i = 0; i < yCount; i++) {
+                solveString += Math.Round(y[i], roundValue) + "; ";
+            }
+            solveString += "} </br>";
+
+            solveString += "<b>L1* = </b>";
+            decimal L1 = 0;
+            for (int i = 0; i < xCount; i++) {
+                solveString += tables[0].C[i] + " * " + Math.Round(xResults[i],roundValue) +" + ";
+                L1 += tables[0].C[i] * xResults[i];
+                }
+            solveString += " = <b>" + Math.Round(L1,roundValue) + "</b> <br>";
+
+            solveString += "<b>L2* = </b>";
+            decimal L2 = 0;
+            for (int i = 0; i < simplexTableLength; i++) {
+                solveString += tables[0].X[i,1] + " * " + Math.Round(y[i], roundValue) + " + ";
+                L2 += tables[0].X[i,1] * y[i];
+            }
+            solveString += " = <b>" + Math.Round(L2, roundValue) + "</b> <br>";
+
+            decimal L3 = tables[lastTable].delta[0];
+            solveString += "<b>L3* = " + Math.Round(L3,roundValue) +"</b><br>";
+
+            decimal Lcp = (L1 + L2 + L3) / 3;
+            solveString += "<b>Lcp</b> = (" + Math.Round(L1, roundValue) + " + "
+                                            + Math.Round(L2, roundValue) + " + "
+                                            + Math.Round(L3, roundValue) + ") / 3 = <b>" 
+                                            + Math.Round(Lcp,roundValue) + "</b><br>";
+            int counter = 0;
+
+            solveString += "|" + Math.Round(Lcp, roundValue) + " - " + Math.Round(L1, roundValue) + "| = <b>" + Math.Round(Math.Abs(Lcp - L1), roundValue);
+            if (Math.Abs(Lcp - L1) <= 0.0000001m)
+                solveString += " <= epsilon (0,0000001) </b><br>";
+            else {
+                solveString += " > epsilon (0,0000001) </b><br>";
+                counter++;
+            }
+            solveString += "|" + Math.Round(Lcp, roundValue) + " - " + Math.Round(L2, roundValue) + "| = <b>" + Math.Round(Math.Abs(Lcp - L2),roundValue);
+            if (Math.Abs(Lcp - L2) <= 0.0000001m)
+                solveString += " <= epsilon (0,0000001) </b><br>";
+            else {
+                solveString += " > epsilon (0,0000001) </b><br>";
+                counter++;
+            }
+            solveString += "|" + Math.Round(Lcp, roundValue) + " - " + Math.Round(L3, roundValue) + "| = <b>" + Math.Round(Math.Abs(Lcp - L3), roundValue);
+            if (Math.Abs(Lcp - L3) <= 0.0000001m)
+                solveString += " <= epsilon (0,0000001) </b><br>";
+            else {
+                solveString += " > epsilon (0,0000001) </b><br>";
+                counter++;
+            }
+
+            if (counter == 0)
+                solveString += "<h2>Отриманий план є оптимальним! </h2>";
+            else
+                solveString += "<h2>Отриманий план не є оптимальним! </h2>";
+            solveString += "</body>\r\n</html>";
+            using (StreamWriter sw = new StreamWriter("optimality.html", false, Encoding.Default)) //false вказує, що файл буде перезаписано.
+            {
+                sw.WriteLine(solveString);
+            }
+        }
+
+        /// <summary>
+        /// Виведення перевірки опорности в html-файл
+        /// </summary>
+        public static void drowReference(SimplexTable[] tables, int roundValue) {
+            string solveString = "<!DOCTYPE html>\r\n<html lang='uk'>\r\n<head>\r\n<title>Перевірка опорности</title>\r\n<style>\r\ndiv{font-size: 14pt; padding: 10px 0px;}\r\n</style>\r\n</head>\r\n<body>";
+            solveString += "В результаті роботи ПР був отриманий такий опорний план: <br>";
+            solveString += "Fs* = {";
+            int lastTable = tables.GetLength(0) - 1;
+            int rows = tables[0].X.GetLength(0);
+            for (int row = 0; row < rows; row++)
+                solveString += "A" + tables[lastTable].fs[row] + ", ";
+            solveString += "} <br>";
+            solveString += "<h2>Сформуємо матрицю Аfs*: </h2>";
+            solveString += "<table border=\"1\">";
+            decimal[,] Afs = SimplexMethod.formAfs(tables);
+            for(int row = 0; row < rows; row++) {
+                solveString += "<tr>";
+                for(int col = 0; col < rows; col++) {
+                    solveString += "<td> <b>" + Afs[row,col] + "</b> </td>";
+                 }
+                solveString += "</tr>";
+            }
+            solveString += "</table>";
+            decimal determinant = SimplexMethod.determinant(Afs);
+            solveString += "<h2>Визначник матриці буде дорівнювати " + determinant;
+            if(determinant != 0) 
+                solveString += " != 0 </h2> Отриманий план є опорним! <br>";
+            else
+                solveString += " == 0 </h2> Отриманий план не є опорним! <br>";
+            solveString += "</body>\r\n</html>";
+            using (StreamWriter sw = new StreamWriter("reference.html", false, Encoding.Default)) //false вказує, що файл буде перезаписано.
             {
                 sw.WriteLine(solveString);
             }

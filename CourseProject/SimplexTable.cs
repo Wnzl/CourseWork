@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace CourseProject {
+
     /// <summary>
     /// Класс который описывает симплекс таблицу
     /// </summary>
@@ -56,9 +57,11 @@ namespace CourseProject {
         public int situation { get; set; }
         //Дополнительная строка для проверки вычислений
         public decimal[] checkRow { get; set; }
+
+        public int xCount { get {
+                int count = X.GetLength(1) - X.GetLength(0) - 2; // -2 потому что первій столбец индекс, а второй єто вектор б
+                return count;
+            } }
         public SimplexTable() { }
-
     }
-
-
 }

@@ -73,11 +73,10 @@ namespace CourseProject
                     getDetailSolveButton.Enabled = true;
                     //третий параметр - направление целевой функции, его нужно изменить на значение с бокса
                     SimplexTable[] results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e), true); 
-                    int last = results.Length - 1;
                     //Отримуємо значення заокруглення
                     int roundValue = IO.getAnswerRoundValue(AnswerRoundBox);
                     //Виводимо результати
-                    AnswerBox.Text = IO.writeSolve(results[last], roundValue);
+                    AnswerBox.Text = IO.writeSolve(results, roundValue);
 
                     IO.drowSolve(results, roundValue);
                     IO.drowAdmissibility(results, roundValue);

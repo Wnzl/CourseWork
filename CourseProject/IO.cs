@@ -124,31 +124,43 @@ namespace CourseProject
         /// <summary>
         /// Виведення результату в TextBox
         /// </summary>
-        public static string writeSolve(SimplexTable simplexTable, int roundValue)
+        public static string writeSolve(SimplexTable[] simplexTable, int roundValue)
         {
-            int xCount = simplexTable.X.GetLength(1) - 2;
-            int simplexTableLength = simplexTable.X.GetLength(0);
+            int lastTable = simplexTable.GetLength(0) - 1;
+            int xCount = simplexTable[lastTable].X.GetLength(1) - 2;
+            int simplexTableLength = simplexTable[lastTable].X.GetLength(0);
             string answer = "";
-            for(int index = 1; index <= xCount; index++)
+            answer += "Отриманий опорний план \r\nFs = { ";
+
+            foreach (int Fs in simplexTable[lastTable].fs) {
+                answer += "A" + Fs.ToString() + " ";
+            }
+            answer += "}\r\n\r\nОтримані такі значення прямої задачі:\r\n";
+            for (int index = 1; index <= xCount; index++)
             {
                 for (int i = 0; i < simplexTableLength; i++)
                 {
-                    if (simplexTable.X[i, 0] == index)
+                    if (simplexTable[lastTable].X[i, 0] == index)
                     {
-                        answer += "x" + index + " = " + Math.Round(simplexTable.X[i, 1], roundValue) + "\r\n";
+                        answer += "x" + index + " = " + Math.Round(simplexTable[lastTable].X[i, 1], roundValue) + "\r\n";
                         break;
                     }
                     else if (i == simplexTableLength - 1)
                         answer += "x" + index + " = " + 0 + "\r\n";
                 }
             }
-            answer += "\r\nFs = { ";
-
-            foreach (int Fs in simplexTable.fs)
-                {
-                    answer += "A" + Fs.ToString() + " ";
-                }
-            answer += "}\r\nL = " + Math.Round(simplexTable.L, roundValue).ToString() + "\r\n";
+            answer += "\r\nОтримані такі значення зворотньої задачі:";
+            decimal[] y = SimplexMethod.getY(simplexTable);
+            int yCount = y.GetLength(0);
+            for (int i = 0; i < yCount; i++) {
+                answer += "\r\ny*" + (i+1) + " = " + Math.Round(y[i], roundValue) + ";";
+            }
+            answer += "\r\n\r\nЗначення цільової функції прямої та зворотньої задачі\r\nL = " + Math.Round(simplexTable[lastTable].L, roundValue).ToString() + "\r\n";
+            decimal L2 = 0;
+            for (int i = 0; i < simplexTableLength; i++) {
+                L2 += simplexTable[0].X[i, 1] * y[i];
+            }
+            answer += "L* = " + Math.Round(L2, roundValue);
             return answer;
         }
 

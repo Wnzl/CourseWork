@@ -645,20 +645,5 @@ namespace CourseProject {
             }
             return L;
         }
-
-
-          public static void inverseCount(decimal[,] matrix) {
-              decimal[] b = new decimal[] { 1300, 9100, 12400, 11240, 12402, 41240, 12405, 21240, 12407, 51240, 12408, 12410 };
-              int xCount = b.GetLength(0);
-              decimal[] X = new decimal[xCount];
-
-              for(int i = 0; i < xCount; i++) {
-                  for(int j = 0; j < xCount; j++) 
-                      X[i] += matrix[i,j] * b[j];
-              }
-
-              foreach (decimal el in X)
-                  Console.WriteLine(el + ", ");
-          }
     }
 }

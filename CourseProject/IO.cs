@@ -334,10 +334,10 @@ namespace CourseProject
             }
             if(yGamma.Max() <= 0.0000001m) { 
             solveString += "<br> Максимальна &gamma; = " + yGamma.Max() + " <= epsilon (0.0000001) </br>";
-            solveString += "<h1> Полученое решение допустимо! </h1><br/>";
+            solveString += "<h1> Отримане рішення допустиме! </h1><br/>";
             }else {
                 solveString += "<br> Максимальна &gamma; = " + yGamma.Max() + " > epsilon (0.0000001) </br>";
-                solveString += "<h1> Полученое решение не допустимо! </h1><br/>";
+                solveString += "<h1> Отримане рішення не допустиме! </h1><br/>";
             }
             solveString += "</body>\r\n</html>";
             using (StreamWriter sw = new StreamWriter("admissibility.html", false, Encoding.Default)) //false вказує, що файл буде перезаписано.

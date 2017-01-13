@@ -95,7 +95,7 @@ namespace CourseProject
                     this.Cursor = Cursors.WaitCursor;
                     getDetailSolveButton.Enabled = true;
                     //третий параметр - направление целевой функции, его нужно изменить на значение с бокса
-                    results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e), true); 
+                    results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e), getMaxMin(sender,e)); 
                     //Отримуємо значення заокруглення
                     roundValue = IO.getAnswerRoundValue(AnswerRoundBox);
                     //Виводимо результати

@@ -10,8 +10,14 @@ using System.Windows.Forms;
 
 namespace CourseProject
 {
+    public enum Directions { Horizontal, Vertical }
+
     public partial class Form1 : Form
     {
+        SimplexTable[] results;
+        int roundValue;
+
+
         public Form1()
         {
             InitializeComponent();
@@ -22,20 +28,36 @@ namespace CourseProject
         /// </summary>
         private void insertValues_Click(object sender, EventArgs e) {
             resetButtons(sender, e);
-            decimal[,] AFirst = new decimal[,] { {1300, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                                                      {9100, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13},
-                                                      {12400, 11, 5, 9, 21, 1, 19, 1, 31, 1, 0, 0, 0, 29},
-                                                      {11240, 0, 7, 11, 9, 21, 1, 19, 31, 11, 29, 0, 0, 3},
-                                                      {12402, 0, 0, 7, 21, 11, 9, 1, 19, 1, 31, 29, 0, 4},
-                                                      {41240, 0, 0, 0, 7, 9, 11, 21, 19, 1, 29, 31, 6, 5},
-                                                      {12405, 7, 0, 19, 11, 9, 31, 29, 21, 11, 6, 0, 0, 6},
-                                                      {21240, 9, 0, 0, 11, 29, 31, 19, 21, 1, 11, 6, 0, 7},
-                                                      {12407, 11, 0, 0, 0, 5, 9, 19, 31, 21, 29, 11, 6, 8},
-                                                      {51240, 0, 31, 9, 11, 1, 21, 19, 29, 11, 70, 0, 0, 9},
-                                                      {12408, 7, 0, 0, 5, 1, 9, 11, 1, 19, 21, 29, 0, 31},
-                                                      {12410, 11, 0, 0, 0, 9, 1, 19, 1, 21, 1, 29, 31, 10},
-                   };
-            decimal[] CFirst = new decimal[] { 315, 489, 663, 837, 1011, 1185, 1359, 1533, 1707, 1881, 2055, 2229, 2403 };
+              decimal[,] AFirst = new decimal[,] { {1300, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                                                        {9100, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13},
+                                                        {12400, 11, 5, 9, 21, 1, 19, 1, 31, 1, 0, 0, 0, 29},
+                                                        {11240, 0, 7, 11, 9, 21, 1, 19, 31, 11, 29, 0, 0, 3},
+                                                        {12402, 0, 0, 7, 21, 11, 9, 1, 19, 1, 31, 29, 0, 4},
+                                                        {41240, 0, 0, 0, 7, 9, 11, 21, 19, 1, 29, 31, 6, 5},
+                                                        {12405, 7, 0, 19, 11, 9, 31, 29, 21, 11, 6, 0, 0, 6},
+                                                        {21240, 9, 0, 0, 11, 29, 31, 19, 21, 1, 11, 6, 0, 7},
+                                                        {12407, 11, 0, 0, 0, 5, 9, 19, 31, 21, 29, 11, 6, 8},
+                                                        {51240, 0, 31, 9, 11, 1, 21, 19, 29, 11, 70, 0, 0, 9},
+                                                        {12408, 7, 0, 0, 5, 1, 9, 11, 1, 19, 21, 29, 0, 31},
+                                                        {12410, 11, 0, 0, 0, 9, 1, 19, 1, 21, 1, 29, 31, 10},
+                     };
+              decimal[] CFirst = new decimal[] { 315, 489, 663, 837, 1011, 1185, 1359, 1533, 1707, 1881, 2055, 2229, 2403 };
+            /*
+              decimal[,] AFirst = new decimal[,] { {220, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                                                        {2530, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22},
+                                                        {2600, 4, 16, 11, 79, 33, 77, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1},
+                                                        {2600,0, 4, 16, 11, 79, 33, 77, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 37, 0, 1, 1, 1},
+                                                        {2600, 0, 0, 11, 79, 4, 16, 33, 77, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1},
+                                                        {2600, 0, 1, 0, 0, 1, 1, 11, 79, 4, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 33, 77, 37},
+                                                        {2600, 0, 0, 0, 0, 1, 11, 79, 4, 16, 33, 0, 0, 0, 77, 0, 0, 0, 0, 0, 37, 1, 1},
+                                                        {2600, 0, 0, 0, 0, 0, 0, 1, 1, 11, 79, 4, 16, 33, 77, 0, 0, 0, 0, 0, 0, 37, 1},
+                                                        {2600, 0, 0, 0, 0, 0, 0, 0, 1, 11, 79, 16, 4, 1, 1, 33, 77, 0, 0, 0, 0, 0, 37},
+                                                        {2600, 0, 1, 0, 0, 0, 0, 0, 0, 0, 4, 16, 11, 79, 33, 77, 37, 0, 0, 0, 1, 0, 1},
+                                                        {2600, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 16, 0, 11, 0, 79, 33, 77, 37, 0, 1, 1},
+                                                        {2600, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 4, 16, 79, 33, 77, 37, 1, 0, 0, 11},
+                     };
+              decimal[] CFirst = new decimal[] { 433, 1006, 1961, 3298, 5017, 7118, 9601, 12466, 15713, 19342, 23353, 27746, 32521, 37678, 43217, 49138, 55441, 62126, 69193, 76642, 84473, 92686};
+              */
             MaxMinBox.SelectedIndex = 0;
             //-----Заповнення таблиці даними з масиву-----
             //Отримання розмірності
@@ -72,9 +94,9 @@ namespace CourseProject
                 {
                     getDetailSolveButton.Enabled = true;
                     //третий параметр - направление целевой функции, его нужно изменить на значение с бокса
-                    SimplexTable[] results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e), true); 
+                    results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e), true); 
                     //Отримуємо значення заокруглення
-                    int roundValue = IO.getAnswerRoundValue(AnswerRoundBox);
+                    roundValue = IO.getAnswerRoundValue(AnswerRoundBox);
                     //Виводимо результати
                     AnswerBox.Text = IO.writeSolve(results, roundValue);
 
@@ -264,6 +286,56 @@ namespace CourseProject
         {
             TargetFunctionGraph form = new TargetFunctionGraph();
             form.Show();
+        }
+
+        private void областьДопустимостіОптимальногоПлануToolStripMenuItem_Click(object sender, EventArgs e) {
+            Graph NewWindow;
+                try {
+                int lastTable = results.GetLength(0) - 1;
+                decimal[] y = SimplexMethod.getY(results);
+                int First = 3, Second = 7;
+                NewWindow = new Graph(FindDDeltaB(First, Second), First, Second, y, roundValue);
+                NewWindow.ShowDialog();
+/*
+                int First = int.Parse(delta1.Text) - 1, Second = int.Parse(delta2.Text) - 1;
+                    if (First > Vars.NumberO - 1 || Second > Vars.NumberO - 1 || First < 0 || Second < 0)
+                        MessageBox.Show("Введенных номеров ограничений не существует в задаче");
+                    else {
+                        NewWindow = new Graph(FindDDeltaB(First, Second, !(bool)GraphCurse.IsChecked), First, Second, Y0);
+                        NewWindow.ShowDialog();
+                    }
+                    */
+                } catch (Exception exc) {
+                    MessageBox.Show(exc.Message);
+                }
+        }
+
+        private Matrix FindDDeltaB(int First, int Second) {
+            Matrix C;
+            int rows = results[0].A.GetLength(0); // количество ограничений
+            int lastTable = results.GetLength(0) - 1;
+            C = new Matrix(new decimal[][] { new decimal[] { 1, 0, -results[0].X[First,1] }, new decimal[] { 0, 1, -results[0].X[Second,1] } });
+            decimal[,] Afs = SimplexMethod.formAfs(results);
+            decimal[,] inversedAfs = SimplexMethod.inverseMatrix(Afs);
+            //тут нужно получить обратную Афс
+            for (int i = 0; i < rows; i++) {
+                if (inversedAfs[i,First] != 0 || inversedAfs[i,Second] != 0)
+                    C = C.Add(new Matrix(Directions.Horizontal, new decimal[] {
+                        inversedAfs[i,First], //первый выбраный столбец b
+                        inversedAfs[i,Second], // второй столбец б
+                        - results[lastTable].X[i,1]})); //значение x 
+            }
+            return C;
+        }
+
+        private void областьДопустимостіОптимальногоПлануToolStripMenuItem_Click_1(object sender, EventArgs e) {
+            Graph NewWindow;
+                int lastTable = results.GetLength(0) - 1;
+                decimal[] y = SimplexMethod.getY(results);
+                int First = 3, Second = 8;
+                NewWindow = new Graph(FindDDeltaB(First, Second), First, Second, y, roundValue);
+                NewWindow.ShowDialog();
+
         }
     }
 }

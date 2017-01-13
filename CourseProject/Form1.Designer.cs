@@ -230,6 +230,7 @@
             this.областьДопустимостіОптимальногоПлануToolStripMenuItem.Name = "областьДопустимостіОптимальногоПлануToolStripMenuItem";
             this.областьДопустимостіОптимальногоПлануToolStripMenuItem.Size = new System.Drawing.Size(316, 22);
             this.областьДопустимостіОптимальногоПлануToolStripMenuItem.Text = "Область допустимості оптимального плану";
+            this.областьДопустимостіОптимальногоПлануToolStripMenuItem.Click += new System.EventHandler(this.областьДопустимостіОптимальногоПлануToolStripMenuItem_Click_1);
             // 
             // checkingButton
             // 

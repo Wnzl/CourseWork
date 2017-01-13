@@ -15,12 +15,14 @@ namespace CourseProject
     public partial class Form1 : Form
     {
         SimplexTable[] results;
+        Boolean isSolved;
         int roundValue;
 
 
         public Form1()
         {
             InitializeComponent();
+            isSolved = false;
         }
 
         /// <summary>
@@ -93,7 +95,6 @@ namespace CourseProject
                 try
                 {
                     this.Cursor = Cursors.WaitCursor;
-                    getDetailSolveButton.Enabled = true;
                     //третий параметр - направление целевой функции, его нужно изменить на значение с бокса
                     results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e), getMaxMin(sender,e)); 
                     //Отримуємо значення заокруглення
@@ -139,7 +140,6 @@ namespace CourseProject
                     throw new System.ArgumentException("Недійсні значення. Мінімальний розмір 2х1");
                 IO.buildMatrix(dataGridView1, dataGridView2, colsNum, rowsNum);
                 // Табуляграма неактивна поки не розв'язали задачу
-                getDetailSolveButton.Enabled = false;
             }
             catch (Exception) { MessageBox.Show("Не вдалося побудувати матрицю, перевірте введені значення.\n(Мінімальний розмір 2х2)", "Помилка при побудові матриці"); }
             //для виведення системної помилки: catch (Exception ex) { MessageBox.Show("Не вдалося побудувати матрицю, перевірте введені значення\r\n\r\nДеталі:\r\n" + ex, "Помилка при побудові матриці"); }
@@ -182,8 +182,13 @@ namespace CourseProject
         /// </summary>
         private void getDetailSolve_Click(object sender, EventArgs e)
         {
-            detailSolve form = new detailSolve();
-            form.Show();
+            if (isSolved) {
+                detailSolve form = new detailSolve();
+                form.Show();
+            }
+            else {
+                MessageBox.Show("Задача ще не була вирішена", "Помилка");
+            }
         }
 
         /// <summary>
@@ -198,26 +203,37 @@ namespace CourseProject
         /// <summary>
         /// Виклик вікна з перевіркою допустимості
         /// </summary>
-        private void admissibilityCheck_Click(object sender, EventArgs e)
-        {
-            admissibilityCheck form = new admissibilityCheck();
-            form.Show();
+        private void admissibilityCheck_Click(object sender, EventArgs e) {
+            if (isSolved) {
+                admissibilityCheck form = new admissibilityCheck();
+                form.Show();
+            } else {
+                MessageBox.Show("Задача ще не була вирішена", "Помилка");
+            }
         }
 
         /// <summary>
         /// Вызов окна с проверкой оптимальности
         /// </summary>
         private void оптимавльностіToolStripMenuItem_Click(object sender, EventArgs e) {
-            optimalityCheck form = new optimalityCheck();
-            form.Show();
+            if (isSolved) {
+                optimalityCheck form = new optimalityCheck();
+                form.Show();
+            } else {
+                MessageBox.Show("Задача ще не була вирішена", "Помилка");
+            }
         }
 
         /// <summary>
         /// Вызов окна с проверкой опорности (!)
         /// </summary>
         private void ефективностіToolStripMenuItem_Click(object sender, EventArgs e) {
-            referenceCheck form = new referenceCheck();
-            form.Show();
+            if (isSolved) {
+                referenceCheck form = new referenceCheck();
+                form.Show();
+            } else {
+                MessageBox.Show("Задача ще не була вирішена", "Помилка");
+            }
         }
 
         /// <summary>
@@ -242,12 +258,7 @@ namespace CourseProject
         /// </summary>
         private void resetButtons(object sender, EventArgs e)
         {
-            //Табуляграма неактивна поки не розв'язали задачу
-            getDetailSolveButton.Enabled = false;
-            //Перевірка і збереження відповіді теж
-            checkingButton.Enabled = false;
-            saveResult.Enabled = false;
-            GraphsButton.Enabled = false;
+            isSolved = false;
             //Очистимо поле відповіді
             AnswerBox.Clear();
         }
@@ -257,19 +268,18 @@ namespace CourseProject
         /// </summary>
         private void enableButtons(object sender, EventArgs e)
         {
-            //Табуляграма активна після розв'язку задачі
-            getDetailSolveButton.Enabled = true;
-            //Перевірка і збереження відповіді теж
-            checkingButton.Enabled = true;
-            saveResult.Enabled = true;
-            GraphsButton.Enabled = true;
+            isSolved = true;
         }
         /// <summary>
         /// Виклик функції збереження відповіді в txt-файл
         /// </summary>
         private void saveResult_Click(object sender, EventArgs e)
         {
-            IO.saveResult(AnswerBox);
+            if (isSolved) {
+                IO.saveResult(AnswerBox);
+            } else {
+                MessageBox.Show("Задача ще не була вирішена", "Помилка");
+            }
         }
 
         /// <summary>
@@ -286,17 +296,25 @@ namespace CourseProject
         /// </summary>
         private void TargetFunctionGraphButton_Click(object sender, EventArgs e)
         {
-            TargetFunctionGraph form = new TargetFunctionGraph();
-            form.Show();
+            if (isSolved) { 
+                TargetFunctionGraph form = new TargetFunctionGraph();
+                form.Show();
+            } else {
+                MessageBox.Show("Задача ще не була вирішена", "Помилка");
+            }
         }
 
         private void областьДопустимостіОптимальногоПлануToolStripMenuItem_Click_1(object sender, EventArgs e) {
+                if (isSolved) {
                 Graph NewWindow;
                 int lastTable = results.GetLength(0) - 1;
                 decimal[] y = SimplexMethod.getY(results);
-                  int First = 4, Second = 9;
+                int First = 4, Second = 9;
                 NewWindow = new Graph(results, First, Second, y, roundValue);
                 NewWindow.ShowDialog();
+            } else {
+                MessageBox.Show("Задача ще не була вирішена", "Помилка");
+            }
         }
     }
 }

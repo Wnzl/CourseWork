@@ -193,7 +193,6 @@
             // 
             // saveResult
             // 
-            this.saveResult.Enabled = false;
             this.saveResult.Name = "saveResult";
             this.saveResult.Size = new System.Drawing.Size(250, 22);
             this.saveResult.Text = "Зберегти результати обчислень";
@@ -201,7 +200,6 @@
             // 
             // getDetailSolveButton
             // 
-            this.getDetailSolveButton.Enabled = false;
             this.getDetailSolveButton.Name = "getDetailSolveButton";
             this.getDetailSolveButton.Size = new System.Drawing.Size(91, 20);
             this.getDetailSolveButton.Text = "Табуляграма";
@@ -212,7 +210,6 @@
             this.GraphsButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TargetFunctionGraphButton,
             this.областьДопустимостіОптимальногоПлануToolStripMenuItem});
-            this.GraphsButton.Enabled = false;
             this.GraphsButton.Name = "GraphsButton";
             this.GraphsButton.Size = new System.Drawing.Size(63, 20);
             this.GraphsButton.Text = "Графіки";
@@ -237,7 +234,6 @@
             this.допустимостіToolStripMenuItem,
             this.оптимавльностіToolStripMenuItem,
             this.ефективностіToolStripMenuItem});
-            this.checkingButton.Enabled = false;
             this.checkingButton.Name = "checkingButton";
             this.checkingButton.Size = new System.Drawing.Size(84, 20);
             this.checkingButton.Text = "Перевірка...";
@@ -353,7 +349,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(752, 53);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(18, 13);
+            this.label1.Size = new System.Drawing.Size(19, 13);
             this.label1.TabIndex = 16;
             this.label1.Text = "→";
             // 

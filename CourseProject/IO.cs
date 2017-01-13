@@ -668,29 +668,41 @@ namespace CourseProject
                 return 8;
             }
         }
-        
+
         /// <summary>
         /// Перевірка цільової функції і обмежень на пусті значення
         /// </summary>
         public static int checkingMatrix(DataGridView dataGridView1, DataGridView dataGridView2)
         {
-            int colsNum = dataGridView1.ColumnCount;
-            int rowsNum = dataGridView2.RowCount;
-            for (int row = 0; row < colsNum; row++)
+            try
             {
-                if (dataGridView1.Rows[0].Cells[row].Value == null)
+                int colsNum = dataGridView1.ColumnCount;
+                int rowsNum = dataGridView2.RowCount;
+                for (int row = 0; row < colsNum; row++)
                 {
-                    MessageBox.Show("Здається, ви забули вказати одне зі значень цільової функції.", "Помилка вводу!");
-                    return -1;
+                    if (dataGridView1.Rows[0].Cells[row].Value == null)
+                    {
+                        MessageBox.Show("Здається, ви забули вказати одне зі значень цільової функції.", "Помилка вводу!");
+                        return -1;
+                    }
+                }
+                for (int row = 0; row < rowsNum; row++)
+                {
+                    if (dataGridView2.Rows[row].Cells[colsNum].Value == null)
+                    {
+                        MessageBox.Show("Здається, ви забули вказати одне з обмежень.", "Помилка вводу!");
+                        return -1;
+                    }
+                    if (Convert.ToDecimal(dataGridView2.Rows[row].Cells[colsNum].Value) < 0)
+                    {
+                        MessageBox.Show("Невірно вказане одне з обмежень, воно не може бути від'ємним", "Помилка вводу!");
+                        return -1;
+                    }
                 }
             }
-            for (int row = 0; row < rowsNum; row++)
+            catch (Exception)
             {
-                if (dataGridView2.Rows[row].Cells[colsNum].Value == null)
-                {
-                    MessageBox.Show("Здається, ви забули вказати одне з обмежень.", "Помилка вводу!");
-                    return -1;
-                }
+                MessageBox.Show("Невірно вказані обмеження", "Помилка вводу");
             }
             return 0;
         }

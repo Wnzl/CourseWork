@@ -135,8 +135,8 @@ namespace CourseProject
             {
                 int colsNum = Convert.ToInt16(numCols.Text);
                 int rowsNum = Convert.ToInt16(numRows.Text);
-                if (colsNum < 2 || rowsNum < 2)
-                    throw new System.ArgumentException("Недійсні значення. Мінімальний розмір 2х2");
+                if (colsNum < 2 || rowsNum < 1)
+                    throw new System.ArgumentException("Недійсні значення. Мінімальний розмір 2х1");
                 IO.buildMatrix(dataGridView1, dataGridView2, colsNum, rowsNum);
                 // Табуляграма неактивна поки не розв'язали задачу
                 getDetailSolveButton.Enabled = false;

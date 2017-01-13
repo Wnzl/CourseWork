@@ -644,7 +644,10 @@ namespace CourseProject
         {
             public static double[] Points { get; set; }
         }
-
+        
+        /// <summary>
+        /// Забирає значення з TextBox кількості знаків після коми
+        /// </summary>
         public static int getAnswerRoundValue(TextBox AnswerRoundBox)
         {
             try
@@ -665,7 +668,10 @@ namespace CourseProject
                 return 8;
             }
         }
-
+        
+        /// <summary>
+        /// Перевірка цільової функції і обмежень на пусті значення
+        /// </summary>
         public static int checkingMatrix(DataGridView dataGridView1, DataGridView dataGridView2)
         {
             int colsNum = dataGridView1.ColumnCount;

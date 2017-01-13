@@ -50,7 +50,6 @@
             this.допустимостіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оптимавльностіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ефективностіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.стійкостіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpButton = new System.Windows.Forms.ToolStripMenuItem();
             this.проПрограмуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.вихідToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -237,8 +236,7 @@
             this.checkingButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.допустимостіToolStripMenuItem,
             this.оптимавльностіToolStripMenuItem,
-            this.ефективностіToolStripMenuItem,
-            this.стійкостіToolStripMenuItem});
+            this.ефективностіToolStripMenuItem});
             this.checkingButton.Enabled = false;
             this.checkingButton.Name = "checkingButton";
             this.checkingButton.Size = new System.Drawing.Size(84, 20);
@@ -264,12 +262,6 @@
             this.ефективностіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.ефективностіToolStripMenuItem.Text = "Опорності";
             this.ефективностіToolStripMenuItem.Click += new System.EventHandler(this.ефективностіToolStripMenuItem_Click);
-            // 
-            // стійкостіToolStripMenuItem
-            // 
-            this.стійкостіToolStripMenuItem.Name = "стійкостіToolStripMenuItem";
-            this.стійкостіToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.стійкостіToolStripMenuItem.Text = "Стійкості";
             // 
             // HelpButton
             // 
@@ -430,7 +422,6 @@
         private System.Windows.Forms.ComboBox MaxMinBox;
         private System.Windows.Forms.ToolStripMenuItem оптимавльностіToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ефективностіToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem стійкостіToolStripMenuItem;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripMenuItem допустимостіToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;

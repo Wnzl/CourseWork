@@ -92,6 +92,7 @@ namespace CourseProject
                 enableButtons(sender, e);
                 try
                 {
+                    this.Cursor = Cursors.WaitCursor;
                     getDetailSolveButton.Enabled = true;
                     //третий параметр - направление целевой функции, его нужно изменить на значение с бокса
                     results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e), true); 
@@ -112,6 +113,7 @@ namespace CourseProject
                     {
                         getDetailSolve_Click(sender, e);
                     }
+                    this.Cursor = Cursors.Arrow;
                 }
                 catch (Exception)
                 {
@@ -288,54 +290,13 @@ namespace CourseProject
             form.Show();
         }
 
-        private void областьДопустимостіОптимальногоПлануToolStripMenuItem_Click(object sender, EventArgs e) {
-            Graph NewWindow;
-                try {
-                int lastTable = results.GetLength(0) - 1;
-                decimal[] y = SimplexMethod.getY(results);
-                int First = 3, Second = 7;
-                NewWindow = new Graph(FindDDeltaB(First, Second), First, Second, y, roundValue);
-                NewWindow.ShowDialog();
-/*
-                int First = int.Parse(delta1.Text) - 1, Second = int.Parse(delta2.Text) - 1;
-                    if (First > Vars.NumberO - 1 || Second > Vars.NumberO - 1 || First < 0 || Second < 0)
-                        MessageBox.Show("Введенных номеров ограничений не существует в задаче");
-                    else {
-                        NewWindow = new Graph(FindDDeltaB(First, Second, !(bool)GraphCurse.IsChecked), First, Second, Y0);
-                        NewWindow.ShowDialog();
-                    }
-                    */
-                } catch (Exception exc) {
-                    MessageBox.Show(exc.Message);
-                }
-        }
-
-        private Matrix FindDDeltaB(int First, int Second) {
-            Matrix C;
-            int rows = results[0].A.GetLength(0); // количество ограничений
-            int lastTable = results.GetLength(0) - 1;
-            C = new Matrix(new decimal[][] { new decimal[] { 1, 0, -results[0].X[First,1] }, new decimal[] { 0, 1, -results[0].X[Second,1] } });
-            decimal[,] Afs = SimplexMethod.formAfs(results);
-            decimal[,] inversedAfs = SimplexMethod.inverseMatrix(Afs);
-            //тут нужно получить обратную Афс
-            for (int i = 0; i < rows; i++) {
-                if (inversedAfs[i,First] != 0 || inversedAfs[i,Second] != 0)
-                    C = C.Add(new Matrix(Directions.Horizontal, new decimal[] {
-                        inversedAfs[i,First], //первый выбраный столбец b
-                        inversedAfs[i,Second], // второй столбец б
-                        - results[lastTable].X[i,1]})); //значение x 
-            }
-            return C;
-        }
-
         private void областьДопустимостіОптимальногоПлануToolStripMenuItem_Click_1(object sender, EventArgs e) {
-            Graph NewWindow;
+                Graph NewWindow;
                 int lastTable = results.GetLength(0) - 1;
                 decimal[] y = SimplexMethod.getY(results);
-                int First = 3, Second = 8;
-                NewWindow = new Graph(FindDDeltaB(First, Second), First, Second, y, roundValue);
+                  int First = 4, Second = 9;
+                NewWindow = new Graph(results, First, Second, y, roundValue);
                 NewWindow.ShowDialog();
-
         }
     }
 }

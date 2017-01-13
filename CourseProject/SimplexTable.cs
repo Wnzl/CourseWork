@@ -9,7 +9,7 @@ namespace CourseProject {
     /// <summary>
     /// Класс который описывает симплекс таблицу
     /// </summary>
-    class SimplexTable {
+    public class SimplexTable {
         //Коэффициенты целевой функции при направляющих строках
         public decimal[] Cs { get {
                 int leng = fs.GetLength(0);

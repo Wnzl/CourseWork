@@ -31,81 +31,39 @@ namespace CourseProject {
         string[] Signs = new string[] { };
         string[] XSigns = new string[] { };
         Matrix Solution;
+        decimal[] y;
+        int roundValue;
+        SimplexTable[] results;
 
-        
-        public Graph(Matrix DDeltaB, int First, int Second, decimal[] y, int roundValue)
-        {
+        public Graph(SimplexTable[] results, int First, int Second, decimal[] y, int roundValue) {
             InitializeComponent();
             this.First = First;
             this.Second = Second;
-            Reference1.Content += (First + 1).ToString();
-            Reference2.Content += (Second + 1).ToString();
-            string result = "";
-            for (int i = 0; i < DDeltaB.Row; i++)
-            {
-                if (DDeltaB[i][1] < Epsilon && DDeltaB[i][1] > -Epsilon)
-                {
-                    Array.Resize(ref XLines, XLines.Length + 1);
-                    XLines[XLines.Length - 1] = DDeltaB[i][2] / DDeltaB[i][0];
-                    Array.Resize(ref XSigns, XSigns.Length + 1);
-                    if (DDeltaB[i][0] > 0) XSigns[XSigns.Length - 1] = ">=";
-                    else XSigns[XSigns.Length - 1] = "<=";
-                }
-                else
-                {
-                    Array.Resize(ref eqations, eqations.Length + 1);
-                    Array.Resize(ref Signs, Signs.Length + 1);
-                    eqations[eqations.Length - 1] = new polinom();
-                    eqations[eqations.Length - 1].Compile(-DDeltaB[i][0] / DDeltaB[i][1] + "*x +(" + DDeltaB[i][2] / DDeltaB[i][1] + ")");
-                    if (DDeltaB[i][1] > 0) Signs[Signs.Length - 1] = ">=";
-                    else Signs[Signs.Length - 1] = "<=";
-                }
-                for (int j = i + 1; j < DDeltaB.Row; j++)
-                {
-                  if (!(DDeltaB[i][0] < Epsilon && DDeltaB[i][0] > -Epsilon) || !(DDeltaB[j][0] < Epsilon && DDeltaB[j][0] > -Epsilon))
-                    {
-                        Matrix C = DDeltaB.GetRows(i, j).Reshenie();
-                        bool flag = false;
-                        for (int k = 0; k < DDeltaB.Row; k++)
-                        {
-                            decimal q = DDeltaB[k][0] * C[0][0] + DDeltaB[k][1] * C[0][1];
-                            decimal t = DDeltaB[k][2];
-                            if (Math.Round(DDeltaB[k][0] * C[0][0] + DDeltaB[k][1] * C[0][1], roundValue) < Math.Round(DDeltaB[k][2], roundValue))
-                            {
-                                flag = true;
-                                break;
-                            }
-                        }
-                        if (!flag)
-                            if (Solution != null) Solution = Solution.Add(C);
-                            else Solution = new Matrix(C);
-                    }
-                    
-                }
-                for (int j = 0; j < DDeltaB.Col; j++)
-                {
-                    result += DDeltaB[i, j] != 0 ? (DDeltaB[i, j] == 1 ? "" : DDeltaB[i, j] == -1 ? "-" : Math.Round(DDeltaB[i, j], roundValue).ToString()) +
-                        (j < DDeltaB.Col - 1 ? "Δb" + (j == 0 ? First + 1 : Second + 1) : "") : "";
-                    result += (j == DDeltaB.Col - 2 ? "≥" : j == DDeltaB.Col - 1 || DDeltaB[i, 1] == 0 || DDeltaB[i, 0] == 0 ? "" : DDeltaB[i, j + 1] < 0 ? " " : " +");
-                }
-                result += "\n";
-            }
-            Matrix D = Matrix.Transpose(Solution);
-            xMin = 1.2m * FindMin(D[0]);
-            xMax = 1.2m * FindMax(D[0], false);
-            yMin = 1.2m * FindMin(D[1]);
-            yMax = 1.2m * FindMax(D[1], false);
-            Label2.Text = result;
-            SortSolutions();
-            L = new decimal[Solution.Row];
-            for (int i = 0; i < Solution.Row; i++)
-                L[i] = Solution[i][0] * y[First] + Solution[i][1] * y[Second];
-            int nMax = FindMaxN(L, false), nMin = FindMinN(L);
-            Label2.Text += "\nΔLmax = " + FindMax(L, false) + "\nв (" + 
-                Math.Round(Solution[nMax][0], roundValue) + "; " + Math.Round(Solution[nMax][1], roundValue) + ")";
-            Label2.Text += "\nΔLmin = " + FindMin(L) + "\nв (" +
-                Math.Round(Solution[nMin][0], roundValue) + "; " + Math.Round(Solution[nMin][1], roundValue) + ")";
+            this.y = y;
+            this.roundValue = roundValue;
+            this.results = results;
+            db1.Text = First + "";
+            db2.Text = Second + "";
         }
+
+        private Matrix FindDDeltaB(int First, int Second) {
+            Matrix C;
+            int rows = results[0].A.GetLength(0); // количество ограничений
+            int lastTable = results.GetLength(0) - 1;
+            C = new Matrix(new decimal[][] { new decimal[] { 1, 0, -results[0].X[First, 1] }, new decimal[] { 0, 1, -results[0].X[Second, 1] } });
+            decimal[,] Afs = SimplexMethod.formAfs(results);
+            decimal[,] inversedAfs = SimplexMethod.inverseMatrix(Afs);
+            //тут нужно получить обратную Афс
+            for (int i = 0; i < rows; i++) {
+                if (inversedAfs[i, First] != 0 || inversedAfs[i, Second] != 0)
+                    C = C.Add(new Matrix(Directions.Horizontal, new decimal[] {
+                        inversedAfs[i,First], //первый выбраный столбец b
+                        inversedAfs[i,Second], // второй столбец б
+                        - results[lastTable].X[i,1]})); //значение x 
+            }
+            return C;
+        }
+
         /// <summary>
         /// Определение где находится y относительно (x z)
         /// 0 - на линии, >0 - справа, <0 - слева
@@ -190,8 +148,11 @@ namespace CourseProject {
         //вызов функции отрисовки с учетом маштаба на скроллбарах
         public void Drow()
         {
-            if (Math.Abs(xMax / (decimal)ScrollBarX.Value * 100 - xMin / (decimal)ScrollBarX.Value * 100) > 2)
-                DrowGraph((int)(xMin / (decimal)ScrollBarX.Value * 100 - 0.5m), (int)(xMax / (decimal)ScrollBarX.Value * 100 + 0.5m), (int)(yMin / (decimal)ScrollBarY.Value * 100 - 0.5m), (int)(yMax / (decimal)ScrollBarY.Value * 100 + 0.5m));
+            if (Math.Abs(xMax - xMin) > 2)
+                DrowGraph((int)(xMin), 
+                          (int)(xMax), 
+                          (int)(yMin), 
+                          (int)(yMax));
         }
         private void Mouse_Move(object sender, MouseEventArgs e)
         {
@@ -220,6 +181,93 @@ namespace CourseProject {
                 }
             }
         }
+
+        private void textBox_TextChanged(object sender, TextChangedEventArgs e) {
+
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e) {
+            try {
+                this.First = int.Parse(db1.Text) - 1;
+                this.Second = int.Parse(db2.Text) - 1;
+                if (First > 12 - 1 || Second > 12 - 1 || First < 0 || Second < 0) // тут нужно норм задать количество ограничений
+                    MessageBox.Show("Введених номерів обмежень не існує в задачі!");
+                else {
+                    this.Cursor = Cursors.Wait;
+                    Solution = null;
+                    Array.Resize(ref eqations, 0);
+                    Array.Resize(ref Signs, 0);
+                    Matrix DDeltaB = FindDDeltaB(First, Second);
+                    string result = "";
+                    for (int i = 0; i < DDeltaB.Row; i++) {
+                        if (DDeltaB[i][1] < Epsilon && DDeltaB[i][1] > -Epsilon) {
+                            Array.Resize(ref XLines, XLines.Length + 1);
+                            XLines[XLines.Length - 1] = DDeltaB[i][2] / DDeltaB[i][0];
+                            Array.Resize(ref XSigns, XSigns.Length + 1);
+                            if (DDeltaB[i][0] > 0) XSigns[XSigns.Length - 1] = ">=";
+                            else XSigns[XSigns.Length - 1] = "<=";
+                        } else {
+                            Array.Resize(ref eqations, eqations.Length + 1);
+                            Array.Resize(ref Signs, Signs.Length + 1);
+                            eqations[eqations.Length - 1] = new polinom();
+                            eqations[eqations.Length - 1].Compile(-DDeltaB[i][0] / DDeltaB[i][1] + "*x +(" + DDeltaB[i][2] / DDeltaB[i][1] + ")");
+                            if (DDeltaB[i][1] > 0) Signs[Signs.Length - 1] = ">=";
+                            else Signs[Signs.Length - 1] = "<=";
+                        }
+                        for (int j = i + 1; j < DDeltaB.Row; j++) {
+                            if (!(DDeltaB[i][0] < Epsilon && DDeltaB[i][0] > -Epsilon) || !(DDeltaB[j][0] < Epsilon && DDeltaB[j][0] > -Epsilon)) {
+                                Matrix C = DDeltaB.GetRows(i, j).Reshenie();
+                                bool flag = false;
+                                for (int k = 0; k < DDeltaB.Row; k++) {
+                                    decimal q = DDeltaB[k][0] * C[0][0] + DDeltaB[k][1] * C[0][1];
+                                    decimal t = DDeltaB[k][2];
+                                    if (Math.Round(DDeltaB[k][0] * C[0][0] + DDeltaB[k][1] * C[0][1], roundValue) < Math.Round(DDeltaB[k][2], roundValue)) {
+                                        flag = true;
+                                        break;
+                                    }
+                                }
+                                if (!flag)
+                                    if (Solution != null) Solution = Solution.Add(C);
+                                    else Solution = new Matrix(C);
+                            }
+
+                        }
+                        for (int j = 0; j < DDeltaB.Col; j++) {
+                            result += DDeltaB[i, j] != 0 ? (DDeltaB[i, j] == 1 ? "" : DDeltaB[i, j] == -1 ? "-" : Math.Round(DDeltaB[i, j], roundValue).ToString()) +
+                                (j < DDeltaB.Col - 1 ? "Δb" + (j == 0 ? First + 1 : Second + 1) : "") : "";
+                            result += (j == DDeltaB.Col - 2 ? "≥" : j == DDeltaB.Col - 1 || DDeltaB[i, 1] == 0 || DDeltaB[i, 0] == 0 ? "" : DDeltaB[i, j + 1] < 0 ? " " : " +");
+                        }
+                        result += "\n";
+                    }
+                    Matrix D = Matrix.Transpose(Solution);
+                    xMin = 1.2m * FindMin(D[0]);
+                    xMax = 1.2m * FindMax(D[0], false);
+                    yMin = 1.2m * FindMin(D[1]);
+                    yMax = 1.2m * FindMax(D[1], false);
+                    Label2.Text = result;
+                    SortSolutions();
+                    L = new decimal[Solution.Row];
+                    for (int i = 0; i < Solution.Row; i++)
+                        L[i] = Solution[i][0] * y[First] + Solution[i][1] * y[Second];
+                    int nMax = FindMaxN(L, false), nMin = FindMinN(L);
+                    Label2.Text += "\nΔLmax = " + FindMax(L, false) + "\nв (" +
+                        Math.Round(Solution[nMax][0], roundValue) + "; " + Math.Round(Solution[nMax][1], roundValue) + ")";
+                    Label2.Text += "\nΔLmin = " + FindMin(L) + "\nв (" +
+                        Math.Round(Solution[nMin][0], roundValue) + "; " + Math.Round(Solution[nMin][1], roundValue) + ")";                
+                    Drow();
+                    this.Cursor = Cursors.Arrow;
+                }
+            }
+            catch (Exception exc) {
+                if(exc is DivideByZeroException) {
+                    MessageBox.Show("Неможливо побудувати графік через необмеженість зверху");
+                    return;
+                }
+                MessageBox.Show(exc.Message);
+            }
+        }
+
+       
         //отрисовка всего
         private void DrowGraph(int xMin, int xMax, decimal yMin, decimal yMax)
         {
@@ -246,9 +294,7 @@ namespace CourseProject {
 
             // пустой прямоугольник для корректной работы скрола мышкой
             c.Children.Add(new Rectangle() { Fill = Brushes.White, Width = c.ActualWidth, Height = c.ActualHeight });
-            string s = Label3.Text;
-            if (Lyambda1 == null)
-            {
+            Label3.Text = "";
                 for (int i = 0; i < Solution.Row; i++)
                 {
                     x1 = x0 + Solution[i][0] * xScale;
@@ -256,18 +302,16 @@ namespace CourseProject {
                     if (!points.Contains(new Point((double)x1, (double)y1)))
                     {
                         points.Add(new Point((double)x1, (double)y1));
-                        if (s == "") Label3.Text += char.ConvertFromUtf32(0x0041 + points.Count - 1) + " (" + Math.Round(Solution[i][0], 3) + "; " + Math.Round(Solution[i][1], 3) + ")\n";
+                        Label3.Text += char.ConvertFromUtf32(0x0041 + points.Count - 1) + " (" + Math.Round(Solution[i][0], 3) + "; " + Math.Round(Solution[i][1], 3) + ")\n";
                     }
                 }
                 //прорисовка ответа
                 c.Children.Add(new Polygon()
                 {
-                    Fill = Brushes.Tan,
+                    Fill = Brushes.Khaki,
                     Points = new PointCollection(points)
                 });
-            }
-            else
-                X0 = x0 + Lyambda1.Count * xScale;
+
             // сетка и цифры на оси:
             int xStep = 1; // шаг сетки
             int dd = xMin;
@@ -355,7 +399,7 @@ namespace CourseProject {
                 {
                     Margin = new Thickness((double)x2, 60, 0, 0),
                     Stroke = Brushes.Black,
-                    Fill = Brushes.Tan,
+                    Fill = Brushes.Khaki,
                     Width = 25,
                     Height = 15
                 });
@@ -433,10 +477,10 @@ namespace CourseProject {
             // остановка перетягивания графика мышкой
             if (CheckStop)
             {
-                this.xMax = xMax * (decimal)ScrollBarX.Value / 100;
-                this.xMin = xMin * (decimal)ScrollBarX.Value / 100;
-                this.yMax = yMax * (decimal)ScrollBarY.Value / 100;
-                this.yMin = yMin * (decimal)ScrollBarY.Value / 100;
+                this.xMax = xMax;
+                this.xMin = xMin;
+                this.yMax = yMax;
+                this.yMin = yMin;
                 CheckStop = false;
             }
         }
@@ -446,16 +490,6 @@ namespace CourseProject {
             Drow();
         }
 
-        private void ScrollX(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
-        {
-            TextX.Content = (int)(e.NewValue * 100) / 100.0 + "%";
-            Drow();
-        }
-        private void ScrollY(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
-        {
-            TextY.Content = (int)(e.NewValue * 100) / 100.0 + "%";
-            Drow();
-        }
         //добавление прямой
         private void AddLine(Canvas c, Brush stroke, decimal x1, decimal y1, decimal x2, decimal y2)
         {

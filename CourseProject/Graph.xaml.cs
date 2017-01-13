@@ -188,11 +188,13 @@ namespace CourseProject {
 
         private void button_Click(object sender, RoutedEventArgs e) {
             try {
+
                 this.First = int.Parse(db1.Text) - 1;
                 this.Second = int.Parse(db2.Text) - 1;
-                if (First > 12 - 1 || Second > 12 - 1 || First < 0 || Second < 0) // тут нужно норм задать количество ограничений
-                    MessageBox.Show("Введених номерів обмежень не існує в задачі!");
-                else {
+                if (First > 12 - 1 || Second > 12 - 1 || First < 0 || Second < 0) { // тут нужно норм задать количество ограничений
+                    if (First > 12 - 1 || Second > 12 - 1 || First < 0 || Second < 0)
+                        MessageBox.Show("Введених номерів обмежень не існує в задачі!", "Помилка!");
+                } else {
                     this.Cursor = Cursors.Wait;
                     Solution = null;
                     Array.Resize(ref eqations, 0);
@@ -253,14 +255,18 @@ namespace CourseProject {
                     Label2.Text += "\nΔLmax = " + FindMax(L, false) + "\nв (" +
                         Math.Round(Solution[nMax][0], roundValue) + "; " + Math.Round(Solution[nMax][1], roundValue) + ")";
                     Label2.Text += "\nΔLmin = " + FindMin(L) + "\nв (" +
-                        Math.Round(Solution[nMin][0], roundValue) + "; " + Math.Round(Solution[nMin][1], roundValue) + ")";                
+                        Math.Round(Solution[nMin][0], roundValue) + "; " + Math.Round(Solution[nMin][1], roundValue) + ")";
                     Drow();
                     this.Cursor = Cursors.Arrow;
                 }
             }
             catch (Exception exc) {
                 if(exc is DivideByZeroException) {
-                    MessageBox.Show("Неможливо побудувати графік через необмеженість зверху");
+                    MessageBox.Show("Неможливо побудувати графік через необмеженість зверху", "Помилка!");
+                    return;
+                }
+                if(exc is FormatException) {
+                    MessageBox.Show("Необхідно ввести два числових значення!","Помилка!");
                     return;
                 }
                 MessageBox.Show(exc.Message);
@@ -308,7 +314,7 @@ namespace CourseProject {
                 //прорисовка ответа
                 c.Children.Add(new Polygon()
                 {
-                    Fill = Brushes.Khaki,
+                    Fill = Brushes.Aquamarine,
                     Points = new PointCollection(points)
                 });
 
@@ -399,7 +405,7 @@ namespace CourseProject {
                 {
                     Margin = new Thickness((double)x2, 60, 0, 0),
                     Stroke = Brushes.Black,
-                    Fill = Brushes.Khaki,
+                    Fill = Brushes.Aquamarine,
                     Width = 25,
                     Height = 15
                 });

@@ -129,7 +129,9 @@ namespace CourseProject
             int lastTable = simplexTable.GetLength(0) - 1;
             int xCount = simplexTable[lastTable].X.GetLength(1) - 2;
             int simplexTableLength = simplexTable[lastTable].X.GetLength(0);
+            int situation = simplexTable[lastTable].situation;
             string answer = "";
+            if(situation == 1) { 
             answer += "Отриманий опорний план \r\nFs = { ";
 
             foreach (int Fs in simplexTable[lastTable].fs) {
@@ -162,6 +164,10 @@ namespace CourseProject
             }
             answer += "L* = " + Math.Round(L2, roundValue);
             return answer;
+            }else {
+                answer += "Задача не може бути рішена через необмеженість лінійної форми зверху на множині планів Dm";
+                return answer;
+            }
         }
 
         /// <summary>

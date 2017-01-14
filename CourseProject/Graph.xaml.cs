@@ -257,7 +257,6 @@ namespace CourseProject {
                     Label2.Text += "\nΔLmin = " + FindMin(L) + "\nв (" +
                         Math.Round(Solution[nMin][0], roundValue) + "; " + Math.Round(Solution[nMin][1], roundValue) + ")";
                     Drow();
-                    this.Cursor = Cursors.Arrow;
                 }
             }
             catch (Exception exc) {
@@ -270,6 +269,8 @@ namespace CourseProject {
                     return;
                 }
                 MessageBox.Show(exc.Message);
+            } finally {
+                this.Cursor = Cursors.Arrow;
             }
         }
 

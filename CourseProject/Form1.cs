@@ -30,7 +30,7 @@ namespace CourseProject
         /// </summary>
         private void insertValues_Click(object sender, EventArgs e) {
             resetButtons(sender, e);
-              decimal[,] AFirst = new decimal[,] { {1300, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+             decimal[,] AFirst = new decimal[,] { {1300, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                                                         {9100, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13},
                                                         {12400, 11, 5, 9, 21, 1, 19, 1, 31, 1, 0, 0, 0, 29},
                                                         {11240, 0, 7, 11, 9, 21, 1, 19, 31, 11, 29, 0, 0, 3},
@@ -44,22 +44,7 @@ namespace CourseProject
                                                         {12410, 11, 0, 0, 0, 9, 1, 19, 1, 21, 1, 29, 31, 10},
                      };
               decimal[] CFirst = new decimal[] { 315, 489, 663, 837, 1011, 1185, 1359, 1533, 1707, 1881, 2055, 2229, 2403 };
-            /*
-              decimal[,] AFirst = new decimal[,] { {220, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                                                        {2530, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22},
-                                                        {2600, 4, 16, 11, 79, 33, 77, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1},
-                                                        {2600,0, 4, 16, 11, 79, 33, 77, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 37, 0, 1, 1, 1},
-                                                        {2600, 0, 0, 11, 79, 4, 16, 33, 77, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1},
-                                                        {2600, 0, 1, 0, 0, 1, 1, 11, 79, 4, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 33, 77, 37},
-                                                        {2600, 0, 0, 0, 0, 1, 11, 79, 4, 16, 33, 0, 0, 0, 77, 0, 0, 0, 0, 0, 37, 1, 1},
-                                                        {2600, 0, 0, 0, 0, 0, 0, 1, 1, 11, 79, 4, 16, 33, 77, 0, 0, 0, 0, 0, 0, 37, 1},
-                                                        {2600, 0, 0, 0, 0, 0, 0, 0, 1, 11, 79, 16, 4, 1, 1, 33, 77, 0, 0, 0, 0, 0, 37},
-                                                        {2600, 0, 1, 0, 0, 0, 0, 0, 0, 0, 4, 16, 11, 79, 33, 77, 37, 0, 0, 0, 1, 0, 1},
-                                                        {2600, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 16, 0, 11, 0, 79, 33, 77, 37, 0, 1, 1},
-                                                        {2600, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 4, 16, 79, 33, 77, 37, 1, 0, 0, 11},
-                     };
-              decimal[] CFirst = new decimal[] { 433, 1006, 1961, 3298, 5017, 7118, 9601, 12466, 15713, 19342, 23353, 27746, 32521, 37678, 43217, 49138, 55441, 62126, 69193, 76642, 84473, 92686};
-              */
+        
             MaxMinBox.SelectedIndex = 0;
             //-----Заповнення таблиці даними з масиву-----
             //Отримання розмірності
@@ -91,12 +76,14 @@ namespace CourseProject
         {
             if (IO.checkingMatrix(dataGridView1, dataGridView2) == 0)
             {
-                enableButtons(sender, e);
                 try
                 {
                     this.Cursor = Cursors.WaitCursor;
                     //третий параметр - направление целевой функции, его нужно изменить на значение с бокса
-                    results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e), getMaxMin(sender,e)); 
+                    results = SimplexMethod.solve(getLimitationMatrix(sender, e), getTargetFunction(sender, e), getMaxMin(sender,e));
+                    int lastTable = results.GetLength(0) - 1;
+                    int situation = results[lastTable].situation;
+                    isSolved = true;
                     //Отримуємо значення заокруглення
                     roundValue = IO.getAnswerRoundValue(AnswerRoundBox);
                     //Виводимо результати

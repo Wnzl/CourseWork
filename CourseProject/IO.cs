@@ -165,7 +165,7 @@ namespace CourseProject
             answer += "L* = " + Math.Round(L2, roundValue);
             return answer;
             }else {
-                answer += "Задача не може бути рішена через необмеженість лінійної форми зверху на множині планів Dm";
+                answer += "Задача не може бути розв'язана через необмеженість лінійної форми зверху на множині планів Dm";
                 return answer;
             }
         }

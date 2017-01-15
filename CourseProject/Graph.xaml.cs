@@ -261,7 +261,7 @@ namespace CourseProject {
             }
             catch (Exception exc) {
                 if(exc is DivideByZeroException) {
-                    MessageBox.Show("Неможливо побудувати графік через необмеженість зверху", "Помилка!");
+                    MessageBox.Show("Обмеження, які ви вказали, можуть безкінечно збільшуватися!", "Неможливо побудувати графік!");
                     return;
                 }
                 if(exc is FormatException) {

@@ -123,8 +123,8 @@ namespace CourseProject
             {
                 int colsNum = Convert.ToInt16(numCols.Text);
                 int rowsNum = Convert.ToInt16(numRows.Text);
-                if (colsNum < 2 || rowsNum < 1)
-                    throw new System.ArgumentException("Недійсні значення. Мінімальний розмір 2х1");
+                if (colsNum < 2 || rowsNum < 1 || colsNum > 100 || rowsNum > 100)
+                    throw new System.ArgumentException("Недійсні значення. Мінімальний розмір 2х1, максимальний - 100x100");
                 IO.buildMatrix(dataGridView1, dataGridView2, colsNum, rowsNum);
                 // Табуляграма неактивна поки не розв'язали задачу
             }
@@ -301,6 +301,21 @@ namespace CourseProject
                 NewWindow.ShowDialog();
             } else {
                 MessageBox.Show("Задача ще не була вирішена", "Помилка");
+            }
+        }
+
+        private void changeValueOnIndex_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int rowForChanging = Convert.ToInt32(rowForChangingBox.Text) - 1;
+                int colForChanging = Convert.ToInt32(colForChangingBox.Text) - 1;
+                decimal valueForChanging = Convert.ToDecimal(valueForChangingBox.Text);
+                dataGridView2.Rows[rowForChanging].Cells[colForChanging].Value = valueForChanging.ToString();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Не вдалося змінити значення", "Помилка зміни значення");
             }
         }
     }

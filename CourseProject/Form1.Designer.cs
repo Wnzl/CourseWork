@@ -61,9 +61,22 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.rowForChangingBox = new System.Windows.Forms.TextBox();
+            this.changeValueOnIndex = new System.Windows.Forms.Button();
+            this.colForChangingBox = new System.Windows.Forms.TextBox();
+            this.valueForChangingBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // out1
@@ -286,12 +299,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.AnswerBox.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.AnswerBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.AnswerBox.Location = new System.Drawing.Point(836, 151);
+            this.AnswerBox.Location = new System.Drawing.Point(3, 6);
             this.AnswerBox.Multiline = true;
             this.AnswerBox.Name = "AnswerBox";
             this.AnswerBox.ReadOnly = true;
             this.AnswerBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.AnswerBox.Size = new System.Drawing.Size(181, 436);
+            this.AnswerBox.Size = new System.Drawing.Size(170, 401);
             this.AnswerBox.TabIndex = 15;
             this.toolTip1.SetToolTip(this.AnswerBox, "Так, тут має бути відповідь");
             // 
@@ -349,7 +362,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(752, 53);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(19, 13);
+            this.label1.Size = new System.Drawing.Size(18, 13);
             this.label1.TabIndex = 16;
             this.label1.Text = "→";
             // 
@@ -363,17 +376,113 @@
             this.label2.TabIndex = 18;
             this.label2.Text = "Змінних/обмежень";
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(836, 151);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(181, 436);
+            this.tabControl1.TabIndex = 20;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.AnswerBox);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(173, 410);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Відповідь";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.label6);
+            this.tabPage2.Controls.Add(this.label5);
+            this.tabPage2.Controls.Add(this.label4);
+            this.tabPage2.Controls.Add(this.changeValueOnIndex);
+            this.tabPage2.Controls.Add(this.valueForChangingBox);
+            this.tabPage2.Controls.Add(this.colForChangingBox);
+            this.tabPage2.Controls.Add(this.rowForChangingBox);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(173, 410);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Корекція";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // rowForChangingBox
+            // 
+            this.rowForChangingBox.Location = new System.Drawing.Point(93, 6);
+            this.rowForChangingBox.Name = "rowForChangingBox";
+            this.rowForChangingBox.Size = new System.Drawing.Size(66, 20);
+            this.rowForChangingBox.TabIndex = 0;
+            // 
+            // changeValueOnIndex
+            // 
+            this.changeValueOnIndex.Location = new System.Drawing.Point(93, 84);
+            this.changeValueOnIndex.Name = "changeValueOnIndex";
+            this.changeValueOnIndex.Size = new System.Drawing.Size(66, 23);
+            this.changeValueOnIndex.TabIndex = 1;
+            this.changeValueOnIndex.Text = "Змінити";
+            this.changeValueOnIndex.UseVisualStyleBackColor = true;
+            this.changeValueOnIndex.Click += new System.EventHandler(this.changeValueOnIndex_Click);
+            // 
+            // colForChangingBox
+            // 
+            this.colForChangingBox.Location = new System.Drawing.Point(93, 32);
+            this.colForChangingBox.Name = "colForChangingBox";
+            this.colForChangingBox.Size = new System.Drawing.Size(66, 20);
+            this.colForChangingBox.TabIndex = 0;
+            // 
+            // valueForChangingBox
+            // 
+            this.valueForChangingBox.Location = new System.Drawing.Point(93, 58);
+            this.valueForChangingBox.Name = "valueForChangingBox";
+            this.valueForChangingBox.Size = new System.Drawing.Size(66, 20);
+            this.valueForChangingBox.TabIndex = 0;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(33, 9);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(38, 13);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "Рядок";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(33, 35);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(54, 13);
+            this.label5.TabIndex = 2;
+            this.label5.Text = "Стовпчик";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(33, 61);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(55, 13);
+            this.label6.TabIndex = 2;
+            this.label6.Text = "Значення";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1018, 599);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.AnswerRoundBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.MaxMinBox);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.AnswerBox);
             this.Controls.Add(this.Solve);
             this.Controls.Add(this.buildMatrix);
             this.Controls.Add(this.numRows);
@@ -392,6 +501,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -430,6 +544,16 @@
         private System.Windows.Forms.ToolStripMenuItem заповнитиТестовіЗначенняToolStripMenuItem;
         private System.Windows.Forms.TextBox AnswerRoundBox;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Button changeValueOnIndex;
+        private System.Windows.Forms.TextBox valueForChangingBox;
+        private System.Windows.Forms.TextBox colForChangingBox;
+        private System.Windows.Forms.TextBox rowForChangingBox;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
     }
 }
 
